@@ -7,19 +7,24 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>ZedLytics</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/apple-touch-icon.png')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{asset('/favicon-32x32.png')}}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('/favicon-16x16.png')}}">
+        <link rel="manifest" href="{{asset('/site.webmanifest')}}">
         <link href="{{asset('/assets/css/styles.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-default">
+    <body class="bg-default" style="background-color:#e2d1e5;">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4"> ZedLytics</h3></div>
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4"> 
+                                <img src="{{asset('/assets/images/watermark.png')}}" class="logo"/></h3></div>
+                                <div class="card shadow-lg border-0 rounded-lg mt-5 bg-primary">
+                                    <div class="card-header"><h3 class="text-center font-weight-light text-light my-4">Login</h3></div>
                                     <div class="card-body">
                                         <form  class="form w-100" novalidate="novalidate" id="login-form" method="POST" action="{{ route('login') }}">
                                          @csrf
@@ -38,13 +43,13 @@
                                               <div class="fv-plugins-message-container invalid-feedback">{{ $errors->first('password') }}</div>
                                             @endif
                                             <div class="fv-plugins-message-container invalid-feedback pt-5 pb-5">{{session()->get('error')}}</div>
-                                            <div class="form-check mb-3">
+                                            <!-- <div class="form-check mb-3">
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
                                                 <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                            </div>
+                                            </div> -->
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 
-                                                <button class="btn btn-primary" type="submit">Login</button>
+                                                <button class="btn btn-default text-light" type="submit">Login</button>
                                             </div>
                                         </form>
                                     </div>

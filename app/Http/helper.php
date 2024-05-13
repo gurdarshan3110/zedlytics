@@ -2,7 +2,7 @@
 use App\Models\ModuleMaster;
 function softModules()
 {
-    return ModuleMaster::all();
+    return ModuleMaster::where('status',1)->get();
 }
 
 
@@ -18,4 +18,8 @@ function dateFormatdMYHia($date){
         return '-';
     }
     return date('d M Y H:iA',strtotime($date));
+}
+ 
+function permissions(){
+    return $permissions = Auth::user()->roles()->with('permissions')->get()->pluck('permissions')->flatten()->pluck('name')->toArray();
 }

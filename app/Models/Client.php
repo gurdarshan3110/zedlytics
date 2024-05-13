@@ -18,8 +18,12 @@ class Client extends Model
         'status',
     ];
 
-    public function users()
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'user_clients');
+    // }
+    public function accounts()
     {
-        return $this->belongsToMany(User::class, 'user_clients');
+        return $this->hasMany(ClientAccount::class);
     }
 }
