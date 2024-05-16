@@ -8179,7 +8179,9 @@ textarea.form-control-lg {
 
 .bg-light {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+  /*background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;*/
+  /*background-color: #d797e2ed;*/
+  background-color: #000;
 }
 
 .bg-dark {
@@ -11003,6 +11005,7 @@ body {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   position: relative;
+  border-bottom:1px solid #d797e257;
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
   font-size: 0.9rem;
@@ -11020,7 +11023,7 @@ body {
   flex-direction: column;
 }
 .sb-sidenav .sb-sidenav-footer {
-  padding: 0.75rem;
+  padding: 0.25rem;
   flex-shrink: 0;
 }
 
@@ -11054,7 +11057,7 @@ body {
 }
 
 .sb-sidenav-light {
-  background-color: #f8f9fa;
+  background-color: #d797e257;
   color: #212529;
 }
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
@@ -11070,7 +11073,8 @@ body {
   color: #adb5bd;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link:hover {
-  color: #8c399b;
+  background-color: #d797e2;
+  color:#000;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.active,.nav-link.active:hover {
   background-color: #d797e2;
@@ -11080,7 +11084,7 @@ body {
   color: #8c399b;
 }
 .sb-sidenav-light .sb-sidenav-footer {
-  background-color: #e9ecef;
+  background-color: #000;/*#d797e2ed;*/
 }
 
 .datatable-wrapper .datatable-container {
@@ -11274,6 +11278,24 @@ body {
 .dataTables_filter{
   margin:10px 0px ;
 }
+
+.excel-cell {
+  border: 1px solid #dee2e6;
+  padding: 2px;
+  max-width: 15px !important;
+  font-size:12px;
+  overflow: hidden; 
+  white-space: nowrap; 
+}
+
+.h-460{
+  height: 467px;
+}
+
+.ledger-table{
+  overflow: scroll;
+}
+
 
 @media (max-width: 576px) {
   .dataTables_length{

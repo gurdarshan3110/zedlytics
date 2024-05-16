@@ -24,7 +24,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="sb-sidenav-footer">
+            <div class="sb-sidenav-footer px-3 text-muted">
                 <div class="small">Logged in as:</div>
                 {{Auth::user()->name}}
             </div>

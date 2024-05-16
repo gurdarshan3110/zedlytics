@@ -7,6 +7,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -51,5 +52,9 @@ Route::group(['middleware' => 'auth:web'], function ($router) {
     Route::get('/expenses/list', [ExpenseController::class, 'list'])->name('expenses.list');
     Route::resource('expenses', ExpenseController::class);
 
+    Route::post('/save-ledger', [LedgerController::class, 'saveLedger'])->name('save.ledger');
+    Route::get('/ledger/create/{id}', [LedgerController::class, 'create'])->name('ledger.create');
+    Route::get('/ledger/list', [LedgerController::class, 'list'])->name('ledger.list');
+    Route::resource('ledger', LedgerController::class);
 
 });
