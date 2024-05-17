@@ -14,15 +14,13 @@ return new class extends Migration
         Schema::create('cashbook_ledger', function (Blueprint $table) {
             $table->id();
             $table->string('account_code')->nullable();
-            $table->integer('account_id')->nullable();
             $table->foreignId('bank_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('utr_no')->nullable();
             $table->decimal('amount', 10, 2)->nullable(); 
             $table->boolean('type')->default(0); 
-            $table->decimal('balance', 10, 2)->nullable(); 
 
             $table->integer('employee_id')->nullable();
-            $table->date('ledger_date')->nullable(); 
+            $table->timestamp('ledger_date')->nullable(); 
 
             $table->boolean('status')->default(0); 
             $table->string('remarks')->nullable();

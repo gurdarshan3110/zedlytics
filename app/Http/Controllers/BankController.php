@@ -112,14 +112,14 @@ class BankController extends Controller
     public function update(Request $request, Model $bank)
     {
         $input = $request->all();
-        $user = User::where('email', $client->email)->first();
+        $account = Account::where('account_code', $bank->account_code)->first();
         $validatedData = $request->validate([
             'name' => 'required',
             'account_code' => 'required|unique:accounts',
             'status' => 'required'
         ]);
         $bank->update($input);
-        $account->update(['name' => $request->name,'account_no' => $request->account_no]);
+        $account->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');

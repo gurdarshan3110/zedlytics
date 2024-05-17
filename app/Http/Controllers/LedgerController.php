@@ -7,10 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\Party as Model;
 use App\Models\Account;
 use App\Models\Bank;
-use App\Models\CashbookLedger;
+use App\Models\CashbookLedger as Model;
 use App\Models\User;
 use DataTables;
 use Carbon\Carbon;
@@ -54,8 +53,9 @@ class LedgerController extends Controller
         $account = Account::findOrFail($id);
         $bankId = $account->bankAccounts->first()->bank_id;
         $today = Carbon::today()->toDateString();
-        $ledger = CashbookLedger::whereDate('ledger_date', $today)->where('employee_id',Auth::user()->id)->where('bank_id',$bankId)->get();
-        return view(self::DIRECTORY.'.create', compact('title','url','directory','bankId','ledger'));
+        $ledger = Model::whereDate('ledger_date', $today)->where('employee_id',Auth::user()->id)->where('bank_id',$bankId)->get();
+        $accounts = Account::where('type',Account::BANK_ACCOUNT)->get();
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','bankId','ledger','accounts'));
     }
 
     /**
@@ -151,20 +151,16 @@ class LedgerController extends Controller
         // Check if either credit or debit amount is provided and set accordingly
         if (!is_null($data[2])) {
             $ledgerData['amount'] = $data[2];
-            $ledgerData['type'] = CashbookLedger::LEDGER_TYPE_CREDIT_VAL;
+            $ledgerData['type'] = Model::LEDGER_TYPE_CREDIT_VAL;
         } elseif (!is_null($data[3])) {
-            $ledgerData['amount'] = $data[3];
-            $ledgerData['type'] = CashbookLedger::LEDGER_TYPE_DEBIT_VAL;
+            $ledgerData['amount'] = -abs($data[3]);
+            $ledgerData['type'] = Model::LEDGER_TYPE_DEBIT_VAL;
         }
 
-        // Balance should be set only if provided
-        if (!is_null($data[4])) {
-            $ledgerData['balance'] = $data[4];
-        }
 
         try {
             if($ledgerData['amount']!=null){
-                CashbookLedger::updateOrCreate(
+                Model::updateOrCreate(
                     ['account_code' => $data[0], 'utr_no' => $data[1]],
                     $ledgerData
                 );
@@ -175,18 +171,25 @@ class LedgerController extends Controller
         }
     }
 
+    public function destroy(Request $request,Model $ledger)
+    {
+        $input = $request->all();
+        $ledger->remarks = $input['remarks'];
+        $ledger->save();
+        $ledger->delete();
+
+        return redirect()->route(self::URL.'.index')
+                         ->with('success', self::FNAME.' deleted successfully.');
+    }
 
     public function list()
     {
-        $data = Model::latest()->get();
+        $data = Model::withTrashed()->latest()->get();
 
         return DataTables::of($data)
 
-
-            ->addColumn('name', function ($row) {
-                $name = $row->name;
-
-                return $name;
+            ->addColumn('bank', function ($row) {
+                return $row->bank->account_code;
             })
 
             ->addColumn('account_code', function ($row) {
@@ -195,29 +198,63 @@ class LedgerController extends Controller
                 return $account_code;
             })
 
-            ->addColumn('status', function ($row) {
-                $status = (($row->status == 1) ? 'Active' : 'Inactive');
+            ->addColumn('utr_no', function ($row) {
+                $utr_no = $row->utr_no;
 
-                return $status;
+                return $utr_no;
             })
+
+            ->addColumn('credit', function ($row) {
+                $credit = (($row->type==Model::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'');
+
+                return $credit;
+            })
+
+            ->addColumn('debit', function ($row) {
+                $debit = (($row->type==Model::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'');
+
+                return $debit;
+            })
+
+            ->addColumn('balance', function ($row) {
+                return $row->balance;
+            })
+
+            ->addColumn('ledger_date', function ($row) {
+                if($row->trashed()){
+                    $date = Carbon::parse($row->deleted_at);
+                }else{
+                    $date = Carbon::parse($row->ledger_date);
+                };
+                $formattedDate = $date->format('d/m/y h:i:s A');
+                return $formattedDate;
+            })
+
+            ->addColumn('deleted', function ($row) {
+                $deleted = $row->trashed();
+                return $deleted;
+            })
+
             ->addColumn('action', function ($row) {
-                $msg = 'Are you sure?';
-                $action = '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">
-                    '.csrf_field().'
-                    '.method_field('DELETE').'
-                    <div class="btn-group">
-                    '.((in_array('edit '.self::DIRECTORY, permissions()))?'
-                    <a href="'.route(self::URL.'.edit', [$row]).'"
-                       class="btn btn-warning btn-xs">
-                        <i class="far fa-edit"></i>
-                    </a>':'').((in_array('delete '.self::DIRECTORY, permissions()))?'
-                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>':'').'
-                    
-                </div>
-                </form>';
+                $msg = 'Are you sure ! Please enter remarks?';
+                $action = '';
+                if (!$row->trashed()) {
+                    $action = '<form id="deleteForm'.$row->id.'" action="'.route(self::URL.'.destroy', [$row]).'" method="post">
+                                '.csrf_field().'
+                                '.method_field('DELETE').'
+                                <input type="hidden" id="remarks'.$row->id.'" name="remarks" value="">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger btn-xs" onclick="confirmDelete('.$row->id.')"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                            </form>';
+                }else{
+                    $action = $row->remarks;
+                }
 
                 return $action;
             })
+
+
         ->rawColumns(['action'])
         ->make(true);
     }

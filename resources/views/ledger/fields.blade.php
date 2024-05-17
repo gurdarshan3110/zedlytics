@@ -11,10 +11,10 @@
                   <th class="excel-cell text-end">Credit</th>
                   <th class="excel-cell text-end">Debit</th>
                   <th class="excel-cell text-end">Balance</th>
+                  <th class="excel-cell">Remarks</th>
                   <th class="excel-cell">Name</th>
                   <th class="excel-cell">Type</th>
-                  <th class="excel-cell">Status</th>
-                  <th class="excel-cell">Remarks</th>
+                  
                 </tr>
               </tbody>
             </table>
@@ -28,12 +28,11 @@
                     <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
-                    <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?$row->amount:'')}}</td>
-                    <td class="excel-cell text-end" contenteditable="true">{{$row->balance}}</td>
-                    <td class="excel-cell" contenteditable="true"></td>
-                    <td class="excel-cell" contenteditable="true"></td>
-                    <td class="excel-cell" contenteditable="true"></td>
+                    <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
+                    <td class="excel-cell text-end" contenteditable="true">{{$row->current_balance}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->remarks}}</td>
+                    <td class="excel-cell"></td>
+                    <td class="excel-cell"></td>
                   </tr>
                   @endforeach
                 @endif
@@ -44,9 +43,8 @@
                   <td class="excel-cell text-end" contenteditable="true"></td>
                   <td class="excel-cell text-end" contenteditable="true"></td>
                   <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell" contenteditable="true"></td>
+                  <td class="excel-cell"></td>
+                  <td class="excel-cell"></td>
                 </tr>
               </tbody>
             </table>
@@ -58,6 +56,8 @@
  
         function saveCellValues(data) {
             //console.log(data);
+            $('#response-status').removeClass('green-blinking');
+            $('#response-status').addClass('red-blinking');
             var bank = '{{$bankId}}';
             data.push(bank);
             $.ajax({
@@ -70,10 +70,12 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    console.log('Data saved successfully:', response);
+                  $('#response-status').addClass('green-blinking');
+                  $('#response-status').removeClass('red-blinking');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error saving data:', error);
+                  $('#response-status').addClass('green-blinking');
+                  $('#response-status').removeClass('red-blinking');
                 }
             });
         }
@@ -88,54 +90,78 @@
 
             // Handle arrow key navigation
             switch (event.which) {
-              case 37: // Left arrow
-                if (currentIndex > 0) {
-                  $cells.eq(currentIndex - 1).focus();
-                }
-                break;
-              case 38: // Up arrow
-                var $prevRow = $currentRow.prev();
-                if ($prevRow.length > 0) {
-                  $prevRow.find('.excel-cell').eq(currentIndex).focus();
-                }
-                break;
-              case 39: // Right arrow
-                if (currentIndex < numCols - 1) {
-                  $cells.eq(currentIndex + 1).focus();
-                }
-                break;
-              case 40: // Down arrow
-                var $nextRow = $currentRow.next();
-                if ($nextRow.length > 0) {
-                  $nextRow.find('.excel-cell').eq(currentIndex).focus();
-                }
-                break;
-              case 13: // Enter key
-                event.preventDefault(); 
-                if ($currentCell.is(':focus')) {
-                  if ($currentCell.closest('td').is(':last-child')) {
-                    var newRow = '<tr>';
-                    var i = 0;
-                    $('#excel-head tbody th').each(function() {
-                      newRow += '<td class="excel-cell '+(((i==2) || (i==3) ||(i==4))?'text-end':'')+'" contenteditable="true"></td>';
-                      i++;
-                    });
-                    newRow += '</tr>';
-                    $('#excel-grid tbody').append(newRow);
-                  }
-                  var $nextCell;
-                  if (currentIndex === numCols - 1) {
-                    $nextCell = $currentRow.next().find('.excel-cell').first();
-                  } else {
-                    $nextCell = $cells.eq(currentIndex + 1);
-                  }
-                  //saveCellValues();
-                  $nextCell.focus();
-                }
-                break;
+                case 37: // Left arrow
+                    if (currentIndex > 0) {
+                        $cells.eq(currentIndex - 1).focus();
+                    }
+                    break;
+                case 38: // Up arrow
+                    var $prevRow = $currentRow.prev();
+                    if ($prevRow.length > 0) {
+                        $prevRow.find('.excel-cell').eq(currentIndex).focus();
+                    }
+                    break;
+                case 39: // Right arrow
+                    if (currentIndex < numCols - 1) {
+                        $cells.eq(currentIndex + 1).focus();
+                    }
+                    break;
+                case 40: // Down arrow
+                    var $nextRow = $currentRow.next();
+                    if ($nextRow.length > 0) {
+                        $nextRow.find('.excel-cell').eq(currentIndex).focus();
+                    }
+                    break;
+                case 13: // Enter key
+                    event.preventDefault();
+                    if ($currentCell.is(':focus')) {
+                        if ($currentCell.closest('td').is(':nth-child(3)')) {
+                            if ($currentCell.text() != '') {
+                                var newRow = '<tr>';
+                                var i = 0;
+                                $('#excel-head tbody th').each(function() {
+                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" contenteditable="true"></td>';
+                                    i++;
+                                });
+                                newRow += '</tr>';
+                                $('#excel-grid tbody').append(newRow);
+                                $nextRow = $currentRow.next(); // Get the newly created row
+                                $nextRow.find('.excel-cell').eq(0).focus(); // Set focus to the first cell in the new row
+                            }else{
+                              $nextCell = $cells.eq(currentIndex + 1);
+                              $nextCell.focus();
+                            }
+                        }else if ($currentCell.closest('td').is(':nth-child(4)')) {
+                            if ($currentCell.text() != '') {
+                                var newRow = '<tr>';
+                                var i = 0;
+                                $('#excel-head tbody th').each(function() {
+                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" contenteditable="true"></td>';
+                                    i++;
+                                });
+                                newRow += '</tr>';
+                                $('#excel-grid tbody').append(newRow);
+                                $nextRow = $currentRow.next(); // Get the newly created row
+                                $nextRow.find('.excel-cell').eq(0).focus(); // Set focus to the first cell in the new row
+                            }else{
+                              $nextCell = $cells.eq(currentIndex + 1);
+                              $nextCell.focus();
+                            }
+                        }else{
+                          var $nextCell;
+                          if (currentIndex === numCols - 1) {
+                              $nextCell = $currentRow.next().find('.excel-cell').first();
+                          } else {
+                              $nextCell = $cells.eq(currentIndex + 1);
+                          }
+                          //saveCellValues();
+                          $nextCell.focus();
+                        }
+                    }
+                    break;
             }
-            
         });
+
 
         var initialCellValues = {};
 

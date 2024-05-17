@@ -11296,6 +11296,37 @@ body {
   overflow: scroll;
 }
 
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.red-blinking {
+  width: 13px; /* Adjust size as needed */
+  height: 13px; /* Adjust size as needed */
+  border-radius: 50%; /* Create a round shape */
+  background-color: red; /* Set background color to red */
+  animation: blink 1s infinite; /* Apply the blink animation */
+}
+
+.green-blinking {
+  width: 13px; /* Adjust size as needed */
+  height: 13px; /* Adjust size as needed */
+  border-radius: 50%; /* Create a round shape */
+  background-color: green; /* Set background color to red */
+}
+
+.text-canceled td{
+   --bs-text-opacity: 1;
+    color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity)) !important;
+}
 
 @media (max-width: 576px) {
   .dataTables_length{

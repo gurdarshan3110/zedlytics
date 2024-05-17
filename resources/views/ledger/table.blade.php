@@ -2,10 +2,13 @@
     <table class="table table-bordered table-striped w-100 align-middle" id="record-table">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Status</th>
-            <th  style="width:15%;">Action</th>
+            <th width="25%">Bank</th>
+            <th width="20%">Account</th>
+            <th width="10%" class="text-end">Credit</th>
+            <th width="10%" class="text-end">Debit</th>
+            <th width="10%" class="text-end">Balance</th>
+            <th width="20%">Date</th>
+            <th width="5%">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -28,10 +31,13 @@
                 serverSide: true,
                 ajax: "/{{$url}}/list",
                 columns: [
-                    {data: 'name', name: 'name'},
+                    {data: 'bank', name: 'bank'},
                     {data: 'account_code', name: 'account_code'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action',className:'action'},
+                    {data: 'credit', name: 'credit', className: "text-end"},
+                    {data: 'debit', name: 'debit', className: "text-end"},
+                    {data: 'balance', name: 'balance', className: "text-end"},
+                    {data: 'ledger_date', name: 'ledger_date'},
+                    {data: 'action', name: 'action'},
                     
                 ],
                 pageLength:10,
@@ -62,12 +68,25 @@
                     $('.paginate_button.current').addClass('fs-7 active-menu-item');
                     $('.paginate_button.active-menu-item').removeClass('current');
                     
+                },
+                "rowCallback": function (row, data) {
+                    if (data.deleted==true) {
+                        $(row).addClass('text-canceled');
+                    }
                 }
+
             });
             $('#filter').click(function(){
                 var min=$('#min').val();
                 var max=$('#max').val();
                 table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
             });
+            function confirmDelete(rowId) {
+                var remarks = prompt('Are you sure! Please enter remarks:');
+                if (remarks !== null) {
+                    $('#remarks'+rowId).val(remarks); 
+                    $('#deleteForm'+rowId).submit(); // Submit the form
+                }
+            }
     </script>
 @endpush

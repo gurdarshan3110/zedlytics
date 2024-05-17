@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CashbookLedger extends Model
@@ -19,17 +20,83 @@ class CashbookLedger extends Model
 
     protected $fillable = [
         'account_code',
-        'account_id',
         'bank_id',
         'utr_no',
         'amount',
         'type',
-        'balance',
         'employee_id',
         'ledger_date',
         'status',
         'remarks',
     ];
+
+    protected $appends = [
+        'current_balance','bank_balance','balance'
+    ];
+
+    public function getBankBalanceAttribute()
+    {
+        $balance=0;
+        // Calculate sum of credit amounts
+        $creditSum = $this->where('bank_id', $this->bank_id)
+                           ->where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                           ->where('ledger_date', '<=', $this->ledger_date)
+                           ->sum('amount');
+
+        // Calculate sum of debit amounts
+        $debitSum = $this->where('bank_id', $this->bank_id)
+                          ->where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                          ->where('ledger_date', '<=', $this->ledger_date)
+                          ->sum('amount');
+
+        // Calculate balance
+        $balance = $creditSum + $debitSum;
+
+        return $balance;
+    }
+
+    public function getCurrentBalanceAttribute()
+    {
+        $balance=0;
+        $user_id = Auth::user()->id;
+        // Calculate sum of credit amounts
+        $creditSum = $this->where('bank_id', $this->bank_id)
+                        ->where('employee_id',$user_id)
+                           ->where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                           ->where('ledger_date', '<=', $this->ledger_date)
+                           ->sum('amount');
+
+        // Calculate sum of debit amounts
+        $debitSum = $this->where('bank_id', $this->bank_id)
+                        ->where('employee_id',$user_id)
+                          ->where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                          ->where('ledger_date', '<=', $this->ledger_date)
+                          ->sum('amount');
+
+        // Calculate balance
+        $balance = $creditSum + $debitSum;
+
+        return $balance;
+    }
+
+    public function getBalanceAttribute()
+    {
+        $balance=0;
+        // Calculate sum of credit amounts
+        $creditSum = $this->where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                           ->where('ledger_date', '<=', $this->ledger_date)
+                           ->sum('amount');
+
+        // Calculate sum of debit amounts
+        $debitSum = $this->where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                          ->where('ledger_date', '<=', $this->ledger_date)
+                          ->sum('amount');
+
+        // Calculate balance
+        $balance = $creditSum + $debitSum;
+
+        return $balance;
+    }
 
     public function account()
     {

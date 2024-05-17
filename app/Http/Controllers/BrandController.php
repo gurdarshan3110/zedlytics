@@ -119,7 +119,7 @@ class BrandController extends Controller
             'status' => 'required'
         ]);
         $brand->update($input);
-        $account->update(['name' => $request->name,'account_no' => $request->account_no]);
+        $account->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');
