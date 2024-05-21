@@ -13,9 +13,11 @@
             <div class="mt-auto w-75 align-items-end d-flex justify-content-end">
                 @if(in_array('create '.$directory, permissions()))
                     @foreach($accounts as $account)
+                        @if(in_array($account->account_code, permissions()))    
                         <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1" tooltip="New">
                             <span class=" d-md-inline">{{$account->account_code}}</span>
                         </a>
+                        @endif
                     @endforeach
                 @endif
                 <a href="{{route($url.'.index')}}" class="btn btn-primary ms-1" tooltip="New">

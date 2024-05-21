@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     protected $fillable = [
-        'name', 'guard_name',
+        'name', 'guard_name','parent'
     ];
 }

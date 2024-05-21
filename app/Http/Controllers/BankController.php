@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Bank as Model;
 use App\Models\Account;
+use App\Models\Permission;
 use App\Models\User;
 use DataTables;
 
@@ -69,7 +70,11 @@ class BankController extends Controller
         $bank = Model::create($input);
         $account = Account::create($input);
         $account->banks()->attach($bank);
-
+        Permission::create([
+            'name' => $input['account_code'],
+            'guard_name' => 'web',
+            'parent' => 'New Bank Account'
+        ]);
         return redirect()->route(self::URL.'.index', $bank->id)->with('success', self::FNAME.' created successfully.');
     }
 
@@ -118,6 +123,10 @@ class BankController extends Controller
             'account_code' => 'required|unique:accounts',
             'status' => 'required'
         ]);
+
+        $permission = Permission::where('name', $bank->account_code)->first();
+        $permission->name = $input['account_code'];
+        $permission->update();
         $bank->update($input);
         $account->update($input);
 
@@ -134,7 +143,7 @@ class BankController extends Controller
     public function destroy(Model $bank)
     {
         $bank->delete();
-
+        
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' deleted successfully.');
     }
