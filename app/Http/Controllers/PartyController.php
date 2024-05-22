@@ -115,7 +115,7 @@ class PartyController extends Controller
         $account = Account::where('account_code', $party->account_code)->first();
         $validatedData = $request->validate([
             'name' => 'required',
-            'account_code' => 'required|unique:accounts',
+            'account_code' => 'required|unique:accounts,id,'.$account->id,
             'status' => 'required'
         ]);
         $party->update($input);
@@ -139,9 +139,10 @@ class PartyController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
 
         return DataTables::of($data)
 

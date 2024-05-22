@@ -120,12 +120,13 @@ class BankController extends Controller
         $account = Account::where('account_code', $bank->account_code)->first();
         $validatedData = $request->validate([
             'name' => 'required',
-            'account_code' => 'required|unique:accounts',
+            'account_code' => 'required|unique:accounts,id,'.$account->id,
             'status' => 'required'
         ]);
 
         $permission = Permission::where('name', $bank->account_code)->first();
         $permission->name = $input['account_code'];
+
         $permission->update();
         $bank->update($input);
         $account->update($input);
@@ -148,9 +149,10 @@ class BankController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
 
         return DataTables::of($data)
 
@@ -171,6 +173,12 @@ class BankController extends Controller
                 $account_code = $row->account_code;
 
                 return $account_code;
+            })
+
+            ->addColumn('rm', function ($row) {
+                $rm = $row->rm;
+
+                return $rm;
             })
 
             ->addColumn('status', function ($row) {

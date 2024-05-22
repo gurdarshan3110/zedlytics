@@ -1,20 +1,34 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+use App\Models\CashbookLedger;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    
     const TITLE = 'Dashboard';
 
     public function index()
     {
-        // Your logic to retrieve data for the dashboard goes here
         $title = self::TITLE;
-        return view('dashboard.index',compact('title'));
+        $totalBalance = CashbookLedger::getTotalBalance();
+        $todaysDeposits = CashbookLedger::getTodaysDeposits();
+        $todaysWithdrawals = CashbookLedger::getTodaysWithdrawals();
+
+        $todayData = CashbookLedger::getDataForPeriod(now()->startOfDay(), now()->endOfDay());
+        $weekData = CashbookLedger::getDataForPeriod(now()->startOfWeek(), now()->endOfWeek());
+        $monthData = CashbookLedger::getDataForPeriod(now()->startOfMonth(), now()->endOfMonth());
+
+
+        return view('dashboard.index', compact(
+            'title',
+            'totalBalance',
+            'todaysDeposits',
+            'todaysWithdrawals',
+            'todayData',
+            'weekData',
+            'monthData'
+        ));
     }
 }

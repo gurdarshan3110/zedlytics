@@ -144,8 +144,8 @@ class LedgerController extends Controller
             'utr_no' => $data[1],
             'employee_id' => Auth::user()->id,
             'ledger_date' => Carbon::now(),
-            'remarks' => $data[8],
-            'bank_id' => $data[9]
+            'remarks' => $data[5],
+            'bank_id' => $data[8]
         ];
 
         // Check if either credit or debit amount is provided and set accordingly

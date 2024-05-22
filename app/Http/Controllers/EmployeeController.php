@@ -130,7 +130,7 @@ class EmployeeController extends Controller
             'status' => 'required',
         ]);
         $employee->update($input);
-        $user->update(['name' => $request->name,'email' => $request->email]);
+        $user->update(['name' => $request->name,'email' => $request->email,'role' => $request->role]);
         $user->assignRole($input['role']);
 
         return redirect()->route(self::URL.'.index')
@@ -151,9 +151,10 @@ class EmployeeController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
         return DataTables::of($data)
 
 
@@ -161,6 +162,12 @@ class EmployeeController extends Controller
                 $name = $row->name;
 
                 return $name;
+            })
+
+            ->addColumn('account_code', function ($row) {
+                $account_code = $row->employee_code;
+
+                return $account_code;
             })
 
             ->addColumn('email', function ($row) {
@@ -175,10 +182,10 @@ class EmployeeController extends Controller
                 return $phone_no;
             })
 
-            ->addColumn('status', function ($row) {
-                $status = (($row->status == 1) ? 'Active' : 'Inactive');
+            ->addColumn('role', function ($row) {
+                $role = $row->role;
 
-                return $status;
+                return $role;
             })
             ->addColumn('action', function ($row) {
                 $msg = 'Are you sure?';

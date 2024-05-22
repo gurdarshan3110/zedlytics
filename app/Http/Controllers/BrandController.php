@@ -115,7 +115,7 @@ class BrandController extends Controller
         $account = Account::where('account_code', $brand->account_code)->first();
         $validatedData = $request->validate([
             'name' => 'required',
-            'account_code' => 'required|unique:accounts',
+            'account_code' => 'required|unique:accounts,id,'.$account->id,
             'status' => 'required'
         ]);
         $brand->update($input);
@@ -139,9 +139,10 @@ class BrandController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
 
         return DataTables::of($data)
 
@@ -184,6 +185,7 @@ class BrandController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
+
 
 
 }

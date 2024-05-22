@@ -115,7 +115,7 @@ class ExpenseController extends Controller
         $user = User::where('email', $client->email)->first();
         $validatedData = $request->validate([
             'name' => 'required',
-            'account_code' => 'required|unique:expenses',
+            'account_code' => 'required|unique:expenses,id,'.$account->id,
             'status' => 'required'
         ]);
         $expense->update($input);
@@ -139,9 +139,10 @@ class ExpenseController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
 
         return DataTables::of($data)
 

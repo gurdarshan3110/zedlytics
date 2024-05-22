@@ -118,7 +118,7 @@ class ClientController extends Controller
         $account = Account::where('account_code', $client->account_code)->first();
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'account_code' => 'required|unique:accounts',
+            'account_code' => 'required|unique:accounts,id,'.$account->id,
             'email' => 'required|email|unique:users,id,'.$user->id,
             'phone_no' => [
                 'required',
@@ -148,9 +148,10 @@ class ClientController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::latest()->get();
+        $input = $request->all();
+        $data = Model::where('status',$input['status'])->latest()->get();
 
         return DataTables::of($data)
 

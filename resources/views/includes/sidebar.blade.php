@@ -9,9 +9,9 @@
                         $modules = softModules();
                         $permissions = permissions();
                     ?>
-                    @foreach ($modules as $module)
+                    @foreach ($modules as $i=> $module)
                         @php
-                            $permissionKey = 'view ' . $module->url;
+                            $permissionKey = (($i==0)?'dashboard':'view ' . $module->url);
                         @endphp
                         @if (in_array($permissionKey, $permissions))
                             <a class="nav-link {{ request()->is($module->url . '*') ? 'active' : '' }}" href="{{ route($module->url.'.index') }}">

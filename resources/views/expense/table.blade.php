@@ -26,7 +26,7 @@
         var table=$('#record-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list",
+                ajax: "/{{$url}}/list?status=1",
                 columns: [
                     {data: 'name', name: 'name'},
                     {data: 'account_code', name: 'account_code'},

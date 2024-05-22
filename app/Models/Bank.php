@@ -16,6 +16,7 @@ class Bank extends Model
         'account_no',
         'description',
         'status',
+        'rm',
     ];
 
     public function accounts()

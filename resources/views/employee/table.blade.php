@@ -3,9 +3,10 @@
         <thead>
         <tr>
             <th>Name</th>
+            <th>Employee Code</th>
             <th>Email</th>
             <th>Phone No</th>
-            <th>Status</th>
+            <th>Role</th>
             <th  style="width:15%;">Action</th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
         </tbody>
     </table>
 </div>
+
 @push('jsscript')
     <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
@@ -27,12 +29,13 @@
         var table=$('#record-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list",
+                ajax: "/{{$url}}/list?status=1",
                 columns: [
                     {data: 'name', name: 'name'},
+                    {data: 'account_code', name: 'account_code'},
                     {data: 'email', name: 'email'},
                     {data: 'phone_no', name: 'phone_no'},
-                    {data: 'status', name: 'status'},
+                    {data: 'role', name: 'role'},
                     {data: 'action', name: 'action',className:'action'},
                     
                 ],
@@ -66,6 +69,7 @@
                     
                 }
             });
+            
             $('#filter').click(function(){
                 var min=$('#min').val();
                 var max=$('#max').val();

@@ -24,6 +24,7 @@
             <!--end::Create app-->
         </div>
         <div class="card mb-4">
+            @include('errors.flash.message')
             <div class="card-body">
                 @include($directory.'.table')
             </div>

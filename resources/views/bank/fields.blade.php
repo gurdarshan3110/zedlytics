@@ -14,6 +14,11 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('RM') }}
+    {{ html()->text('rm')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Description') }}
     {{ html()->textarea('description')->class('form-control')->autocomplete(false) }}
 </div>

@@ -31,27 +31,17 @@ class CashbookLedger extends Model
     ];
 
     protected $appends = [
-        'current_balance','bank_balance','balance'
+        //'current_balance','bank_balance','balance'
     ];
 
     public function getBankBalanceAttribute()
     {
         $balance=0;
+        $ledger_date = $this->ledger_date;
         // Calculate sum of credit amounts
-        $creditSum = $this->where('bank_id', $this->bank_id)
-                           ->where('type', self::LEDGER_TYPE_CREDIT_VAL)
-                           ->where('ledger_date', '<=', $this->ledger_date)
-                           ->sum('amount');
-
-        // Calculate sum of debit amounts
-        $debitSum = $this->where('bank_id', $this->bank_id)
-                          ->where('type', self::LEDGER_TYPE_DEBIT_VAL)
-                          ->where('ledger_date', '<=', $this->ledger_date)
-                          ->sum('amount');
-
-        // Calculate balance
-        $balance = $creditSum + $debitSum;
-
+        $balance = self::where('bank_id', $this->bank_id)
+                        ->where('ledger_date', '<=', $ledger_date)
+                        ->sum('amount');
         return $balance;
     }
 
@@ -59,22 +49,12 @@ class CashbookLedger extends Model
     {
         $balance=0;
         $user_id = Auth::user()->id;
+        $ledger_date = $this->ledger_date;
         // Calculate sum of credit amounts
-        $creditSum = $this->where('bank_id', $this->bank_id)
+        $balance = self::where('bank_id', $this->bank_id)
                         ->where('employee_id',$user_id)
-                           ->where('type', self::LEDGER_TYPE_CREDIT_VAL)
-                           ->where('ledger_date', '<=', $this->ledger_date)
-                           ->sum('amount');
-
-        // Calculate sum of debit amounts
-        $debitSum = $this->where('bank_id', $this->bank_id)
-                        ->where('employee_id',$user_id)
-                          ->where('type', self::LEDGER_TYPE_DEBIT_VAL)
-                          ->where('ledger_date', '<=', $this->ledger_date)
-                          ->sum('amount');
-
-        // Calculate balance
-        $balance = $creditSum + $debitSum;
+                        ->where('ledger_date', '<=', $ledger_date)
+                        ->sum('amount');
 
         return $balance;
     }
@@ -82,18 +62,9 @@ class CashbookLedger extends Model
     public function getBalanceAttribute()
     {
         $balance=0;
+        $ledger_date = $this->ledger_date;
         // Calculate sum of credit amounts
-        $creditSum = $this->where('type', self::LEDGER_TYPE_CREDIT_VAL)
-                           ->where('ledger_date', '<=', $this->ledger_date)
-                           ->sum('amount');
-
-        // Calculate sum of debit amounts
-        $debitSum = $this->where('type', self::LEDGER_TYPE_DEBIT_VAL)
-                          ->where('ledger_date', '<=', $this->ledger_date)
-                          ->sum('amount');
-
-        // Calculate balance
-        $balance = $creditSum + $debitSum;
+        $balance = self::where('ledger_date', '<=', $ledger_date)->sum('amount');
 
         return $balance;
     }
@@ -112,4 +83,75 @@ class CashbookLedger extends Model
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
+
+    public static function getTotalBalance()
+    {
+        $balance = self::sum('amount');
+        return $balance;
+    }
+
+    public static function getTodaysDeposits()
+    {
+        $today = now()->startOfDay();
+        return self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                    ->where('ledger_date', '>=', $today)
+                    ->sum('amount');
+    }
+
+    public static function getTodaysWithdrawals()
+    {
+        $today = now()->startOfDay();
+        return self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                    ->where('ledger_date', '>=', $today)
+                    ->sum('amount');
+    }
+
+    public static function getDataForPeriod($startDate, $endDate)
+    {
+        $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
+                    ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
+                    ->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
+                    ->whereNull('cashbook_ledger.deleted_at') 
+                    ->groupBy('banks.account_code', 'cashbook_ledger.type')
+                    ->get();
+
+        $result = [];
+
+        foreach ($data as $item) {
+            $accountCode = $item->account_code;
+            $type = $item->type;
+            $total = $item->total;
+
+            if (!isset($result[$accountCode])) {
+                $result[$accountCode] = [
+                    'account_code' => $accountCode,
+                    'credit' => 0,
+                    'debit' => 0,
+                    'balance' => 0
+                ];
+            }
+
+            if ($type == \App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL) {
+                $result[$accountCode]['credit'] += $total;
+            } else {
+                $result[$accountCode]['debit'] += $total;
+            }
+
+            $result[$accountCode]['balance'] = $result[$accountCode]['credit'] + $result[$accountCode]['debit'];
+        }
+
+        return array_values($result); // Convert associative array to indexed array
+    }
+
+
+    public function balance()
+    {
+        $balance=0;
+        $ledger_date = $this->ledger_date;
+        // Calculate sum of credit amounts
+        $balance = self::where('ledger_date', '<=', $ledger_date)->sum('amount');
+
+        return $balance;
+    }
+
 }
