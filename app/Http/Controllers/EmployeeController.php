@@ -73,7 +73,8 @@ class EmployeeController extends Controller
         $employee = Model::create($input);
         $user = User::create($input);
         $user->employees()->attach($employee);
-        $user->assignRole($input['role']);
+        $role = Role::where('id', $input['role'])->first();
+        $user->assignRole($role);
 
         return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' created successfully.');
     }
