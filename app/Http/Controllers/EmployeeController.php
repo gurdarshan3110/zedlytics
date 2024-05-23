@@ -48,7 +48,7 @@ class EmployeeController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        $roles = Role::pluck('name', 'id')->prepend('Select Role', '');
+        $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
         return view(self::DIRECTORY.'.create', compact('title','url','directory','roles'));
     }
 
@@ -73,8 +73,7 @@ class EmployeeController extends Controller
         $employee = Model::create($input);
         $user = User::create($input);
         $user->employees()->attach($employee);
-        $role = Role::where('id', $input['role'])->first();
-        $user->assignRole($role);
+        $user->assignRole($input['role']);
 
         return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' created successfully.');
     }
