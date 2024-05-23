@@ -32,6 +32,8 @@ Route::group(['middleware' => 'auth:web'], function ($router) {
     Route::resource('dashboard', DashboardController::class);
 
     Route::get('/employees/list', [EmployeeController::class, 'list'])->name('employees.list');
+    Route::get('/employees/{employee}/reset', [EmployeeController::class, 'reset'])->name('employees.reset');
+    Route::put('/employees/{employee}/password', [EmployeeController::class, 'resetpassword'])->name('employees.password');
     Route::resource('employees', EmployeeController::class);
 
     Route::get('/roles/list', [RoleController::class, 'list'])->name('roles.list');

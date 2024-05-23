@@ -65,7 +65,6 @@ class EmployeeController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'employee_code' => 'required|unique:users',
             'phone_no' => ['required', 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/', 'unique:'.self::URL],
             'password' => 'required',
             'status' => 'required'
@@ -82,6 +81,7 @@ class EmployeeController extends Controller
                     ->withInput();
         }
 
+        $input['employee_code'] = Model::generateEmployeeCode();
         $input['user_type'] = User::USER_EMPLOYEE;
         $employee = Model::create($input);
         $user = User::create($input);
@@ -89,6 +89,33 @@ class EmployeeController extends Controller
         $user->assignRole($input['role']);
 
         return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' created successfully.');
+    }
+
+    public function resetpassword(Request $request, Model $employee)
+    {
+        $input = $request->all();
+        $rules = [
+            'password' => 'required',
+        ];
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+
+        $user = User::where('employee_code',$employee->employee_code)->first();
+        //dd($employee->employee_code);
+        $password = Hash::make($input['password']);
+        $user->password = $password;
+        $user->save();
+
+        return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' Password reset successfully.');
     }
 
     /**
@@ -120,6 +147,15 @@ class EmployeeController extends Controller
         return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','roles'));
     }
 
+    public function reset(Model $employee)
+    {
+        $title = 'Reset '.self::FNAME .' Password';
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
+        return view(self::DIRECTORY.'.reset', compact(self::DIRECTORY, 'title','directory','url','roles'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -135,7 +171,6 @@ class EmployeeController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,id,'.$user->id,
-            'employee_code' => 'required|unique:users,id,'.$user->id,
             'phone_no' => [
                 'required',
                 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
@@ -222,8 +257,11 @@ class EmployeeController extends Controller
                     <div class="btn-group">
                     '.((in_array('edit '.self::DIRECTORY, permissions()))?'
                     <a href="'.route(self::URL.'.edit', [$row]).'"
-                       class="btn btn-warning btn-xs">
+                       class="btn btn-info btn-xs">
                         <i class="far fa-edit"></i>
+                    </a><a href="'.route(self::URL.'.reset', [$row]).'"
+                       class="btn btn-warning btn-xs">
+                        <i class="fa fa-key"></i>
                     </a>':'').((in_array('delete '.self::DIRECTORY, permissions()))?'
                     <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>':'').'
                     

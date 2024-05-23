@@ -26,6 +26,8 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5 bg-primary">
                                     <div class="card-header"><h3 class="text-center font-weight-light text-light my-4">Login</h3></div>
                                     <div class="card-body">
+                                        @include('errors.flash.message')
+
                                         <form  class="form w-100" novalidate="novalidate" id="login-form" method="POST" action="{{ route('login') }}">
                                          @csrf
                                             <div class="form-floating mb-3">

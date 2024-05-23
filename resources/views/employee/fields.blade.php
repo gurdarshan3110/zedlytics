@@ -1,7 +1,3 @@
-<div class="form-group col-sm-6">
-    {{ html()->label('Employee Code') }}
-    {{ html()->text('employee_code')->class('form-control') }}
-</div>
 
 <div class="form-group col-sm-6">
     {{ html()->label('Name') }}

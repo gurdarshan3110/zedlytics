@@ -63,7 +63,9 @@ class LoginController extends Controller
             return redirect()->intended('/dashboard');
         } else {
             // Authentication failed
-            return back()->withErrors(['identifier' => 'Invalid credentials'])->withInput();
+            return redirect()->back()
+                    ->with('error','Invalid credentials')
+                    ->withInput();
         }
     }
 

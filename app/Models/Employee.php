@@ -24,4 +24,22 @@ class Employee extends Model
     {
         return $this->belongsToMany(User::class, 'user_employees');
     }
+
+    public static function generateEmployeeCode()
+    {
+        // Get the last employee code
+        $lastEmployee = self::withTrashed()->orderBy('employee_code', 'desc')->first();
+
+        if ($lastEmployee) {
+            $lastCode = $lastEmployee->employee_code;
+            $numericPart = intval(substr($lastCode, 1));
+            $newCode = 'S' . str_pad($numericPart + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            // If there are no employees yet, start with S001
+            $newCode = 'S001';
+        }
+
+        return $newCode;
+    }
+
 }
