@@ -26,21 +26,62 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    // Process the login form
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        // Validate the input
+        $request->validate([
+            'email' => 'required',
             'password' => 'required|min:6',
         ]);
-        $userTypes = [User::USER_SUPER_ADMIN,User::USER_EMPLOYEE,User::USER_CLIENT]; 
-        if (Auth::attempt($credentials) && in_array(Auth::user()->user_type, $userTypes)) {
+
+        // Get the credentials from the request
+        $credentials = $request->only('email', 'password');
+
+        // Define the user types that are allowed to login
+        $userTypes = [User::USER_SUPER_ADMIN, User::USER_EMPLOYEE];
+
+        // Attempt to authenticate using the provided identifier
+        $loginSuccess = false;
+
+        // Check if identifier is email
+        if (filter_var($credentials['email'], FILTER_VALIDATE_EMAIL)) {
+            $loginSuccess = Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']]);
+        }
+        
+        // Check if identifier is phone number
+        if (!$loginSuccess) {
+            $loginSuccess = Auth::attempt(['phone_no' => $credentials['email'], 'password' => $credentials['password']]);
+        }
+
+        // Check if identifier is employee code
+        if (!$loginSuccess) {
+            $loginSuccess = Auth::attempt(['employee_code' => $credentials['email'], 'password' => $credentials['password']]);
+        }
+
+        // Check if login was successful and user has the correct user type
+        if ($loginSuccess && in_array(Auth::user()->user_type, $userTypes)) {
             return redirect()->intended('/dashboard');
         } else {
             // Authentication failed
-            return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+            return back()->withErrors(['identifier' => 'Invalid credentials'])->withInput();
         }
     }
+
+    // Process the login form
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required|min:6',
+    //     ]);
+    //     $userTypes = [User::USER_SUPER_ADMIN,User::USER_EMPLOYEE,User::USER_CLIENT]; 
+    //     if (Auth::attempt($credentials) && in_array(Auth::user()->user_type, $userTypes)) {
+    //         return redirect()->intended('/dashboard');
+    //     } else {
+    //         // Authentication failed
+    //         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+    //     }
+    // }
 
     // Logout the authenticated user
     public function logout()

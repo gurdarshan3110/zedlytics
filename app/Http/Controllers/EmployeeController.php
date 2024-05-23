@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -61,13 +62,25 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'employee_code' => 'required|email|unique:users',
             'phone_no' => ['required', 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/', 'unique:'.self::URL],
             'password' => 'required',
             'status' => 'required'
-        ]);
+        ];
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         $input['user_type'] = User::USER_EMPLOYEE;
         $employee = Model::create($input);
@@ -119,16 +132,30 @@ class EmployeeController extends Controller
     {
         $input = $request->all();
         $user = User::where('email', $employee->email)->first();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,id,'.$user->id,
+            'employee_code' => 'required|email|unique:users,id,'.$user->id,
             'phone_no' => [
                 'required',
                 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
                 'unique:'.self::URL.',phone_no,'.$employee->id.',id'
             ],
             'status' => 'required',
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+
         $employee->update($input);
         $user->update(['name' => $request->name,'email' => $request->email,'role' => $request->role]);
         $user->assignRole($input['role']);
