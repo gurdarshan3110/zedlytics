@@ -31,7 +31,7 @@ class LoginController extends Controller
         // Validate the input
         $request->validate([
             'email' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:4',
         ]);
 
         // Get the credentials from the request
