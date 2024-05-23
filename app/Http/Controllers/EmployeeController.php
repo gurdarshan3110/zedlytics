@@ -81,7 +81,7 @@ class EmployeeController extends Controller
                     ->withInput();
         }
 
-        $input['employee_code'] = Model::generateEmployeeCode();
+        $input['employee_code'] = Model::generateEmployeeCode($input['name']);
         $input['user_type'] = User::USER_EMPLOYEE;
         $employee = Model::create($input);
         $user = User::create($input);
