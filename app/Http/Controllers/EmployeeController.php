@@ -65,7 +65,7 @@ class EmployeeController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'employee_code' => 'required|email|unique:users',
+            'employee_code' => 'required|unique:users',
             'phone_no' => ['required', 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/', 'unique:'.self::URL],
             'password' => 'required',
             'status' => 'required'
@@ -135,7 +135,7 @@ class EmployeeController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,id,'.$user->id,
-            'employee_code' => 'required|email|unique:users,id,'.$user->id,
+            'employee_code' => 'required|unique:users,id,'.$user->id,
             'phone_no' => [
                 'required',
                 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
