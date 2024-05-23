@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -59,13 +60,25 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:clients',
             'account_code' => 'required|unique:accounts',
             'phone_no' => ['required', 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/', 'unique:'.self::URL],
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         $input['client_code'] = $input['account_code'];
         $input['type'] = Account::CLIENT_ACCOUNT;
@@ -116,7 +129,7 @@ class ClientController extends Controller
     {
         $input = $request->all();
         $account = Account::where('account_code', $client->account_code)->first();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'account_code' => 'required|unique:accounts,id,'.$account->id,
             'email' => 'required|email|unique:users,id,'.$user->id,
@@ -126,7 +139,20 @@ class ClientController extends Controller
                 'unique:'.self::URL.',phone_no,'.$client->id.',id'
             ],
             'status' => 'required',
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+
         $client->update($input);
         $account->update(['name' => $request->name]);
 

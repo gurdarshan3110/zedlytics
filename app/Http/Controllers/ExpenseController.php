@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -59,11 +60,23 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:expenses',
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         //$input['type'] = Account::EXPENSE_ACCOUNT;
         $expense = Model::create($input);
@@ -113,11 +126,24 @@ class ExpenseController extends Controller
     {
         $input = $request->all();
         $user = User::where('email', $client->email)->first();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:expenses,id,'.$account->id,
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+        
         $expense->update($input);
         //$account->update(['name' => $request->name,'account_no' => $request->account_no]);
 

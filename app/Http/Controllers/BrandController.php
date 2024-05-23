@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -59,11 +60,23 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:accounts',
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         $input['type'] = Account::BRAND_ACCOUNT;
         $brand = Model::create($input);
@@ -113,11 +126,24 @@ class BrandController extends Controller
     {
         $input = $request->all();
         $account = Account::where('account_code', $brand->account_code)->first();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:accounts,id,'.$account->id,
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+        
         $brand->update($input);
         $account->update($input);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -60,10 +61,22 @@ class RoleController extends Controller
     {
         $input = $request->all();
         //dd($input);
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|unique:roles,name',
             'permissions' => 'required|array',
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         // Create the role
         $role = Model::create([
@@ -119,10 +132,22 @@ class RoleController extends Controller
     {
         $input = $request->all();
         ;
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         // Update the role name
         $role->update([

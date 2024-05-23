@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
@@ -60,11 +61,23 @@ class BankController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:accounts',
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         $input['type'] = Account::BANK_ACCOUNT;
         $bank = Model::create($input);
@@ -118,11 +131,23 @@ class BankController extends Controller
     {
         $input = $request->all();
         $account = Account::where('account_code', $bank->account_code)->first();
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required',
             'account_code' => 'required|unique:accounts,id,'.$account->id,
             'status' => 'required'
-        ]);
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
 
         $permission = Permission::where('name', $bank->account_code)->first();
         $permission->name = $input['account_code'];
