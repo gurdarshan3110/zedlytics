@@ -19,6 +19,8 @@ class DashboardController extends Controller
         $todayData = CashbookLedger::getDataForPeriod(now()->startOfDay(), now()->endOfDay());
         $weekData = CashbookLedger::getDataForPeriod(now()->startOfWeek(), now()->endOfWeek());
         $monthData = CashbookLedger::getDataForPeriod(now()->startOfMonth(), now()->endOfMonth());
+        $bankData = CashbookLedger::getDataForBank();
+
 
 
         return view('dashboard.index', compact(
@@ -28,7 +30,8 @@ class DashboardController extends Controller
             'todaysWithdrawals',
             'todayData',
             'weekData',
-            'monthData'
+            'monthData',
+            'bankData'
         ));
     }
 }

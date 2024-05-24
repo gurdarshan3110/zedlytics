@@ -144,10 +144,11 @@ class LedgerController extends Controller
             'account_code' => $data[0],
             'account_type' => $account_type,
             'utr_no' => $data[1],
+            'transaction_id' => $data[8],
             'employee_id' => Auth::user()->id,
             'ledger_date' => Carbon::now(),
             'remarks' => $data[5],
-            'bank_id' => $data[8]
+            'bank_id' => $data[9]
         ];
 
         // Check if either credit or debit amount is provided and set accordingly
@@ -163,7 +164,7 @@ class LedgerController extends Controller
         try {
             if($ledgerData['amount']!=null){
                 Model::updateOrCreate(
-                    ['account_code' => $data[0], 'utr_no' => $data[1]],
+                    ['account_code' => $data[0], 'transaction_id' => $data[8]],
                     $ledgerData
                 );
             }

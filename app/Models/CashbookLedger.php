@@ -32,6 +32,7 @@ class CashbookLedger extends Model
         'account_type',
         'bank_id',
         'utr_no',
+        'transaction_id',
         'amount',
         'type',
         'employee_id',
@@ -96,7 +97,7 @@ class CashbookLedger extends Model
 
     public static function getTotalBalance()
     {
-        $balance = self::sum('amount');
+        $balance = self::whereNull('cashbook_ledger.deleted_at')->sum('amount');
         $balance = number_format((float)$balance, 2, '.', '');
 
         return $balance;
@@ -132,6 +133,43 @@ class CashbookLedger extends Model
                     ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
                     ->where('cashbook_ledger.account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
+                    ->whereNull('cashbook_ledger.deleted_at') 
+                    ->groupBy('banks.account_code', 'cashbook_ledger.type')
+                    ->get();
+
+        $result = [];
+
+        foreach ($data as $item) {
+            $accountCode = $item->account_code;
+            $type = $item->type;
+            $total = $item->total;
+
+            if (!isset($result[$accountCode])) {
+                $result[$accountCode] = [
+                    'account_code' => $accountCode,
+                    'credit' => 0,
+                    'debit' => 0,
+                    'balance' => 0
+                ];
+            }
+
+            if ($type == \App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL) {
+                $result[$accountCode]['credit'] += $total;
+            } else {
+                $result[$accountCode]['debit'] += $total;
+            }
+
+            $result[$accountCode]['balance'] = $result[$accountCode]['credit'] + $result[$accountCode]['debit'];
+        }
+
+        return array_values($result); // Convert associative array to indexed array
+    }
+
+    public static function getDataForBank()
+    {
+        $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
+                    ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
+                    //->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
                     ->whereNull('cashbook_ledger.deleted_at') 
                     ->groupBy('banks.account_code', 'cashbook_ledger.type')
                     ->get();

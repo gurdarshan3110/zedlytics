@@ -14,6 +14,7 @@
                   <th class="excel-cell">Remarks</th>
                   <th class="excel-cell">Name</th>
                   <th class="excel-cell">Type</th>
+                  <th class="hide-cell">Type</th>
                   
                 </tr>
               </tbody>
@@ -25,7 +26,7 @@
                 @if($ledger!=null)
                   @foreach($ledger as $row)
                   <tr>
-                    <td class="excel-cell" contenteditable="true">{{$row->account_code}} - {{$row->id}}</td>
+                    <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
@@ -33,6 +34,7 @@
                     <td class="excel-cell" contenteditable="true">{{$row->remarks}}</td>
                     <td class="excel-cell"></td>
                     <td class="excel-cell"></td>
+                    <td class="hide-cell">{{$row->transaction_id}}</td>
                   </tr>
                   @endforeach
                 @endif
@@ -45,6 +47,7 @@
                   <td class="excel-cell" contenteditable="true"></td>
                   <td class="excel-cell"></td>
                   <td class="excel-cell"></td>
+                  <td class="hide-cell"></td>
                 </tr>
               </tbody>
             </table>
@@ -115,22 +118,14 @@
                 case 13: // Enter key
                     event.preventDefault();
                     if ($currentCell.is(':focus')) {
-                        if ($currentCell.closest('td').is(':nth-child(2)')) {
-                            if ($currentCell.text() == '') {
-                                var cellVal = Math.floor(Date.now() / 1000);
-                                $currentCell.text(cellVal); 
-                                $nextCell = $cells.eq(currentIndex + 1);
-                                $nextCell.focus();
-                            }else{
-                                $nextCell = $cells.eq(currentIndex + 1);
-                                $nextCell.focus();
-                            }
-                        }else if ($currentCell.closest('td').is(':nth-child(3)')) {
+                        if ($currentCell.closest('td').is(':nth-child(3)')) {
                             if ($currentCell.text() != '') {
                                 var newRow = '<tr>';
                                 var i = 0;
+
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
+                                    cellValue = Math.floor(Date.now() / 1000);
+                                    newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -146,7 +141,8 @@
                                 var newRow = '<tr>';
                                 var i = 0;
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+((i == 6) || (i == 7) || (i == 4) ? '' : 'contenteditable="true"')+'></td>';
+                                    cellValue = Math.floor(Date.now() / 1000);
+                                    newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -161,7 +157,8 @@
                                 var newRow = '<tr>';
                                 var i = 0;
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+((i == 6) || (i == 7)  || (i == 4)? '' : 'contenteditable="true"')+'></td>';
+                                    cellValue = Math.floor(Date.now() / 1000);
+                                    newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -195,6 +192,11 @@
         $('#excel-grid').on('blur', 'tbody tr td', function() {
             $('.excel-cell[contenteditable="true"]').on('focus', function() {
                 $(this).closest('tr').addClass('highlight-row');
+                $hideCell=$(this).closest('tr').find('.hide-cell');
+                if($hideCell.text()==''){
+                    cellValue = Math.floor(Date.now() / 1000);
+                    $hideCell.text(cellValue);
+                }
             }).on('blur', function() {
                 $(this).closest('tr').removeClass('highlight-row');
             });
@@ -205,15 +207,15 @@
             if (currentValue !== initialValue) {
                 var data = [];
                 var i = 0;
+
                 $currentCell.closest('tr').find('.excel-cell').each(function(index) {
                     var cellValue = $(this).text();
-                    if(i==1 && cellValue==''){
-                        cellValue = Math.floor(Date.now() / 1000);
-                        $(this).text(cellValue);
-                    }
                     data.push(cellValue);
                     i++;
                 });
+                if(data[8]=='' || data[8]==null){
+                    data.push($currentCell.closest('tr').find('.hide-cell').text());
+                }
                 saveCellValues(data);
                 calculateBalance();
             }

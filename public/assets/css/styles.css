@@ -11333,6 +11333,10 @@ body {
     border: 1px solid #d797e2;
 }
 
+.hide-cell{
+  display: none !important;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;
