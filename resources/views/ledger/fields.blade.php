@@ -36,7 +36,7 @@
                   </tr>
                   @endforeach
                 @endif
-                <tr>
+                <tr class="highlight-row">
                   <td class="excel-cell" contenteditable="true"></td>
                   <td class="excel-cell" contenteditable="true"></td>
                   <td class="excel-cell text-end" contenteditable="true"></td>
@@ -115,7 +115,17 @@
                 case 13: // Enter key
                     event.preventDefault();
                     if ($currentCell.is(':focus')) {
-                        if ($currentCell.closest('td').is(':nth-child(3)')) {
+                        if ($currentCell.closest('td').is(':nth-child(2)')) {
+                            if ($currentCell.text() == '') {
+                                var cellVal = Math.floor(Date.now() / 1000);
+                                $currentCell.text(cellVal); 
+                                $nextCell = $cells.eq(currentIndex + 1);
+                                $nextCell.focus();
+                            }else{
+                                $nextCell = $cells.eq(currentIndex + 1);
+                                $nextCell.focus();
+                            }
+                        }else if ($currentCell.closest('td').is(':nth-child(3)')) {
                             if ($currentCell.text() != '') {
                                 var newRow = '<tr>';
                                 var i = 0;
