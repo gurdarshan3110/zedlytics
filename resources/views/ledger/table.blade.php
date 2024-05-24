@@ -37,10 +37,15 @@
                     {data: 'debit', name: 'debit', className: "text-end"},
                     {data: 'balance', name: 'balance', className: "text-end"},
                     {data: 'ledger_date', name: 'ledger_date'},
-                    {data: 'action', name: 'action'},
-                    
+                    {data: 'action', name: 'action'}
                 ],
-                order: [5],
+                order: [[0, 'desc']], // Sort by ID in descending order
+                columnDefs: [
+                    {
+                        targets: 0,
+                        orderable: false 
+                    }
+                ],
                 pageLength:10,
                 dom: 'Blfrtip',
                 responsive: true,

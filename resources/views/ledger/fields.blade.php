@@ -120,7 +120,7 @@
                                 var newRow = '<tr>';
                                 var i = 0;
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" contenteditable="true"></td>';
+                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -136,7 +136,7 @@
                                 var newRow = '<tr>';
                                 var i = 0;
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" contenteditable="true"></td>';
+                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+((i == 6) || (i == 7) || (i == 4) ? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -151,7 +151,7 @@
                                 var newRow = '<tr>';
                                 var i = 0;
                                 $('#excel-head tbody th').each(function() {
-                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" contenteditable="true"></td>';
+                                    newRow += '<td class="excel-cell ' + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+((i == 6) || (i == 7)  || (i == 4)? '' : 'contenteditable="true"')+'></td>';
                                     i++;
                                 });
                                 newRow += '</tr>';
@@ -189,9 +189,15 @@
             var initialValue = initialCellValues[cellId];
             if (currentValue !== initialValue) {
                 var data = [];
+                var i = 0;
                 $currentCell.closest('tr').find('.excel-cell').each(function(index) {
                     var cellValue = $(this).text();
+                    if(i==1 && cellValue==''){
+                        cellValue = Math.floor(Date.now() / 1000);
+                        $(this).text(cellValue);
+                    }
                     data.push(cellValue);
+                    i++;
                 });
                 saveCellValues(data);
                 calculateBalance();

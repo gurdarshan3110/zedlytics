@@ -16,10 +16,20 @@ class CashbookLedger extends Model
     public const LEDGER_TYPE_DEBIT = 'debit';
     public const LEDGER_TYPE_DEBIT_VAL = 1;
 
+    public const ACCOUNT_TYPE_CLIENT = 'Client';
+    public const ACCOUNT_TYPE_CLIENT_VAL = 0;
+
+    public const ACCOUNT_TYPE_BANK = 'Bank';
+    public const ACCOUNT_TYPE_BANK_VAL = 1;
+
+    public const ACCOUNT_TYPE_PARTY = 'Party';
+    public const ACCOUNT_TYPE_PARTY_VAL = 2;
+
     protected $table = 'cashbook_ledger';
 
     protected $fillable = [
         'account_code',
+        'account_type',
         'bank_id',
         'utr_no',
         'amount',
@@ -94,6 +104,7 @@ class CashbookLedger extends Model
     {
         $today = now()->startOfDay();
         return self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                    ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->where('ledger_date', '>=', $today)
                     ->sum('amount');
     }
@@ -101,15 +112,18 @@ class CashbookLedger extends Model
     public static function getTodaysWithdrawals()
     {
         $today = now()->startOfDay();
-        return self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+        $withdrawal = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                    ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->where('ledger_date', '>=', $today)
                     ->sum('amount');
+        return abs($withdrawal);
     }
 
     public static function getDataForPeriod($startDate, $endDate)
     {
         $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
                     ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
+                    ->where('cashbook_ledger.account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
                     ->whereNull('cashbook_ledger.deleted_at') 
                     ->groupBy('banks.account_code', 'cashbook_ledger.type')

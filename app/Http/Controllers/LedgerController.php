@@ -136,11 +136,13 @@ class LedgerController extends Controller
     public function saveLedger(Request $request)
     {
         $data = $request->all();
-        $accountId = Account::where('account_code', $data[0])->value('id');
+        $account = Account::where('account_code', $data[0])->first();
+        //dd($account);
+        $account_type = (($account==null)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::CLIENT_ACCOUNT)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::BANK_ACCOUNT)?Model::ACCOUNT_TYPE_BANK_VAL:Model::ACCOUNT_TYPE_PARTY_VAL)));
 
         $ledgerData = [
             'account_code' => $data[0],
-            'account_id' => $accountId,
+            'account_type' => $account_type,
             'utr_no' => $data[1],
             'employee_id' => Auth::user()->id,
             'ledger_date' => Carbon::now(),
@@ -188,6 +190,10 @@ class LedgerController extends Controller
 
         return DataTables::of($data)
 
+            ->addColumn('id', function ($row) {
+                return $row->id;
+            })
+            
             ->addColumn('bank', function ($row) {
                 return $row->bank->account_code;
             })
