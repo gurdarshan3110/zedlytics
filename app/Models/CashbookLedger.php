@@ -97,16 +97,20 @@ class CashbookLedger extends Model
     public static function getTotalBalance()
     {
         $balance = self::sum('amount');
+        $balance = number_format((float)$balance, 2, '.', '');
+
         return $balance;
     }
 
     public static function getTodaysDeposits()
     {
         $today = now()->startOfDay();
-        return self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+        $deposits = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
                     ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->where('ledger_date', '>=', $today)
                     ->sum('amount');
+        $deposits = number_format((float)$deposits, 2, '.', '');
+        return $deposits;
     }
 
     public static function getTodaysWithdrawals()
@@ -116,6 +120,9 @@ class CashbookLedger extends Model
                     ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
                     ->where('ledger_date', '>=', $today)
                     ->sum('amount');
+
+        $withdrawal = number_format((float)$withdrawal, 2, '.', '');
+
         return abs($withdrawal);
     }
 
@@ -164,6 +171,8 @@ class CashbookLedger extends Model
         $ledger_date = $this->ledger_date;
         // Calculate sum of credit amounts
         $balance = self::where('ledger_date', '<=', $ledger_date)->sum('amount');
+
+        $balance = number_format((float)$balance, 2, '.', '');
 
         return $balance;
     }

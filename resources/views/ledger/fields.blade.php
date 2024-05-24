@@ -79,7 +79,7 @@
                 }
             });
         }
-
+        
         $('#excel-grid').on('keydown', '.excel-cell', function(event) {
             var $currentCell = $(this);
             var $currentRow = $currentCell.closest('tr');
@@ -183,6 +183,11 @@
         });
 
         $('#excel-grid').on('blur', 'tbody tr td', function() {
+            $('.excel-cell[contenteditable="true"]').on('focus', function() {
+                $(this).closest('tr').addClass('highlight-row');
+            }).on('blur', function() {
+                $(this).closest('tr').removeClass('highlight-row');
+            });
             var $currentCell = $(this);
             var cellId = $currentCell.closest('tr').index() + '-' + $currentCell.index();
             var currentValue = $currentCell.text();

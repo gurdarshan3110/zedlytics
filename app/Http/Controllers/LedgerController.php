@@ -53,7 +53,7 @@ class LedgerController extends Controller
         $account = Account::findOrFail($id);
         $bankId = $account->bankAccounts->first()->bank_id;
         $today = Carbon::today()->toDateString();
-        $ledger = Model::whereDate('ledger_date', $today)->where('employee_id',Auth::user()->id)->where('bank_id',$bankId)->get();
+        $ledger = Model::whereDate('ledger_date', $today)->where('employee_id',Auth::user()->id)->where('bank_id',$bankId)->orderBy('id','ASC')->get();
         $accounts = Account::where('type',Account::BANK_ACCOUNT)->get();
         return view(self::DIRECTORY.'.create', compact('title','url','directory','bankId','ledger','accounts'));
     }
@@ -193,7 +193,7 @@ class LedgerController extends Controller
             ->addColumn('id', function ($row) {
                 return $row->id;
             })
-            
+
             ->addColumn('bank', function ($row) {
                 return $row->bank->account_code;
             })
