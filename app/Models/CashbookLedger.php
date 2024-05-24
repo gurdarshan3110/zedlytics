@@ -41,7 +41,7 @@ class CashbookLedger extends Model
     ];
 
     protected $appends = [
-        //'current_balance','bank_balance','balance'
+        'current_balance'//,'bank_balance','balance'
     ];
 
     public function getBankBalanceAttribute()
@@ -59,13 +59,13 @@ class CashbookLedger extends Model
     {
         $balance=0;
         $user_id = Auth::user()->id;
-        $ledger_date = $this->ledger_date;
+        $ledger_date = $this->id;
         // Calculate sum of credit amounts
         $balance = self::where('bank_id', $this->bank_id)
                         ->where('employee_id',$user_id)
-                        ->where('ledger_date', '<=', $ledger_date)
+                        ->where('id', '<=', $ledger_date)
                         ->sum('amount');
-
+        $balance = number_format((float)$balance, 2, '.', '');
         return $balance;
     }
 

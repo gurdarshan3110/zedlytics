@@ -11329,8 +11329,8 @@ body {
 }
 
 .highlight-row {
-    background-color: #f0f0f0; /* Highlight color */
-    border: 1px solid #d9d9d9;
+    background-color: #d797e257; /* Highlight color */
+    border: 1px solid #d797e2;
 }
 
 @media (max-width: 576px) {

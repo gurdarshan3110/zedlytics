@@ -25,7 +25,7 @@
                 @if($ledger!=null)
                   @foreach($ledger as $row)
                   <tr>
-                    <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
+                    <td class="excel-cell" contenteditable="true">{{$row->account_code}} - {{$row->id}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
@@ -221,7 +221,8 @@
             if (!isNaN(debit)) {
                 totalDebit += debit;
             }
-            $(this).find('.excel-cell').eq(4).text(totalCredit - totalDebit);
+            var balance = totalCredit - totalDebit;
+            $(this).find('.excel-cell').eq(4).text(balance.toFixed(2));
         });
     }
 </script>
