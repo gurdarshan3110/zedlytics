@@ -5,10 +5,10 @@
     <div class="container-fluid px-4">
         <div class="d-flex">
             <h3 class="mt-4 w-95">
-                {{$title}}
+                {{$title}} : Balance {{$totalBalance}}
             </h3>
         </div>
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
