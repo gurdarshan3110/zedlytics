@@ -20,7 +20,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Today's Deposits</h5>
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Today's Withdrawals</h5>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-2">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Yesterday's Withdrawals</h5>
