@@ -11,26 +11,30 @@
         <div class="row">
             <!-- Cards for Total Balance, Today's Deposits, Today's Withdrawals -->
             <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Balance</h5>
-                        <p class="card-text">{{ $totalBalance }}</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Balance</h5>
+                                <p class="card-text">{{ $totalBalance }}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Today's Deposits</h5>
-                        <p class="card-text">{{ $todaysDeposits }}</p>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Today's Deposits</h5>
+                                <p class="card-text">{{ $yesterdayDeposits }}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Today's Withdrawals</h5>
-                        <p class="card-text">{{ $todaysWithdrawals }}</p>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Today's Withdrawals</h5>
+                                <p class="card-text">{{ $todaysWithdrawals }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,6 +44,35 @@
                         <h5 class="card-title">Today's Difference</h5>
                         <p class="card-text">{{ $todaysDeposits-$todaysWithdrawals }}</p>
                         <canvas id="myPieChart" width="50" height="50"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Yesterday's Deposits</h5>
+                                <p class="card-text">{{ $yesterdayDeposits }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Yesterday's Withdrawals</h5>
+                                <p class="card-text">{{ $yesterdayWithdrawals }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Yesterday's Difference</h5>
+                        <p class="card-text">{{ $yesterdayDeposits-$yesterdayWithdrawals }}</p>
+                        <canvas id="myPieChart2" width="50" height="50"></canvas>
                     </div>
                 </div>
             </div>
@@ -175,6 +208,44 @@
             labels: ['Deposits', 'Withdrawals', 'Difference'],
             datasets: [{
                 data: [todaysDeposits, todaysWithdrawals, difference],
+                backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.raw !== null) {
+                                label += context.raw;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    var yesterdayDeposits = @json($yesterdayDeposits); 
+    var yesterdayWithdrawals = @json($yesterdayWithdrawals); 
+    var yesterdaydifference = yesterdayDeposits - yesterdayWithdrawals;
+    yesterdaydifference = yesterdaydifference.toFixed(2);
+    var ctx = document.getElementById('myPieChart2').getContext('2d');
+    var myPieChart2 = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Deposits', 'Withdrawals', 'Difference'],
+            datasets: [{
+                data: [yesterdayDeposits, yesterdayWithdrawals, yesterdaydifference],
                 backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
             }]
         },

@@ -127,6 +127,28 @@ class CashbookLedger extends Model
         return abs($withdrawal);
     }
 
+    public static function getDepositsBetween($startDate, $endDate)
+    {
+        $deposits = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+                        ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
+                        ->whereBetween('ledger_date', [$startDate, $endDate])
+                        ->sum('amount');
+        $deposits = number_format((float)$deposits, 2, '.', '');
+        return $deposits;
+    }
+
+    public static function getWithdrawalsBetween($startDate, $endDate)
+    {
+        $withdrawal = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+                        ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
+                        ->whereBetween('ledger_date', [$startDate, $endDate])
+                        ->sum('amount');
+
+        $withdrawal = number_format((float)$withdrawal, 2, '.', '');
+
+        return abs($withdrawal);
+    }
+
     public static function getDataForPeriod($startDate, $endDate)
     {
         $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
