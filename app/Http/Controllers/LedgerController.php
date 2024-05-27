@@ -164,7 +164,7 @@ class LedgerController extends Controller
         try {
             if($ledgerData['amount']!=null){
                 Model::updateOrCreate(
-                    ['account_code' => $data[0], 'transaction_id' => $data[8]],
+                    ['transaction_id' => $data[8]],
                     $ledgerData
                 );
             }
