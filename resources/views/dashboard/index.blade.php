@@ -12,49 +12,38 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title">Today's Distribution</h5>
                         <div class="row">
                             <!-- First half of the card -->
-                            <div class="col-md-6">
-                                <h5 class="card-title">Today's Summary</h5>
-                                <p class="card-text"><strong>Today's Deposits:</strong> {{ $todaysDeposits }}</p>
-                                <p class="card-text"><strong>Today's Withdrawals:</strong> {{ $todaysWithdrawals }}</p>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <p class="card-text"><strong>Deposits:</strong> {{ $todaysDeposits }}</p>
+                                <p class="card-text"><strong>Withdrawals:</strong> {{ $todaysWithdrawals }}</p>
                                 <p class="card-text"><strong>Gap:</strong> {{ $todaysDeposits - $todaysWithdrawals }}</p>
                             </div>
                             <!-- Second half of the card -->
                             <div class="col-md-6">
-                                <h5 class="card-title">Today's Distribution</h5>
                                 <canvas id="myPieChart" width="50" height="50"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Yesterday's Deposits</h5>
-                                <p class="card-text">{{ $yesterdayDeposits }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mt-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Yesterday's Withdrawals</h5>
-                                <p class="card-text">{{ $yesterdayWithdrawals }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Yesterday's Difference</h5>
-                        <p class="card-text">{{ $yesterdayDeposits-$yesterdayWithdrawals }}</p>
-                        <canvas id="myPieChart2" width="50" height="50"></canvas>
+                        <h5 class="card-title">Yesterday's Distribution</h5>
+                        <div class="row">
+                            <!-- First half of the card -->
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <p class="card-text"><strong>Deposits:</strong> {{ $yesterdayDeposits }}</p>
+                                <p class="card-text"><strong>Withdrawals:</strong> {{ $yesterdayWithdrawals }}</p>
+                                <p class="card-text"><strong>Gap:</strong> {{ $yesterdayDeposits - $yesterdayWithdrawals }}</p>
+                            </div>
+                            <!-- Second half of the card -->
+                            <div class="col-md-6">
+                                <canvas id="myPieChart2" width="50" height="50"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
