@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Employee as Model;
 use App\Models\UserEmployee;
+use App\Models\MacAddress;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use DataTables;
@@ -117,6 +118,38 @@ class EmployeeController extends Controller
         return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' Password reset successfully.');
     }
 
+    public function macaddress(Request $request, Model $employee)
+    {
+        $input = $request->all();
+        $rules = [
+            'mac_address' => 'required',
+        ];
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+
+        $user = User::where('employee_code',$employee->employee_code)->first();
+        
+        $macArray = [
+            'mac_address' => $input['mac_address']
+        ];
+
+        MacAddress::updateOrCreate(
+                    ['user_id' => $user->id],
+                    $macArray
+                );
+        
+        return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' Mac Address updated successfully.');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -153,6 +186,18 @@ class EmployeeController extends Controller
         $directory = self::DIRECTORY;
         $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
         return view(self::DIRECTORY.'.reset', compact(self::DIRECTORY, 'title','directory','url','roles'));
+    }
+
+    public function mac(Model $employee)
+    {
+        $title = 'Add '.$employee->name .' Mac Address';
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
+        $user = User::where('employee_code',$employee->employee_code)->first();
+        $macAddress = MacAddress::where('user_id',$user->id)->first();
+        $mac_address = (($macAddress==null)?'':$macAddress->mac_address);
+        return view(self::DIRECTORY.'.mac', compact(self::DIRECTORY, 'title','directory','url','roles','mac_address'));
     }
 
     /**
@@ -253,6 +298,9 @@ class EmployeeController extends Controller
                     <a href="'.route(self::URL.'.edit', [$row]).'"
                        class="btn btn-info btn-xs">
                         <i class="far fa-edit"></i>
+                    </a><a href="'.route(self::URL.'.mac', [$row]).'"
+                       class="btn btn-info btn-xs">
+                        <i class="fa fa-laptop"></i>
                     </a><a href="'.route(self::URL.'.reset', [$row]).'"
                        class="btn btn-warning btn-xs">
                         <i class="fa fa-key"></i>

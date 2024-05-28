@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\CheckMacAddress;
+use \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
+use \Illuminate\Contracts\Auth\Middleware\Authorize;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias(['check.mac'=>CheckMacAddress::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

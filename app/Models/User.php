@@ -62,9 +62,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Employee::class, 'user_employees');
     }
 
-    // public function clients()
-    // {
-    //     return $this->belongsToMany(Client::class, 'user_clients');
-    // }
+    public function macAddresses()
+    {
+        return $this->hasMany(MacAddress::class);
+    }
 
 }
