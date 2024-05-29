@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Store;
 use App\Models\Agent;
 use App\Models\Agency;
+use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -86,9 +88,28 @@ class LoginController extends Controller
     // }
 
     // Logout the authenticated user
-    public function logout()
+
+    public function logout(Request $request)
     {
+        $user = Auth::user();
+        if ($user) {
+            // Find the latest activity log entry that has no end_time
+            $lastLog = ActivityLog::where('user_id', $user->id)
+                ->whereNull('end_time')
+                ->latest('start_time')
+                ->first();
+            //dd($lastLog);
+            // Update the end_time
+            if ($lastLog) {
+                $lastLog->end_time = Carbon::now();
+                $lastLog->save();
+                
+            } 
+        }
+
         Auth::logout();
+        //$request->session()->invalidate();
+        //$request->session()->regenerateToken();
 
         return redirect('/login');
     }

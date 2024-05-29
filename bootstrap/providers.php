@@ -1,9 +1,10 @@
 <?php
 
 return [
-    Illuminate\Auth\AuthServiceProvider::class,
     App\Providers\AppServiceProvider::class,
-    Spatie\Permission\PermissionServiceProvider::class,
+    App\Providers\EventServiceProvider::class,
+    Illuminate\Auth\AuthServiceProvider::class,
     Spatie\Html\HtmlServiceProvider::class,
+    Spatie\Permission\PermissionServiceProvider::class,
     Yajra\DataTables\DataTablesServiceProvider::class,
 ];
