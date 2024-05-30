@@ -11,7 +11,7 @@ use App\Models\Bank;
 class ReportController extends Controller
 {
     const TITLE = 'DW Report';
-    const URL = 'dw report';
+    const URL = 'report';
     const DIRECTORY = 'report';
     const FNAME = 'DW Report';
 
