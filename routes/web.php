@@ -11,6 +11,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
@@ -57,11 +58,16 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::post('/save-ledger', [LedgerController::class, 'saveLedger'])->name('save.ledger');
     Route::get('/ledger/create/{id}', [LedgerController::class, 'create'])->name('ledger.create');
     Route::get('/ledger/list', [LedgerController::class, 'list'])->name('ledger.list');
+    Route::get('/ledger/data/{date}', [LedgerController::class, 'fetchdata'])->name('ledger.data');
     Route::resource('ledger', LedgerController::class);
     Route::get('/debug-user', function () {
         return Auth::user(); // This should now return the user object
     });
     Route::get('/timeline/list', [ActivityLogController::class, 'list'])->name('timeline.list');
     Route::resource('timeline', ActivityLogController::class);
+
+    Route::post('/generate-excel-report', [ReportController::class, 'generateExcelReport']);
+    Route::resource('report', ReportController::class);
+
 
 });

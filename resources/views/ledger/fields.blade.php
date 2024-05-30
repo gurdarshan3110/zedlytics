@@ -22,7 +22,7 @@
         </div>
         <div class="table-responsive h-460">
             <table class="table table-bordered w-100 ledger-table" id="excel-grid">
-              <tbody>
+              <tbody id="data-container">
                 @if($ledger!=null)
                   @foreach($ledger as $row)
                   <tr>
@@ -56,13 +56,30 @@
     </div>
 <script type="text/javascript">
     $(document).ready(function() {
- 
+        $('#date').on('change', function() {
+            var selectedDate = $(this).val();
+            
+            $.ajax({
+                url: '/ledger/data/'+selectedDate,  
+                type: 'GET',
+                //data: { date: selectedDate },
+                success: function(response) {
+                    $('#data-container').html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                    $('#data-container').html('<p>Failed to fetch data. Please try again.</p>');
+                }
+            });
+        });
         function saveCellValues(data) {
             //console.log(data);
             $('#response-status').removeClass('green-blinking');
             $('#response-status').addClass('red-blinking');
             var bank = '{{$bankId}}';
+            var date = $('#date').val();
             data.push(bank);
+            data.push(date);
             $.ajax({
                 url: '{{ route("save.ledger") }}',
                 type: 'POST',

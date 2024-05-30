@@ -52,6 +52,7 @@ class CashbookLedger extends Model
         // Calculate sum of credit amounts
         $balance = self::where('bank_id', $this->bank_id)
                         ->where('ledger_date', '<=', $ledger_date)
+                        ->where('id', '<=', $ledger_date)
                         ->sum('amount');
         return $balance;
     }
@@ -75,7 +76,7 @@ class CashbookLedger extends Model
         $balance=0;
         $ledger_date = $this->ledger_date;
         // Calculate sum of credit amounts
-        $balance = self::where('ledger_date', '<=', $ledger_date)->sum('amount');
+        $balance = self::where('ledger_date', '<=', $ledger_date)->where('id','<=',$this->id)->sum('amount');
 
         return $balance;
     }

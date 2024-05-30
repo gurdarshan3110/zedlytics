@@ -11,6 +11,11 @@
             </h3>
 
             <div class="mt-auto w-75 align-items-end d-flex justify-content-end">
+                @if(in_array('view ledger date', permissions()))
+                <input type="date" id="date" class="form-control w-25" value="{{ date('Y-m-d') }}"/>
+                @else
+                <input type="hidden" id="date" value="{{ date('Y-m-d') }}"/>
+                @endif
                 @foreach($accounts as $account)
                     @if(in_array($account->account_code, permissions()))    
                     <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1" tooltip="New">

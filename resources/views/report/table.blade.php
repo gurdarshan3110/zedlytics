@@ -2,14 +2,12 @@
     <table class="table table-bordered table-striped w-100 align-middle" id="record-table">
         <thead>
         <tr>
-            <th width="20%">Bank</th>
-            <th width="15%">Account</th>
-            <th width="10%" class="text-end">Credit</th>
-            <th width="10%" class="text-end">Debit</th>
-            <th width="10%" class="text-end">Balance</th>
-            <th width="10%">Ledger Date</th>
-            <th width="20%">Entry Date</th>
-            <th width="5%">Action</th>
+            <th>Name</th>
+            <th>Account No</th>
+            <th>Code</th>
+            <th>RM</th>
+            <th>Status</th>
+            <th  style="width:15%;">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -30,23 +28,15 @@
         var table=$('#record-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list",
+                ajax: "/{{$url}}/list?status=1",
                 columns: [
-                    {data: 'bank', name: 'bank'},
+                    {data: 'name', name: 'name'},
+                    {data: 'account_no', name: 'account_no'},
                     {data: 'account_code', name: 'account_code'},
-                    {data: 'credit', name: 'credit', className: "text-end"},
-                    {data: 'debit', name: 'debit', className: "text-end"},
-                    {data: 'balance', name: 'balance', className: "text-end"},
-                    {data: 'ledger_date', name: 'ledger_date'},
-                    {data: 'entry_date', name: 'entry_date'},
-                    {data: 'action', name: 'action'}
-                ],
-                order: [[0, 'desc']], // Sort by ID in descending order
-                columnDefs: [
-                    {
-                        targets: 0,
-                        orderable: false 
-                    }
+                    {data: 'rm', name: 'rm'},
+                    {data: 'status', name: 'status'},
+                    {data: 'action', name: 'action',className:'action'},
+                    
                 ],
                 pageLength:10,
                 dom: 'Blfrtip',
@@ -76,25 +66,12 @@
                     $('.paginate_button.current').addClass('fs-7 active-menu-item');
                     $('.paginate_button.active-menu-item').removeClass('current');
                     
-                },
-                "rowCallback": function (row, data) {
-                    if (data.deleted==true) {
-                        $(row).addClass('text-canceled');
-                    }
                 }
-
             });
             $('#filter').click(function(){
                 var min=$('#min').val();
                 var max=$('#max').val();
                 table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
             });
-            function confirmDelete(rowId) {
-                var remarks = prompt('Are you sure! Please enter remarks:');
-                if (remarks !== null) {
-                    $('#remarks'+rowId).val(remarks); 
-                    $('#deleteForm'+rowId).submit(); // Submit the form
-                }
-            }
     </script>
 @endpush

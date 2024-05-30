@@ -133,6 +133,40 @@ class LedgerController extends Controller
                          ->with('success', self::FNAME.' updated successfully.');
     }
 
+    public function fetchdata(Request $request,$date){
+        $rows = Model::whereDate('ledger_date', $date)->get();
+
+        $html = '';
+        if ($rows->isEmpty()) {
+            $html .= '<tr>
+                        <td class="excel-cell" contenteditable="true"></td>
+                        <td class="excel-cell" contenteditable="true"></td>
+                        <td class="excel-cell text-end" contenteditable="true"></td>
+                        <td class="excel-cell text-end" contenteditable="true"></td>
+                        <td class="excel-cell text-end"></td>
+                        <td class="excel-cell" contenteditable="true"></td>
+                        <td class="excel-cell"></td>
+                        <td class="excel-cell"></td>
+                        <td class="hide-cell"></td>
+                      </tr>';
+        } else {
+            foreach ($rows as $row) {
+                $html .= '<tr>
+                            <td class="excel-cell" contenteditable="true">'.$row->account_code.'</td>
+                            <td class="excel-cell" contenteditable="true">'.$row->utr_no.'</td>
+                            <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_CREDIT_VAL) ? $row->amount : '').'</td>
+                            <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_DEBIT_VAL) ? abs($row->amount) : '').'</td>
+                            <td class="excel-cell text-end">'.$row->balance.'</td>
+                            <td class="excel-cell" contenteditable="true">'.$row->remarks.'</td>
+                            <td class="excel-cell"></td>
+                            <td class="excel-cell"></td>
+                            <td class="hide-cell">'.$row->transaction_id.'</td>
+                          </tr>';
+            }
+        }
+        return $html;
+    }
+
     public function saveLedger(Request $request)
     {
         $data = $request->all();
@@ -146,7 +180,7 @@ class LedgerController extends Controller
             'utr_no' => $data[1],
             'transaction_id' => $data[8],
             'employee_id' => Auth::user()->id,
-            'ledger_date' => Carbon::now(),
+            'ledger_date' => $data[10],
             'remarks' => $data[5],
             'bank_id' => $data[9]
         ];
@@ -164,7 +198,7 @@ class LedgerController extends Controller
         try {
             if($ledgerData['amount']!=null){
                 Model::updateOrCreate(
-                    ['bank_id' => $data[9], 'transaction_id' => $data[8]],
+                    ['bank_id' => $data[9], 'transaction_id' => $data[8],'ledger_date'=> $data[10]],
                     $ledgerData
                 );
             }
@@ -233,6 +267,12 @@ class LedgerController extends Controller
                 }else{
                     $date = Carbon::parse($row->ledger_date);
                 };
+                $formattedDate = $date->format('d/m/y');
+                return $formattedDate;
+            })
+
+            ->addColumn('entry_date', function ($row) {
+                $date = Carbon::parse($row->created_at);
                 $formattedDate = $date->format('d/m/y h:i:s A');
                 return $formattedDate;
             })
