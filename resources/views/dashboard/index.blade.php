@@ -13,7 +13,7 @@
             @foreach($banks as $data)
             @if(in_array($data->account_code, permissions())) 
             <div class="col-md-2 mt-1">
-                <div class="card {{(($data->bankBalance()<=100000)?'bg-success':(($data->bankBalance()<=200000)?'bg-warning':'bg-danger'))}}">
+                <div class="card {{(($data->bankBalance()<=100000)?'bg-success':(($data->bankBalance()<=200000)?'bg-warning':'bg-danger'))}} text-light">
                     <div class="card-body">
                         <h6 class="card-title fs-7">{{$data->account_code}}</h6>
                         <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
