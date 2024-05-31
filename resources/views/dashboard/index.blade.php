@@ -23,7 +23,7 @@
             @endif
             @endforeach
         </div>
-        @if(in_array('Dashboard Charts', permissions()))
+        @if(in_array('dashboard charts', permissions()))
         <div class="row mt-2">
             <div class="col-md-6">
                 <div class="card">
