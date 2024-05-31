@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CashbookLedger;
+use App\Models\Bank;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -28,7 +29,7 @@ class DashboardController extends Controller
         $yesterdayWithdrawals = CashbookLedger::getWithdrawalsBetween($startDate, $endDate);
 
 
-
+        $banks = Bank::where('status',1)->get();
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -39,7 +40,8 @@ class DashboardController extends Controller
             'todayData',
             'weekData',
             'monthData',
-            'bankData'
+            'bankData',
+            'banks'
         ));
     }
 }

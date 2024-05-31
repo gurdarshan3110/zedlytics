@@ -104,6 +104,14 @@ class CashbookLedger extends Model
         return $balance;
     }
 
+    public function getBankBalance($bank_id)
+    {
+        $balance=0;
+        $balance = self::where('bank_id', $bank_id)
+                        ->sum('amount');
+        return $balance;
+    }
+
     public static function getTodaysDeposits()
     {
         $today = now()->startOfDay();

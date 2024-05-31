@@ -23,4 +23,12 @@ class Bank extends Model
     {
         return $this->hasMany(BankAccount::class);
     }
+
+    public function bankBalance()
+    {
+        $balance=0;
+        $balance = CashbookLedger::where('bank_id', $this->id)
+                        ->sum('amount');
+        return $balance;
+    }
 }
