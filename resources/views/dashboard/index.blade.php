@@ -9,12 +9,12 @@
             </h3>
         </div>
         <div class="row mt-2">
-            <h5 class="card-title mb-1">Account Details</h5>
+            <h5 class="card-title">Account Details</h5>
             @foreach($banks as $data)
-            <div class="col-md-2">
+            <div class="col-md-2 mt-1">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{$data->account_code}}</h5>
+                        <h6 class="card-title fs-7">{{$data->account_code}}</h6>
                         <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
                     </div>
                 </div>
