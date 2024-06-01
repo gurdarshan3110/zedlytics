@@ -16,22 +16,23 @@
                 @else
                 <input type="hidden" id="date" value="{{ date('Y-m-d') }}"/>
                 @endif
-                @foreach($accounts as $account)
-                    @if(in_array($account->account_code, permissions()))    
-                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1" tooltip="New">
-                        <span class=" d-md-inline">{{$account->account_code}}</span>
-                    </a>
-                    @endif
-                @endforeach
                 <a href="{{route($url.'.index')}}" class="btn btn-primary ms-1" tooltip="New">
                     <span class=" d-md-inline">Back</span>
                 </a>
             </div>
                 
         </div>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/{{$url}}">Listing</a></li>
-        </ol>
+        <div class="row">
+            @foreach($accounts as $account)
+                @if(in_array($account->account_code, permissions()))
+                <div class="col-sm-1 mb-1">
+                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1 fs-9 w-100" tooltip="New">
+                        <span class=" d-md-inline">{{$account->account_code}}</span>
+                    </a>
+                </div>
+                @endif
+            @endforeach
+        </div>
         <div class="d-flex flex-shrink-0">
             
             <!--end::Create app-->

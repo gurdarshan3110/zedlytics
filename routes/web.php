@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::get('/ledger/create/{id}', [LedgerController::class, 'create'])->name('ledger.create');
     Route::get('/ledger/list', [LedgerController::class, 'list'])->name('ledger.list');
     Route::get('/ledger/data/{date}', [LedgerController::class, 'fetchdata'])->name('ledger.data');
+    Route::get('/hints', [LedgerController::class, 'hints']);
     Route::resource('ledger', LedgerController::class);
     Route::get('/debug-user', function () {
         return Auth::user(); // This should now return the user object

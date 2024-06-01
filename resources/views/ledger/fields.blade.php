@@ -1,4 +1,10 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .ledger-table {
+        overflow-y: auto;
+        position: relative;
+    }
+</style>
 <div class="row">
       <div class="col">
         <div class="table-responsive">
@@ -51,6 +57,7 @@
                 </tr>
               </tbody>
             </table>
+            <div id="hint-container"></div>
         </div>
       </div>
     </div>
@@ -254,4 +261,72 @@
             $(this).find('.excel-cell').eq(4).text(balance.toFixed(2));
         });
     }
+
+$(document).ready(function() {
+        var $hintContainer = $('#hint-container');
+
+        function showHints(element, hints) {
+            $hintContainer.empty().hide();
+
+            if (hints.length > 0) {
+                var $tableContainer = $('.ledger-table');
+                var offset = $(element).offset();
+                var containerOffset = $tableContainer.offset();
+
+                if (offset && containerOffset) {
+                    var relativeTop = offset.top - containerOffset.top + $tableContainer.scrollTop();
+                    var height = $(element).outerHeight();
+                    var width = $(element).outerWidth();
+
+                    $hintContainer.css({
+                        top: relativeTop + 35 +'px',
+                        width: width,
+                        position: 'absolute',
+                        background: '#fff',
+                    });
+
+                    var hintList = $('<div>').addClass('hint-list');
+
+                    hints.forEach(function(hint) {
+                        var hintItem = $('<div>').addClass('hint-item').text(hint);
+                        hintItem.on('click', function() {
+                            $(element).text(hint);
+                            $hintContainer.empty().hide();
+                        });
+                        hintList.append(hintItem);
+                    });
+
+                    $hintContainer.append(hintList).show();
+                } else {
+                    console.error('Offsets are undefined:', { offset, containerOffset });
+                }
+            }
+        }
+
+        $('#data-container').on('input', 'tr td:first-child[contenteditable="true"]', function() {
+            var query = $(this).text();
+
+            if (query.length > 0) {
+                $.ajax({
+                    url: '/hints',
+                    data: { query: query },
+                    success: function(data) {
+                        showHints(this, data);
+                    }.bind(this),
+                    error: function(err) {
+                        console.error('Error fetching hints:', err);
+                    }
+                });
+            } else {
+                $hintContainer.empty().hide();
+            }
+        });
+
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.hint-list, .excel-cell').length) {
+                $hintContainer.empty().hide();
+            }
+        });
+    });
 </script>
+

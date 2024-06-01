@@ -58,6 +58,14 @@ class LedgerController extends Controller
         return view(self::DIRECTORY.'.create', compact('title','url','directory','bankId','ledger','accounts'));
     }
 
+    public function hints(Request $request)
+    {
+        $query = $request->input('query');
+        $hints = Account::where('account_code', 'LIKE', "%{$query}%")
+                     ->pluck('account_code'); 
+        return response()->json($hints);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

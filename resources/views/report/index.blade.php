@@ -39,7 +39,7 @@ $(document).ready(function() {
         var startDate = $('#start_date').val();
         var endDate = $('#end_date').val();
         var bank = $('#bank').val();
-        console.log(bank);
+        //console.log(bank);
         $.ajax({
             url: '/generate-excel-report',
             type: 'POST',
