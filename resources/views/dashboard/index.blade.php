@@ -98,7 +98,7 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div clas-tex3 fw-bold deposit">
+                                <div class="card-text fw-bold deposit">
                                     <div class="w-100 fw-bold">Deposits:</div> 
                                     <div class="w-100">{{ $monthlyDeposits }}</div>
                                 </div>
