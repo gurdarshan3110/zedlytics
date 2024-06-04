@@ -23,6 +23,16 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('First Limit') }}
+    {{ html()->number('first_limit')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Second Limit') }}
+    {{ html()->number('second_limit')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Description') }}
     {{ html()->textarea('description')->class('form-control')->autocomplete(false) }}
 </div>

@@ -19,32 +19,38 @@
                         <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
                     </div>
                 </div>
+                @if($data->bankBalance() >= $data->first_limit)
+                <div onload="firstAlert();"></div>
+                @endif
+                @if($data->bankBalance() >= $data->second_limit)
+                    <div onload="secondAlert();"></div>
+                @endif
             </div>
             @endif
             @endforeach
         </div>
         @if(in_array('dashboard charts', permissions()))
         <div class="row mt-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Today's Financials</h5>
+                        <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials</h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text d-flex">
-                                    <div class="w-75 fw-bold">Deposits:</div> 
-                                    <div class="w-25">{{ $todaysDeposits }}</div>
+                                <div class="card-text d-flex fw-bold deposit">
+                                    <div class="w-50 fw-bold">Deposits:</div> 
+                                    <div class="w-50">{{ $todaysDeposits }}</div>
                                 </div>
                                 
-                                <div class="card-text d-flex mt-5">
-                                    <div class="w-75 fw-bold">Withdrawals:</div> 
-                                    <div class="w-25">{{ $todaysWithdrawals }}</div>
+                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                    <div class="w-50 fw-bold">Withdraw:</div> 
+                                    <div class="w-50">{{ $todaysWithdrawals }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5">
-                                    <div class="w-75 fw-bold">Gap:</div> 
-                                    <div class="w-25">{{ $todaysDeposits - $todaysWithdrawals }}</div>
+                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                    <div class="w-50 fw-bold">Gap:</div> 
+                                    <div class="w-50">{{ $todaysDeposits - $todaysWithdrawals }}</div>
                                 </div>
                             </div>
                             <!-- Second half of the card -->
@@ -55,31 +61,61 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Yesterday's Financials</h5>
+                        <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials</h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text d-flex">
-                                    <div class="w-75 fw-bold">Deposits:</div> 
-                                    <div class="w-25">{{ $yesterdayDeposits }}</div>
+                                <div class="card-text d-flex fw-bold deposit">
+                                    <div class="w-50 fw-bold">Deposits:</div> 
+                                    <div class="w-50">{{ $yesterdayDeposits }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5">
-                                    <div class="w-75 fw-bold">Withdrawals:</div> 
-                                    <div class="w-25">{{ $yesterdayWithdrawals }}</div>
+                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                    <div class="w-50 fw-bold">Withdraw:</div> 
+                                    <div class="w-50">{{ $yesterdayWithdrawals }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5">
-                                    <div class="w-75 fw-bold">Gap:</div> 
-                                    <div class="w-25">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
+                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                    <div class="w-50 fw-bold">Gap:</div> 
+                                    <div class="w-50">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
                                 </div>
                             </div>
                             <!-- Second half of the card -->
                             <div class="col-md-6">
                                 <canvas id="myPieChart2" width="50" height="50"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials</h5>
+                        <div class="row">
+                            <!-- First half of the card -->
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text d-flex  fw-bold deposit">
+                                    <div class="w-50 fw-bold">Deposits:</div> 
+                                    <div class="w-50">{{ $monthlyDeposits }}</div>
+                                </div>
+
+                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                    <div class="w-50 fw-bold">Withdraw:</div> 
+                                    <div class="w-50">{{ $monthlyWithdrawals }}</div>
+                                </div>
+
+                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                    <div class="w-50 fw-bold">Gap:</div> 
+                                    <div class="w-50">{{ $monthlyDeposits -$monthlyWithdrawals }}</div>
+                                </div>
+                            </div>
+                            <!-- Second half of the card -->
+                            <div class="col-md-6">
+                                <canvas id="myPieChart3" width="50" height="50"></canvas>
                             </div>
                         </div>
                     </div>
@@ -113,10 +149,20 @@
         </div>
         @endif
     </div>
+    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" autoplay></audio>
+    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" autoplay></audio>
 </main>
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    function firstAlert(){
+        var alertSound = document.getElementById('first-alert');
+        alertSound.play();
+    }
+    function secondAlert(){
+        var alertSound = document.getElementById('second-alert');
+        alertSound.play();
+    }
     // Prepare data for charts
     const todayData = @json($todayData);
     const weekData = @json($weekData);
@@ -215,7 +261,7 @@
     var myPieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Deposits', 'Withdrawals', 'Difference'],
+            labels: ['Deposits', 'Withdrawals', 'Gap'],
             datasets: [{
                 data: [todaysDeposits, todaysWithdrawals, difference],
                 backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
@@ -253,9 +299,47 @@
     var myPieChart2 = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Deposits', 'Withdrawals', 'Difference'],
+            labels: ['Deposits', 'Withdrawals', 'Gap'],
             datasets: [{
                 data: [yesterdayDeposits, yesterdayWithdrawals, yesterdaydifference],
+                backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.raw !== null) {
+                                label += context.raw;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    var monthlyDeposits = @json($monthlyDeposits); 
+    var monthlyWithdrawals = @json($monthlyWithdrawals); 
+    var monthlydifference = monthlyDeposits - monthlyWithdrawals;
+    monthlydifference = monthlydifference.toFixed(2);
+    var ctx = document.getElementById('myPieChart3').getContext('2d');
+    var myPieChart3 = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Deposits', 'Withdrawals', 'Gap'],
+            datasets: [{
+                data: [monthlyDeposits, monthlyWithdrawals, monthlydifference],
                 backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
             }]
         },

@@ -15,6 +15,8 @@ class Bank extends Model
         'name',
         'account_no',
         'description',
+        'first_limit',
+        'second_limit',
         'status',
         'rm',
     ];

@@ -11393,6 +11393,27 @@ body {
     background-color: #d797e2;
 }
 
+.deposit{
+  background-color: #36a2eb;
+  border-color: #36a2eb;
+  padding:2px;
+  border-radius: 4px;
+}
+
+.withdraw{
+  background-color: #ff6384;
+  border-color: #ff6384;
+  padding:2px;
+  border-radius: 4px;
+}
+
+.gap{
+  background-color: #ffcd56;
+  border-color: #ffcd56;
+  padding:2px;
+  border-radius: 4px;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

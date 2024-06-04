@@ -143,9 +143,9 @@ class PartyController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-        
+
         $party->update($input);
-        $account->update(['name' => $request->name,'account_no' => $request->account_no]);
+        $account->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');

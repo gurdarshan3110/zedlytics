@@ -29,6 +29,13 @@ class DashboardController extends Controller
         $yesterdayWithdrawals = CashbookLedger::getWithdrawalsBetween($startDate, $endDate);
 
 
+        $monthStartDate = Carbon::now()->startOfMonth();
+        $monthEndDate = Carbon::now()->endOfMonth();
+
+        $monthlyDeposits = CashbookLedger::getDepositsBetween($monthStartDate, $monthEndDate);
+        $monthlyWithdrawals = CashbookLedger::getWithdrawalsBetween($monthStartDate, $monthEndDate);
+
+
         $banks = Bank::where('status',1)->get();
         return view('dashboard.index', compact(
             'title',
@@ -37,11 +44,15 @@ class DashboardController extends Controller
             'todaysWithdrawals',
             'yesterdayDeposits',
             'yesterdayWithdrawals',
+            'monthlyDeposits',
+            'monthlyWithdrawals',
             'todayData',
             'weekData',
             'monthData',
             'bankData',
-            'banks'
+            'banks',
+            'startDate',
+            'endDate'
         ));
     }
 }
