@@ -1,5 +1,6 @@
 <?php
 use App\Models\ModuleMaster;
+use App\Models\Bank;
 function softModules()
 {
     return ModuleMaster::where('status',1)->get();
@@ -22,4 +23,8 @@ function dateFormatdMYHia($date){
  
 function permissions(){
     return $permissions = Auth::user()->roles()->with('permissions')->get()->pluck('permissions')->flatten()->pluck('name')->toArray();
+}
+
+function bankAccount($account_code){
+    return Bank::where('account_code',$account_code)->first();
 }
