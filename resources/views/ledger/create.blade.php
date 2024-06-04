@@ -22,7 +22,7 @@
             </div>
                 
         </div>
-        <div class="row">
+        <div class="row mt-1">
             @foreach($accounts as $account)
                 @if(in_array($account->account_code, permissions()))
                 <div class="col-sm-2 mb-1">
