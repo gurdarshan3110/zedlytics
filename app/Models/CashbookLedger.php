@@ -91,9 +91,9 @@ class CashbookLedger extends Model
         return $this->belongsTo(Bank::class, 'bank_id');
     }
 
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(User::class, 'employee_id','id');
     }
 
     public static function getTotalBalance()

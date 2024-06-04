@@ -65,9 +65,10 @@
     $(document).ready(function() {
         $('#date').on('change', function() {
             var selectedDate = $(this).val();
+            var bank = '{{$bankId}}';
             
             $.ajax({
-                url: '/ledger/data/'+selectedDate,  
+                url: '/ledger/data/'+selectedDate+'/'+bank,  
                 type: 'GET',
                 //data: { date: selectedDate },
                 success: function(response) {
@@ -262,11 +263,16 @@
         });
     }
 
-$(document).ready(function() {
+
+    $(document).ready(function() {
         var $hintContainer = $('#hint-container');
+        var currentElement = null;
+        var selectedIndex = -1;
 
         function showHints(element, hints) {
             $hintContainer.empty().hide();
+            selectedIndex = -1;
+            currentElement = element;
 
             if (hints.length > 0) {
                 var $tableContainer = $('.ledger-table');
@@ -280,14 +286,15 @@ $(document).ready(function() {
 
                     $hintContainer.css({
                         top: relativeTop + 35 +'px',
+                        //left: offset.left - containerOffset.left,
                         width: width,
-                        position: 'absolute',
                         background: '#fff',
+                        position: 'absolute',
                     });
 
                     var hintList = $('<div>').addClass('hint-list');
 
-                    hints.forEach(function(hint) {
+                    hints.forEach(function(hint, index) {
                         var hintItem = $('<div>').addClass('hint-item').text(hint);
                         hintItem.on('click', function() {
                             $(element).text(hint);
@@ -322,6 +329,45 @@ $(document).ready(function() {
             }
         });
 
+        // Hide hints when moving to the next cell
+        $('#data-container').on('focusout', 'tr td:first-child[contenteditable="true"]', function() {
+            $hintContainer.empty().hide();
+        });
+
+        $('#data-container').on('focusin', 'tr td:first-child[contenteditable="true"]', function() {
+            $(document).on('keydown.hintNavigation', function(e) {
+                if ($hintContainer.is(':visible') && currentElement) {
+                    var hintItems = $hintContainer.find('.hint-item');
+
+                    if (e.key === 'ArrowDown') {
+                        selectedIndex = (selectedIndex + 1) % hintItems.length;
+                        hintItems.removeClass('selected');
+                        $(hintItems[selectedIndex]).addClass('selected');
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowUp') {
+                        selectedIndex = (selectedIndex - 1 + hintItems.length) % hintItems.length;
+                        hintItems.removeClass('selected');
+                        $(hintItems[selectedIndex]).addClass('selected');
+                        e.preventDefault();
+                    } else if (e.key === 'Enter' && selectedIndex !== -1) {
+                        var selectedHint = $(hintItems[selectedIndex]).text();
+                        $(currentElement).text(selectedHint);
+                        $hintContainer.empty().hide();
+                        e.preventDefault();
+                    } else if (e.key === 'Escape') {
+                        $hintContainer.empty().hide();
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+
+        // Remove keydown event handler when focusing out of the cell
+        $('#data-container').on('focusout', 'tr td:first-child[contenteditable="true"]', function() {
+            $(document).off('keydown.hintNavigation');
+        });
+
+        // Close hint list when clicking outside
         $(document).on('click', function(e) {
             if (!$(e.target).closest('.hint-list, .excel-cell').length) {
                 $hintContainer.empty().hide();

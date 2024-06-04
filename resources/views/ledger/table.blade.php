@@ -1,14 +1,15 @@
 <div class="table-responsive">
-    <table class="table table-bordered table-striped w-100 align-middle" id="record-table">
+    <table class="table table-bordered table-striped w-100 align-middle fs-6" id="record-table">
         <thead>
         <tr>
-            <th width="20%">Bank</th>
-            <th width="15%">Account</th>
-            <th width="10%" class="text-end">Credit</th>
-            <th width="10%" class="text-end">Debit</th>
-            <th width="10%" class="text-end">Balance</th>
+            <th width="15%">Bank</th>
+            <th width="13%">Account</th>
+            <th width="8%" class="text-end">Credit</th>
+            <th width="8%" class="text-end">Debit</th>
+            <th width="8%" class="text-end">Balance</th>
             <th width="10%">Ledger Date</th>
-            <th width="20%">Entry Date</th>
+            <th width="19%">Entry Date</th>
+            <th width="15%">By</th>
             <th width="5%">Action</th>
         </tr>
         </thead>
@@ -39,6 +40,7 @@
                     {data: 'balance', name: 'balance', className: "text-end"},
                     {data: 'ledger_date', name: 'ledger_date'},
                     {data: 'entry_date', name: 'entry_date'},
+                    {data: 'created_by', name: 'created_by'},
                     {data: 'action', name: 'action'}
                 ],
                 order: [[0, 'desc']], // Sort by ID in descending order

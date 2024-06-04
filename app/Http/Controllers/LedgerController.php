@@ -141,8 +141,8 @@ class LedgerController extends Controller
                          ->with('success', self::FNAME.' updated successfully.');
     }
 
-    public function fetchdata(Request $request,$date){
-        $rows = Model::whereDate('ledger_date', $date)->get();
+    public function fetchdata(Request $request,$date,$bank_id){
+        $rows = Model::whereDate('ledger_date', $date)->where('bank_id',$bank_id)->get();
 
         $html = '';
         if ($rows->isEmpty()) {
@@ -229,7 +229,7 @@ class LedgerController extends Controller
 
     public function list()
     {
-        $data = Model::withTrashed()->latest()->get();
+        $data = Model::withTrashed()->latest()->limit(200)->get();
 
         return DataTables::of($data)
 
@@ -283,6 +283,11 @@ class LedgerController extends Controller
                 $date = Carbon::parse($row->created_at);
                 $formattedDate = $date->format('d/m/y h:i:s A');
                 return $formattedDate;
+            })
+
+            ->addColumn('created_by', function ($row) {
+                $created_by = $row->user->name;
+                return $created_by;
             })
 
             ->addColumn('deleted', function ($row) {
