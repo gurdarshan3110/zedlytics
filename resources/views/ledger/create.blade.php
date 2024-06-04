@@ -25,8 +25,8 @@
         <div class="row">
             @foreach($accounts as $account)
                 @if(in_array($account->account_code, permissions()))
-                <div class="col-sm-1 mb-1">
-                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1 fs-8 w-100" tooltip="New">
+                <div class="col-sm-1 mb-1 p-0">
+                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1 fs-7 w-100" tooltip="New">
                         <span class=" d-md-inline">{{$account->account_code}}</span>
                     </a>
                 </div>
