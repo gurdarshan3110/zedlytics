@@ -38,17 +38,17 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text d-flex fw-bold deposit">
+                                <div class="card-text fw-bold deposit">
                                     <div class="w-100 fw-bold">Deposits:</div> 
                                     <div class="w-100">{{ $todaysDeposits }}</div>
                                 </div>
                                 
-                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                <div class="card-text mt-3 fw-bold withdraw">
                                     <div class="w-100 fw-bold">Withdraw:</div> 
                                     <div class="w-100">{{ $todaysWithdrawals }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
                                     <div class="w-100">{{ $todaysDeposits - $todaysWithdrawals }}</div>
                                 </div>
@@ -68,17 +68,17 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text d-flex fw-bold deposit">
+                                <div class="card-text fw-bold deposit">
                                     <div class="w-100 fw-bold">Deposits:</div> 
                                     <div class="w-100">{{ $yesterdayDeposits }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                <div class="card-text mt-3 fw-bold withdraw">
                                     <div class="w-100 fw-bold">Withdraw:</div> 
                                     <div class="w-100">{{ $yesterdayWithdrawals }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
                                     <div class="w-100">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
                                 </div>
@@ -98,17 +98,17 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text d-flex  fw-bold deposit">
+                                <div clas-tex3 fw-bold deposit">
                                     <div class="w-100 fw-bold">Deposits:</div> 
                                     <div class="w-100">{{ $monthlyDeposits }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5 fw-bold withdraw">
+                                <div class="card-text mt-3 fw-bold withdraw">
                                     <div class="w-100 fw-bold">Withdraw:</div> 
                                     <div class="w-100">{{ $monthlyWithdrawals }}</div>
                                 </div>
 
-                                <div class="card-text d-flex mt-5 fw-bold gap">
+                                <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
                                     <div class="w-100">{{ $monthlyDeposits -$monthlyWithdrawals }}</div>
                                 </div>
