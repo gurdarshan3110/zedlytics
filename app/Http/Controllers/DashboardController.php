@@ -35,8 +35,9 @@ class DashboardController extends Controller
         $monthlyDeposits = CashbookLedger::getDepositsBetween($monthStartDate, $monthEndDate);
         $monthlyWithdrawals = CashbookLedger::getWithdrawalsBetween($monthStartDate, $monthEndDate);
 
-        $endDate = Carbon::tomorrow()->endOfDay();
-        
+        $startDate = Carbon::today()->endOfDay();
+        //$endDate = Carbon::tomorrow()->endOfDay();
+
         $banks = Bank::where('status',1)->get();
         return view('dashboard.index', compact(
             'title',
