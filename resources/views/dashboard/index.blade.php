@@ -8,27 +8,7 @@
                 {{$title}} @if(Auth::user()->user_type==\App\Models\User::USER_SUPER_ADMIN): Balance {{$totalBalance}}@endif
             </h3>
         </div>
-        <div class="row mt-2">
-            <h5 class="card-title">Account Details</h5>
-            @foreach($banks as $data)
-            @if(in_array($data->account_code, permissions())) 
-            <div class="col-md-2 mt-1">
-                <div class="card {{(($data->bankBalance()<=100000)?'bg-success':(($data->bankBalance()<=200000)?'bg-warning':'bg-danger'))}} text-light">
-                    <div class="card-body">
-                        <h6 class="card-title fs-7">{{$data->account_code}}</h6>
-                        <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
-                    </div>
-                </div>
-                @if($data->bankBalance() >= $data->first_limit)
-                <div onload="firstAlert();"></div>
-                @endif
-                @if($data->bankBalance() >= $data->second_limit)
-                    <div onload="secondAlert();"></div>
-                @endif
-            </div>
-            @endif
-            @endforeach
-        </div>
+        
         @if(in_array('dashboard charts', permissions()))
         <div class="row mt-2">
             <div class="col-md-4">
@@ -38,13 +18,13 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/t">
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                     <div class="card-text fw-bold deposit text-dark">
                                         <div class="w-100 fw-bold">Deposits:</div> 
                                         <div class="w-100">{{ $todaysDeposits }}</div>
                                     </div>
                                 </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/t">
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                     <div class="card-text mt-3 fw-bold withdraw">
                                         <div class="w-100 fw-bold">Withdraw:</div> 
                                         <div class="w-100">{{ $todaysWithdrawals }}</div>
@@ -70,13 +50,13 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/e">
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}">
                                     <div class="card-text fw-bold deposit">
                                         <div class="w-100 fw-bold">Deposits:</div> 
                                         <div class="w-100">{{ $yesterdayDeposits }}</div>
                                     </div>
                                 </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/e">
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}">
                                     <div class="card-text mt-3 fw-bold withdraw">
                                         <div class="w-100 fw-bold">Withdraw:</div> 
                                         <div class="w-100">{{ $yesterdayWithdrawals }}</div>
@@ -126,7 +106,37 @@
                 </div>
             </div>
         </div>
-
+        @endif
+        <div class="row mt-2">
+            @foreach($brands as $brand)
+                 @php
+                    // Get an array of account codes from the brand's banks
+                    $bankAccountCodes = $brand->banks->pluck('account_code')->toArray();
+                @endphp
+                @if(array_intersect($bankAccountCodes, permissions()))
+                    <h5 class="card-title mt-2 mb-2">Account Details for <strong>{{$brand->name}}</strong></h5>
+                    @foreach($brand->banks as $data)
+                        @if(in_array($data->account_code, permissions())) 
+                        <div class="col-md-2 mt-1">
+                            <div class="card {{(($data->bankBalance()<=100000)?'bg-success':(($data->bankBalance()<=200000)?'bg-warning':'bg-danger'))}} text-light">
+                                <div class="card-body">
+                                    <h6 class="card-title fs-7">{{$data->account_code}}</h6>
+                                    <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
+                                </div>
+                            </div>
+                            @if($data->bankBalance() >= $data->first_limit)
+                            <div onload="firstAlert();"></div>
+                            @endif
+                            @if($data->bankBalance() >= $data->second_limit)
+                                <div onload="secondAlert();"></div>
+                            @endif
+                        </div>
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
+        </div>
+        @if(in_array('dashboard charts', permissions()))
         <div class="row mt-4">
             <!-- Bar charts for Today's Credit, Debit, and Balance -->
             <div class="col-md-6">

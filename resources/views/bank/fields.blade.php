@@ -1,4 +1,14 @@
 <div class="form-group col-sm-6">
+    {{ html()->label('Brand') }}
+    <?php 
+    $brand = '';
+    if(!empty($bank) && $bank['brand_id'] != '' ){ $brand = $bank['brand_id'];} else{ $brand = ''; } 
+    ?>
+    
+    {{ html()->select('brand_id')->class('form-control')->options($brands) }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Account Code') }}
     @if(isset($bank) && !empty($bank))
         {{ html()->text('account_code')->class('form-control')->attribute('readonly', 'readonly') }}

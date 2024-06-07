@@ -19,11 +19,17 @@ class Bank extends Model
         'second_limit',
         'status',
         'rm',
+        'brand_id'
     ];
 
     public function accounts()
     {
         return $this->hasMany(BankAccount::class);
+    }
+
+    public function brands()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function bankBalance()

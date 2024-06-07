@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CashbookLedger;
 use App\Models\Bank;
+use App\Models\Brand;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -38,7 +39,7 @@ class DashboardController extends Controller
         $startDate = Carbon::today()->endOfDay();
         //$endDate = Carbon::tomorrow()->endOfDay();
 
-        $banks = Bank::where('status',1)->get();
+        $brands = Brand::where('status',1)->get();
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -52,14 +53,14 @@ class DashboardController extends Controller
             'weekData',
             'monthData',
             'bankData',
-            'banks',
+            'brands',
             'startDate',
             'endDate'
         ));
     }
 
-    public function finDetails($day){
-        $date = (($day=='t')?Carbon::today():Carbon::yesterday());
+    public function finDetails($date){
+        $date = Carbon::parse($date);
         $title = $date->format('d/m/Y').' Financial Details';
         $date = $date->toDateString();
         $banks = Bank::where('status',1)->get();

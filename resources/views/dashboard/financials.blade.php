@@ -4,8 +4,11 @@
 <main>
     <div class="container-fluid px-4">
         <div class="d-flex">
-            <h3 class="mt-4 w-95">
+            <h3 class="mt-4 w-75">
                 {{$title}} 
+            </h3>
+            <h3 class="mt-4 d-flex justify-content-end w-25">
+                <input type="date" id="date" value="{{$date}}" class="form-control"/> 
             </h3>
         </div>
         <div class="table-responsive">
@@ -47,5 +50,16 @@
         </div>
     </div>
 </main>
+@push('jsscript')
+<script>
+    $(document).ready(function() {
+        $('#date').change(function() {
+            var selectedDate = $(this).val();
 
+            var baseUrl = window.location.href.split('/')[0]+'/'+window.location.href.split('/')[1]+'/'+window.location.href.split('/')[2]+'/'+window.location.href.split('/')[3];
+            window.location.href = baseUrl + '/' + selectedDate;
+        });
+    });
+</script>
+@endpush('jsscript')
 @endsection

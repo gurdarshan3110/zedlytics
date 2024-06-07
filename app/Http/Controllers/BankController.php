@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Bank as Model;
+use App\Models\Brand;
 use App\Models\Account;
 use App\Models\Permission;
 use App\Models\User;
@@ -49,7 +50,9 @@ class BankController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.create', compact('title','url','directory'));
+        $brands = Brand::where('status',1)->pluck('name','id')
+            ->prepend('Select Brand', '');
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','brands'));
     }
 
     /**
@@ -116,7 +119,9 @@ class BankController extends Controller
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url'));
+        $brands = Brand::where('status',1)->pluck('name','id')
+            ->prepend('Select Brand', '');
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','brands'));
     }
 
     /**

@@ -21,4 +21,9 @@ class Brand extends Model
     {
         return $this->hasMany(BrandAccount::class);
     }
+
+    public function banks()
+    {
+        return $this->hasMany(Bank::class);
+    }
 }
