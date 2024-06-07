@@ -137,15 +137,22 @@ class EmployeeController extends Controller
         }
 
         $user = User::where('employee_code',$employee->employee_code)->first();
-        
-        $macArray = [
-            'mac_address' => $input['mac_address']
-        ];
+        $macAddress = explode(',',$input['mac_address']);
+        $deleteMac = MacAddress::where('user_id',$user->id)->delete();
+        foreach ($macAddress as $key => $value) {
+            MacAddress::create([
+                    'user_id' => $user->id,
+                    'mac_address' => $value
+                ]);
+        }
+        // $macArray = [
+        //     'mac_address' => $input['mac_address']
+        // ];
 
-        MacAddress::updateOrCreate(
-                    ['user_id' => $user->id],
-                    $macArray
-                );
+        // MacAddress::updateOrCreate(
+        //             ['user_id' => $user->id],
+        //             $macArray
+        //         );
         
         return redirect()->route(self::URL.'.index', $employee->id)->with('success', self::FNAME.' Mac Address updated successfully.');
     }
@@ -195,8 +202,12 @@ class EmployeeController extends Controller
         $directory = self::DIRECTORY;
         $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
         $user = User::where('employee_code',$employee->employee_code)->first();
-        $macAddress = MacAddress::where('user_id',$user->id)->first();
-        $mac_address = (($macAddress==null)?'':$macAddress->mac_address);
+        $macAddress = MacAddress::where('user_id',$user->id)->get();
+        $mac_address = '';
+        foreach ($macAddress as $key => $value) {
+            $mac_address = (($key==0)?$value->mac_address:$mac_address.','.$value->mac_address);
+        }
+        
         return view(self::DIRECTORY.'.mac', compact(self::DIRECTORY, 'title','directory','url','roles','mac_address'));
     }
 

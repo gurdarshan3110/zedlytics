@@ -28,6 +28,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
+
+    Route::get('/financial-details/{day}', [DashboardController::class, 'finDetails'])->name('financial-details');
     Route::resource('dashboard', DashboardController::class);
 
     Route::get('/employees/list', [EmployeeController::class, 'list'])->name('employees.list');

@@ -57,4 +57,14 @@ class DashboardController extends Controller
             'endDate'
         ));
     }
+
+    public function finDetails($day){
+        $date = (($day=='t')?Carbon::today():Carbon::yesterday());
+        $title = $date->format('d/m/Y').' Financial Details';
+        $date = $date->toDateString();
+        $banks = Bank::where('status',1)->get();
+        return view('dashboard.financials', compact('title',
+            'date','banks'
+        ));
+    }
 }

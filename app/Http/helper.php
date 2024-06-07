@@ -1,6 +1,7 @@
 <?php
 use App\Models\ModuleMaster;
 use App\Models\Bank;
+use App\Models\CashbookLedger;
 function softModules()
 {
     return ModuleMaster::where('status',1)->get();
@@ -27,4 +28,8 @@ function permissions(){
 
 function bankAccount($account_code){
     return Bank::where('account_code',$account_code)->first();
+}
+
+function sumLedgerAmount($type,$date,$bank_id){
+    return CashbookLedger::where('type',$type)->whereDate('ledger_date',$date)->where('bank_id',$bank_id)->where('account_type',CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)->sum('amount');
 }

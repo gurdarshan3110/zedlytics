@@ -38,16 +38,18 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text fw-bold deposit">
-                                    <div class="w-100 fw-bold">Deposits:</div> 
-                                    <div class="w-100">{{ $todaysDeposits }}</div>
-                                </div>
-                                
-                                <div class="card-text mt-3 fw-bold withdraw">
-                                    <div class="w-100 fw-bold">Withdraw:</div> 
-                                    <div class="w-100">{{ $todaysWithdrawals }}</div>
-                                </div>
-
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/t">
+                                    <div class="card-text fw-bold deposit text-dark">
+                                        <div class="w-100 fw-bold">Deposits:</div> 
+                                        <div class="w-100">{{ $todaysDeposits }}</div>
+                                    </div>
+                                </a>
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/t">
+                                    <div class="card-text mt-3 fw-bold withdraw">
+                                        <div class="w-100 fw-bold">Withdraw:</div> 
+                                        <div class="w-100">{{ $todaysWithdrawals }}</div>
+                                    </div>
+                                </a>
                                 <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
                                     <div class="w-100">{{ $todaysDeposits - $todaysWithdrawals }}</div>
@@ -68,16 +70,18 @@
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text fw-bold deposit">
-                                    <div class="w-100 fw-bold">Deposits:</div> 
-                                    <div class="w-100">{{ $yesterdayDeposits }}</div>
-                                </div>
-
-                                <div class="card-text mt-3 fw-bold withdraw">
-                                    <div class="w-100 fw-bold">Withdraw:</div> 
-                                    <div class="w-100">{{ $yesterdayWithdrawals }}</div>
-                                </div>
-
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/e">
+                                    <div class="card-text fw-bold deposit">
+                                        <div class="w-100 fw-bold">Deposits:</div> 
+                                        <div class="w-100">{{ $yesterdayDeposits }}</div>
+                                    </div>
+                                </a>
+                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/e">
+                                    <div class="card-text mt-3 fw-bold withdraw">
+                                        <div class="w-100 fw-bold">Withdraw:</div> 
+                                        <div class="w-100">{{ $yesterdayWithdrawals }}</div>
+                                    </div>
+                                </a>
                                 <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
                                     <div class="w-100">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
@@ -149,8 +153,8 @@
         </div>
         @endif
     </div>
-    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" autoplay></audio>
-    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" autoplay></audio>
+    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}"></audio>
+    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}"></audio>
 </main>
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
