@@ -35,11 +35,13 @@ class Bank extends Model
         return $balance;
     }
 
-    public function closingBalance()
+    public function closingBalance($date)
     {
-        $yesterday = now()->subDay()->toDateString();
+        if($date==''){
+            $date = now()->subDay()->toDateString();
+        }
         $balance=0;
-        $balance = CashbookLedger::where('bank_id', $this->id)->whereDate('ledger_date', $yesterday)->sum('amount');
+        $balance = CashbookLedger::where('bank_id', $this->id)->whereDate('ledger_date','<=', $date)->sum('amount');
         return $balance;
     }
 }

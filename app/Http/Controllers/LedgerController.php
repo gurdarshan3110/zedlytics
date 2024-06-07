@@ -164,7 +164,7 @@ class LedgerController extends Controller
                             <td class="excel-cell" contenteditable="true">'.$row->utr_no.'</td>
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_CREDIT_VAL) ? $row->amount : '').'</td>
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_DEBIT_VAL) ? abs($row->amount) : '').'</td>
-                            <td class="excel-cell text-end">'.$row->balance.'</td>
+                            <td class="excel-cell text-end">'.$row->current_balance.'</td>
                             <td class="excel-cell" contenteditable="true">'.$row->remarks.'</td>
                             <td class="excel-cell"></td>
                             <td class="excel-cell"></td>
@@ -172,7 +172,10 @@ class LedgerController extends Controller
                           </tr>';
             }
         }
-        return $html;
+        $carbonDate = Carbon::parse($date); 
+
+        $previousDate = $carbonDate->subDay(); 
+        return json_encode(array('balance'=>closingBalance($previousDate->toDateString(),$bank_id),'html'=>$html));
     }
 
     public function saveLedger(Request $request)

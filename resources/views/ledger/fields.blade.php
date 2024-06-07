@@ -72,7 +72,9 @@
                 type: 'GET',
                 //data: { date: selectedDate },
                 success: function(response) {
-                    $('#data-container').html(response);
+                    response = JSON.parse(response)
+                    $('#data-container').html(response.html);
+                    $('#bank_' + bank).val(response.balance)
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching data:', error);
