@@ -249,19 +249,25 @@
     function calculateBalance() {
         var totalCredit = 0;
         var totalDebit = 0;
+        var bank = '{{$bankId}}';
+        var initialBalance = parseFloat($('#bank_' + bank).val()); 
+        var balance = isNaN(initialBalance) ? 0 : initialBalance;
         $('#excel-grid tbody tr').each(function() {
             var credit = parseFloat($(this).find('.excel-cell').eq(2).text());
             var debit = parseFloat($(this).find('.excel-cell').eq(3).text());
+            
             if (!isNaN(credit)) {
                 totalCredit += credit;
             }
             if (!isNaN(debit)) {
                 totalDebit += debit;
             }
-            var balance = totalCredit - totalDebit;
+            
+            balance = initialBalance + totalCredit - totalDebit;
             $(this).find('.excel-cell').eq(4).text(balance.toFixed(2));
         });
     }
+
 
 
     $(document).ready(function() {

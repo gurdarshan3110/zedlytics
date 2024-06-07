@@ -30,6 +30,7 @@
                     <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1 fs-7 w-100 {{(($bankId==$bank->id)?'active-account':'')}}" tooltip="New">
                         <span class=" d-md-inline">{{$account->account_code}}</span><br>
                         <span class=" d-md-inline">{{$bank->bankBalance()}}</span>
+                        <input type="hidden" id="bank_{{$bank->id}}" value="{{$bank->closingBalance()}}"/>
                     </a>
                 </div>
                 @endif

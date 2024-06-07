@@ -52,7 +52,7 @@ class CashbookLedger extends Model
         // Calculate sum of credit amounts
         $balance = self::where('bank_id', $this->bank_id)
                         ->where('ledger_date', '<=', $ledger_date)
-                        ->where('id', '<=', $ledger_date)
+                        ->where('id', '<=', $this->id)
                         ->sum('amount');
         return $balance;
     }
@@ -64,12 +64,12 @@ class CashbookLedger extends Model
         $ledger_date = $this->id;
         // Calculate sum of credit amounts
         $balance = self::where('bank_id', $this->bank_id)
-                        ->where('employee_id',$user_id)
-                        ->where('id', '<=', $ledger_date)
+                        ->where('id', '<=', $this->id)
                         ->sum('amount');
         $balance = number_format((float)$balance, 2, '.', '');
         return $balance;
     }
+
 
     public function getBalanceAttribute()
     {
@@ -102,6 +102,19 @@ class CashbookLedger extends Model
         $balance = number_format((float)$balance, 2, '.', '');
 
         return $balance;
+    }
+
+    public static function getClosingBalance()
+    {
+        $yesterday = now()->subDay()->toDateString();
+
+        $balance = self::where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
+                    ->whereDate('ledger_date', $yesterday)
+                    ->sum('amount');
+
+        // Format the deposits to two decimal places
+        $deposits = number_format((float)$deposits, 2, '.', '');
+        return $deposits;
     }
 
     public function getBankBalance($bank_id)
