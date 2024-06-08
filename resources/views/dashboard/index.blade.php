@@ -127,17 +127,13 @@
                             @if($data->bankBalance() >= $data->first_limit)
                             <script>
                                 window.addEventListener('load', function() {
-                                var audio = document.getElementById('first-alert');
-                                audio.play().then(() => {
-                                    console.log('Audio is playing muted');
-                                    // Optionally, unmute after a short delay
-                                    setTimeout(() => {
-                                        audio.muted = false;
-                                    }, 1000); // Unmute after 1 second
-                                }).catch(error => {
-                                    console.error('Error playing audio:', error);
+                                    var audio = document.getElementById('first-alert');
+                                    audio.play().then(() => {
+                                        console.log('Audio is playing');
+                                    }).catch(error => {
+                                        console.error('Error playing audio:', error);
+                                    });
                                 });
-                            });
                             </script>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
@@ -178,8 +174,8 @@
         </div>
         @endif
     </div>
-    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}"></audio>
-    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}"></audio>
+    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" preload="auto"></audio>
+    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto"></audio>
     <button id="firstAlert" onclick="firstAlert();" class="d-none"></button>
     <button id="secondAlert" onclick="secondAlert();  class="d-none"></button>
 </main>
