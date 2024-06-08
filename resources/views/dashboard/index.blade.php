@@ -127,16 +127,20 @@
                             @if($data->bankBalance() >= $data->first_limit)
                             @push('jsscript')
                             <script>
-                                document.getElementById('firstAlert').addEventListener('click', function() {
-            firstAlert();
-        });
+                                setTimeout(() => {
+                                    firstAlert();
+                                }, 5000);
                             </script>
                             @endpush('jsscript')
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
+                            @push('jsscript')
                             <script>
-                                document.getElementById('secondAlert').click();
+                                setTimeout(() => {
+                                    secondAlert();
+                                }, 5000);
                             </script>
+                            @endpush('jsscript')
                             @endif
                         </div>
                         @endif
