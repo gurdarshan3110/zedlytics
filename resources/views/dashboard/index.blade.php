@@ -125,10 +125,10 @@
                                 </div>
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
-                            <div onload="firstAlert();"></div>
+                            <div onload="return firstAlert();"></div>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
-                                <div onload="secondAlert();"></div>
+                                <div onload="return secondAlert();"></div>
                             @endif
                         </div>
                         @endif
