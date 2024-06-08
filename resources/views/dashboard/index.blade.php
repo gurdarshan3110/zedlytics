@@ -129,7 +129,7 @@
                             <script>
                                 setTimeout(() => {
                                     firstAlert();
-                                }, 5000);
+                                }, 2000);
                             </script>
                             @endpush('jsscript')
                             @endif
@@ -138,7 +138,7 @@
                             <script>
                                 setTimeout(() => {
                                     secondAlert();
-                                }, 5000);
+                                }, 2000);
                             </script>
                             @endpush('jsscript')
                             @endif
