@@ -126,18 +126,9 @@
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
                             <script>
-                                window.addEventListener('load', function() {
-                                    var audio = document.getElementById('first-alert');
-                                    audio.play().then(() => {
-                                        console.log('Audio is playing muted');
-                                        // Unmute after a short delay
-                                        setTimeout(() => {
-                                            audio.muted = false;
-                                        }, 1000); // Unmute after 1 second
-                                    }).catch(error => {
-                                        console.error('Error playing audio:', error);
-                                    });
-                                });
+                                document.getElementById('firstAlert').addEventListener('click', function() {
+            firstAlert();
+        });
                             </script>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
