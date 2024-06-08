@@ -125,11 +125,13 @@
                                 </div>
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
+                            @push('jsscript')
                             <script>
                                 document.getElementById('firstAlert').addEventListener('click', function() {
             firstAlert();
         });
                             </script>
+                            @endpush('jsscript')
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
                             <script>
@@ -177,14 +179,7 @@
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    function firstAlert(){
-        var alertSound = document.getElementById('first-alert');
-        alertSound.play();
-    }
-    function secondAlert(){
-        var alertSound = document.getElementById('second-alert');
-        alertSound.play();
-    }
+
     // Prepare data for charts
     const todayData = @json($todayData);
     const weekData = @json($weekData);
