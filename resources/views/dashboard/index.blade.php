@@ -126,17 +126,13 @@
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
                             <script>
-                                window.addEventListener('load', function() {
-                                    firstAlert();
-                                });
+                                $('#firstAlert').click();
                             </script>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
-                                <script>
-                                    window.addEventListener('load', function() {
-                                        secondAlert();
-                                    });
-                                </script>
+                            <script>
+                                $('#secondAlert').click();
+                            </script>
                             @endif
                         </div>
                         @endif
@@ -173,6 +169,8 @@
     </div>
     <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}"></audio>
     <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}"></audio>
+    <button id="firstAlert" class="d-none"></button>
+    <button id="secondAlert" class="d-none"></button>
 </main>
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
