@@ -125,10 +125,10 @@
                                 </div>
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
-                            <div onload="return firstAlert();"></div>
+                            <body onload="return firstAlert();">
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
-                                <div onload="return secondAlert();"></div>
+                                <body onload="return secondAlert();">
                             @endif
                         </div>
                         @endif
@@ -170,7 +170,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function firstAlert(){
-        alert();
         var alertSound = document.getElementById('first-alert');
         alertSound.play();
     }
