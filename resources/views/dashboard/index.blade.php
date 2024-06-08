@@ -175,15 +175,20 @@
         </div>
         @endif
     </div>
-    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" preload="auto" muted></audio>
-    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto" muted></audio>
-    <button id="firstAlert" onclick="firstAlert();" class="d-none"></button>
-    <button id="secondAlert" onclick="secondAlert();  class="d-none"></button>
+    <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" preload="auto"></audio>
+    <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto"></audio>
 </main>
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
+    function firstAlert(){
+        var alertSound = document.getElementById('first-alert');
+        alertSound.play();
+    }
+    function secondAlert(){
+        var alertSound = document.getElementById('second-alert');
+        alertSound.play();
+    }
     // Prepare data for charts
     const todayData = @json($todayData);
     const weekData = @json($weekData);
