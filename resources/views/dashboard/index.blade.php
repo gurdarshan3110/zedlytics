@@ -170,6 +170,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function firstAlert(){
+        alert();
         var alertSound = document.getElementById('first-alert');
         alertSound.play();
     }
