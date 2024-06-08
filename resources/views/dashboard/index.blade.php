@@ -126,12 +126,12 @@
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
                             <script>
-                                $('#firstAlert').click();
+                                document.getElementById('firstAlert').click();
                             </script>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
                             <script>
-                                $('#secondAlert').click();
+                                document.getElementById('secondAlert').click();
                             </script>
                             @endif
                         </div>
