@@ -125,10 +125,18 @@
                                 </div>
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
-                            <body onload="return firstAlert();">
+                            <script>
+                                window.addEventListener('load', function() {
+                                    firstAlert();
+                                });
+                            </script>
                             @endif
                             @if($data->bankBalance() >= $data->second_limit)
-                                <body onload="return secondAlert();">
+                                <script>
+                                    window.addEventListener('load', function() {
+                                        secondAlert();
+                                    });
+                                </script>
                             @endif
                         </div>
                         @endif
