@@ -47,11 +47,11 @@ class Brand extends Model
 
     public function todaysWithdrawals()
     {
-        return $this->hasManyThrough(CashbookLedger::class, Bank::class)
+        return number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereDate('cashbook_ledger.ledger_date', now()->toDateString())
-                    ->sum('cashbook_ledger.amount');;
+                    ->sum('cashbook_ledger.amount')), 2, '.', '');
     }
 
     public function withdrawalsBetween($startDate,$endDate)
@@ -63,8 +63,13 @@ class Brand extends Model
                     ->sum('cashbook_ledger.amount')), 2, '.', '');
     }
 
-    public function equityRecords()
+    public function equityRecords($startDate,$endDate)
     {
-        return $this->hasMany(EquityRecord::class);
+        return EquityRecord::where('brand_id',$this->id)->whereBetween('ledger_date', [$startDate, $endDate])->first();
+    }
+
+    public function parkings($startDate,$endDate)
+    {
+        return 0;
     }
 }

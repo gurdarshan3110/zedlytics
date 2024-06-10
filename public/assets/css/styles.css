@@ -11414,6 +11414,20 @@ body {
   border-radius: 4px;
 }
 
+.equity{
+  background-color: #DEB887;
+  border-color: #DEB887;
+  padding:2px;
+  border-radius: 4px;
+}
+
+.parking{
+  background-color: #7FFF00;
+  border-color: #7FFF00;
+  padding:2px;
+  border-radius: 4px;
+}
+
 .active-account {
     color: var(--bs-btn-hover-color);
     background-color: var(--bs-btn-hover-bg);
