@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('ledger_date')->nullable();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             
             $table->boolean('status')->default(0);
             $table->softDeletes();

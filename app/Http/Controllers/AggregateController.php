@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\Brand as Model;
-use App\Models\Account;
+use App\Models\EquityRecord as Model;
+use App\Models\Brand;
 use App\Models\User;
 use DataTables;
 
-class BrandController extends Controller
+class AggregateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,10 +21,10 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    const TITLE = 'Brands';
-    const URL = 'brands';
-    const DIRECTORY = 'brand';
-    const FNAME = 'Brand';
+    const TITLE = 'Aggregates';
+    const URL = 'aggregate';
+    const DIRECTORY = 'aggregate';
+    const FNAME = 'Aggregate';
 
     public function index()
     {
@@ -48,7 +48,9 @@ class BrandController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.create', compact('title','url','directory'));
+        $brands = Bank::where('status', 1)->pluck('name', 'id')
+            ->prepend('Select Brand', '');
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','brands'));
     }
 
     /**
@@ -61,8 +63,11 @@ class BrandController extends Controller
     {
         $input = $request->all();
         $rules = [
-            'name' => 'required',
-            'account_code' => 'required|unique:accounts',
+            'deposit' => 'required',
+            'withdraw' => 'required',
+            'equity' => 'required',
+            'ledger_date' => 'required|unique:equity_records',
+            'brand_id' => 'required',
             'status' => 'required'
         ];
 
@@ -78,10 +83,7 @@ class BrandController extends Controller
                     ->withInput();
         }
 
-        $input['type'] = Account::BRAND_ACCOUNT;
-        $brand = Model::create($input);
-        $account = Account::create($input);
-        $account->banks()->attach($brand);
+        $equity = Model::create($input);
 
         return redirect()->route(self::URL.'.index', $brand->id)->with('success', self::FNAME.' created successfully.');
     }
@@ -111,7 +113,9 @@ class BrandController extends Controller
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url'));
+        $brands = Bank::where('status', 1)->pluck('name', 'id')
+            ->prepend('Select Brand', '');
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','brands'));
     }
 
     /**
@@ -122,13 +126,15 @@ class BrandController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, Model $brand)
+    public function update(Request $request, Model $equityrecord)
     {
         $input = $request->all();
-        $account = Account::where('account_code', $brand->account_code)->first();
         $rules = [
-            'name' => 'required',
-            'account_code' => 'required|unique:accounts,id,'.$account->id,
+            'deposit' => 'required',
+            'withdraw' => 'required',
+            'equity' => 'required',
+            'ledger_date' => 'required|unique:equity_records,id,'.$equityrecord->id,
+            'brand_id' => 'required',
             'status' => 'required'
         ];
 
@@ -144,8 +150,7 @@ class BrandController extends Controller
                     ->withInput();
         }
         
-        $brand->update($input);
-        $account->update($input);
+        $equityrecord->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');
@@ -157,9 +162,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Model $brand)
+    public function destroy(Model $equityrecord)
     {
-        $brand->delete();
+        $equityrecord->delete();
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' deleted successfully.');
@@ -173,16 +178,28 @@ class BrandController extends Controller
         return DataTables::of($data)
 
 
-            ->addColumn('name', function ($row) {
-                $name = $row->name;
+            ->addColumn('brand', function ($row) {
+                $brand = $row->brand->name;
 
-                return $name;
+                return $brand;
             })
 
-            ->addColumn('account_code', function ($row) {
-                $account_code = $row->account_code;
+            ->addColumn('equity', function ($row) {
+                $equity = $row->equity;
 
-                return $account_code;
+                return $equity;
+            })
+
+            ->addColumn('deposit', function ($row) {
+                $deposit = $row->deposit;
+
+                return $deposit;
+            })
+
+            ->addColumn('withdraw', function ($row) {
+                $withdraw = $row->withdraw;
+
+                return $withdraw;
             })
 
             ->addColumn('status', function ($row) {

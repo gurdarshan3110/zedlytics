@@ -1,23 +1,27 @@
+<div class="form-group col-md-4">
+    {{ html()->label('Brand')->for('brand_id') }}
+    {{ html()->select('brand_id', $brands)->class('form-control') }}
+</div>
 <div class="form-group col-sm-6">
-    {{ html()->label('Account Code') }}
-    {{ html()->text('account_code')->class('form-control') }}
+    {{ html()->label('Deposit') }}
+    {{ html()->text('deposit')->class('form-control') }}
 </div>
 
 <div class="form-group col-sm-6">
-    {{ html()->label('Name') }}
-    {{ html()->text('name')->class('form-control') }}
+    {{ html()->label('Withdraw') }}
+    {{ html()->text('withdraw')->class('form-control') }}
 </div>
 
 <div class="form-group col-sm-6">
-    {{ html()->label('Description') }}
-    {{ html()->textarea('description')->class('form-control')->autocomplete(false) }}
+    {{ html()->label('Equity') }}
+    {{ html()->text('equity')->class('form-control') }}
 </div>
 
 <div class="form-group col-sm-6">
     {{ html()->label('Status') }}
     <?php 
     $status = '';
-    if(!empty($party) && $party['status'] != '' ){ $status = $party['status'];} else{ $status = 1; } 
+    if(!empty($equityrecord) && $equityrecord['status'] != '' ){ $status = $equityrecord['status'];} else{ $status = 1; } 
     ?>
     
     {{ html()->select('status')->class('form-control')->options(['1'=>'Active','0'=>'Deactive']) }}

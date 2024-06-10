@@ -62,4 +62,9 @@ class Brand extends Model
                     ->whereBetween('ledger_date', [$startDate, $endDate])
                     ->sum('cashbook_ledger.amount')), 2, '.', '');
     }
+
+    public function equityRecords()
+    {
+        return $this->hasMany(EquityRecord::class);
+    }
 }
