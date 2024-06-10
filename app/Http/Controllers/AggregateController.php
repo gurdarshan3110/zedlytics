@@ -83,6 +83,7 @@ class AggregateController extends Controller
                     ->withInput();
         }
         $input['ledger_date'] = Carbon::today()->toDateString();
+        $input['user_id'] = Auth::user()->id;
         $equity = Model::create($input);
 
         return redirect()->route(self::URL.'.index', $brand->id)->with('success', self::FNAME.' created successfully.');
