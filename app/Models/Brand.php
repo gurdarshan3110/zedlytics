@@ -56,10 +56,10 @@ class Brand extends Model
 
     public function withdrawalsBetween($startDate,$endDate)
     {
-        return $this->hasManyThrough(CashbookLedger::class, Bank::class)
+        return number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('ledger_date', [$startDate, $endDate])
-                    ->sum('cashbook_ledger.amount');;
+                    ->sum('cashbook_ledger.amount')), 2, '.', '');
     }
 }
