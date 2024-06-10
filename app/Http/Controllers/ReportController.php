@@ -42,8 +42,8 @@ class ReportController extends Controller
         }
 
         $data = $query->whereNull('deleted_at')->get();
+        $bank = Bank::find($bankId);
 
-
-        return Excel::download(new CashbookLedgerExport($data,$bankId), 'cashbook_ledger_report.xlsx');
+        return Excel::download(new CashbookLedgerExport($data,$bankId), $bank->name."-".$startDate.'cashbook_ledger_report.xlsx');
     }
 }

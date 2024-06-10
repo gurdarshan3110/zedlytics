@@ -9,7 +9,7 @@
             <th width="8%" class="text-end">Balance</th>
             <th width="10%">Ledger Date</th>
             <th width="19%">Entry Date</th>
-            <th width="15%">By</th>
+            <th width="15%">Created By</th>
             <th width="5%">Action</th>
         </tr>
         </thead>
