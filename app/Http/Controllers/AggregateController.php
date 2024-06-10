@@ -12,6 +12,7 @@ use App\Models\EquityRecord as Model;
 use App\Models\Brand;
 use App\Models\User;
 use DataTables;
+use Carbon\Carbon;
 
 class AggregateController extends Controller
 {
@@ -66,7 +67,6 @@ class AggregateController extends Controller
             'deposit' => 'required',
             'withdraw' => 'required',
             'equity' => 'required',
-            'ledger_date' => 'required|unique:equity_records',
             'brand_id' => 'required',
             'status' => 'required'
         ];
@@ -82,7 +82,7 @@ class AggregateController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-
+        $input['ledger_date'] = Carbon::today()->toDateString();
         $equity = Model::create($input);
 
         return redirect()->route(self::URL.'.index', $brand->id)->with('success', self::FNAME.' created successfully.');
@@ -133,7 +133,6 @@ class AggregateController extends Controller
             'deposit' => 'required',
             'withdraw' => 'required',
             'equity' => 'required',
-            'ledger_date' => 'required|unique:equity_records,id,'.$equityrecord->id,
             'brand_id' => 'required',
             'status' => 'required'
         ];
