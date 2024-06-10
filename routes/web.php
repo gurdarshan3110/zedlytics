@@ -12,6 +12,7 @@ use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AggregateController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::post('/generate-excel-report', [ReportController::class, 'generateExcelReport']);
     Route::resource('report', ReportController::class);
+
+    Route::get('/aggregate/list', [AggregateController::class, 'list'])->name('aggregate.list');
+    Route::resource('aggregate', AggregateController::class);
 
 
 });
