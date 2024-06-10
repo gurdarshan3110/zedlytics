@@ -1,4 +1,4 @@
-<div class="form-group col-md-4">
+<div class="form-group col-md-6">
     {{ html()->label('Brand')->for('brand_id') }}
     {{ html()->select('brand_id', $brands)->class('form-control') }}
 </div>
