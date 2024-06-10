@@ -23,11 +23,12 @@ class DashboardController extends Controller
         $monthData = CashbookLedger::getDataForPeriod(now()->startOfMonth(), now()->endOfMonth());
         $bankData = CashbookLedger::getDataForBank();
 
-        $startDate = Carbon::yesterday()->startOfDay();
+        $yesterdayStartDate = Carbon::yesterday()->startOfDay();
+        $yesterdayEndDate = Carbon::yesterday()->endOfDay();
         $endDate = Carbon::yesterday()->endOfDay();
         
-        $yesterdayDeposits = CashbookLedger::getDepositsBetween($startDate, $endDate);
-        $yesterdayWithdrawals = CashbookLedger::getWithdrawalsBetween($startDate, $endDate);
+        $yesterdayDeposits = CashbookLedger::getDepositsBetween($yesterdayStartDate, $yesterdayEndDate);
+        $yesterdayWithdrawals = CashbookLedger::getWithdrawalsBetween($yesterdayStartDate, $yesterdayEndDate);
 
 
         $monthStartDate = Carbon::now()->startOfMonth();
@@ -55,7 +56,11 @@ class DashboardController extends Controller
             'bankData',
             'brands',
             'startDate',
-            'endDate'
+            'endDate',
+            'yesterdayStartDate',
+            'yesterdayEndDate',
+            'monthStartDate',
+            'monthEndDate',
         ));
     }
 

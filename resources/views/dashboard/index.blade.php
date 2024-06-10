@@ -1,6 +1,9 @@
 @extends('includes.app')
 
 @section('content')
+@push('jsscript')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@endpush
 <main>
     <div class="container-fluid px-4">
         <div class="d-flex">
@@ -109,11 +112,250 @@
         @endif
         <div class="row mt-2">
             @foreach($brands as $brand)
-                 @php
+                @php
                     $bankAccountCodes = $brand->banks->pluck('account_code')->toArray();
+                    $deposits = 0;
+                    $withdrawals = 0;
+                    $gap = 0;
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
                     <h5 class="card-title mt-2 mb-2">Account Details for <strong>{{$brand->name}}</strong></h5>
+                    @if(in_array('dashboard charts', permissions()))
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials</h5>
+                                    <div class="row">
+                                        <!-- First half of the card -->
+                                        <div class="col-md-6 d-flex flex-column justify-content-center">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text fw-bold deposit text-dark">
+                                                    <div class="w-100 fw-bold">Deposits:</div> 
+                                                    <div class="w-100">{{ $brand->todaysDeposits() }}</div>
+                                                </div>
+                                            </a>
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text mt-3 fw-bold withdraw">
+                                                    <div class="w-100 fw-bold">Withdraw:</div> 
+                                                    <div class="w-100">{{ $brand->todaysWithdrawals() }}</div>
+                                                </div>
+                                            </a>
+                                            <div class="card-text mt-3 fw-bold gap">
+                                                <div class="w-100 fw-bold">Gap:</div> 
+                                                <div class="w-100">{{ $brand->todaysDeposits()- $brand->todaysWithdrawals()}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- Second half of the card -->
+                                        <div class="col-md-6">
+                                            <canvas id="myPieChart{{$brand->id}}a" width="50" height="50"></canvas>
+                                        </div>
+                                        @push('jsscript')
+                                        <script>
+                                            var todaysDeposits = @json($brand->todaysDeposits()); 
+                                            var todaysWithdrawals = @json($brand->todaysWithdrawals()); 
+                                            var difference = todaysDeposits - todaysWithdrawals;
+                                            var id = {{$brand->id}};
+                                            difference = difference.toFixed(2);
+                                            var ctx = document.getElementById('myPieChart'+id+'a').getContext('2d');
+                                            var myPieChart = new Chart(ctx, {
+                                                type: 'pie',
+                                                data: {
+                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
+                                                    datasets: [{
+                                                        data: [todaysDeposits, todaysWithdrawals, difference],
+                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    plugins: {
+                                                        legend: {
+                                                            position: 'top',
+                                                        },
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    var label = context.label || '';
+                                                                    if (label) {
+                                                                        label += ': ';
+                                                                    }
+                                                                    if (context.raw !== null) {
+                                                                        label += context.raw;
+                                                                    }
+                                                                    return label;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                        @endpush
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials</h5>
+                                    <?php
+                                    $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
+                                    $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
+                                    $gap = $deposits - $withdrawals;
+                                    ?>
+                                    <div class="row">
+                                        <!-- First half of the card -->
+                                        <div class="col-md-6 d-flex flex-column justify-content-center">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text fw-bold deposit text-dark">
+                                                    <div class="w-100 fw-bold">Deposits:</div> 
+                                                    <div class="w-100">{{ $deposits }}</div>
+                                                </div>
+                                            </a>
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text mt-3 fw-bold withdraw">
+                                                    <div class="w-100 fw-bold">Withdraw:</div> 
+                                                    <div class="w-100">{{ $withdrawals }}</div>
+                                                </div>
+                                            </a>
+                                            <div class="card-text mt-3 fw-bold gap">
+                                                <div class="w-100 fw-bold">Gap:</div> 
+                                                <div class="w-100">{{ $gap}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- Second half of the card -->
+                                        <div class="col-md-6">
+                                            <canvas id="myPieChart{{$brand->id}}b" width="50" height="50"></canvas>
+                                        </div>
+                                        @push('jsscript')
+                                        <script>
+                                            var todaysDeposits = @json($deposits); 
+                                            var todaysWithdrawals = @json($withdrawals); 
+                                            var difference = todaysDeposits - todaysWithdrawals;
+                                            var id = '{{$brand->id}}';
+                                            difference = difference.toFixed(2);
+                                            var ctx = document.getElementById('myPieChart'+id+'b').getContext('2d');
+                                            var myPieChart = new Chart(ctx, {
+                                                type: 'pie',
+                                                data: {
+                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
+                                                    datasets: [{
+                                                        data: [todaysDeposits, todaysWithdrawals, difference],
+                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    plugins: {
+                                                        legend: {
+                                                            position: 'top',
+                                                        },
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    var label = context.label || '';
+                                                                    if (label) {
+                                                                        label += ': ';
+                                                                    }
+                                                                    if (context.raw !== null) {
+                                                                        label += context.raw;
+                                                                    }
+                                                                    return label;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                        @endpush
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials</h5>
+                                    <?php
+                                    $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
+                                    $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
+                                    $gap = $deposits - $withdrawals;
+                                    ?>
+                                    <div class="row">
+                                        <!-- First half of the card -->
+                                        <div class="col-md-6 d-flex flex-column justify-content-center">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text fw-bold deposit text-dark">
+                                                    <div class="w-100 fw-bold">Deposits:</div> 
+                                                    <div class="w-100">{{ $deposits }}</div>
+                                                </div>
+                                            </a>
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                                <div class="card-text mt-3 fw-bold withdraw">
+                                                    <div class="w-100 fw-bold">Withdraw:</div> 
+                                                    <div class="w-100">{{ $withdrawals }}</div>
+                                                </div>
+                                            </a>
+                                            <div class="card-text mt-3 fw-bold gap">
+                                                <div class="w-100 fw-bold">Gap:</div> 
+                                                <div class="w-100">{{ $gap}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- Second half of the card -->
+                                        <div class="col-md-6">
+                                            <canvas id="myPieChart{{$brand->id}}c" width="50" height="50"></canvas>
+                                        </div>
+                                        @push('jsscript')
+                                        <script>
+                                            var todaysDeposits = @json($deposits); 
+                                            var todaysWithdrawals = @json($withdrawals); 
+                                            var difference = todaysDeposits - todaysWithdrawals;
+                                            var id = '{{$brand->id}}';
+                                            difference = difference.toFixed(2);
+                                            var ctx = document.getElementById('myPieChart'+id+'c').getContext('2d');
+                                            var myPieChart = new Chart(ctx, {
+                                                type: 'pie',
+                                                data: {
+                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
+                                                    datasets: [{
+                                                        data: [todaysDeposits, todaysWithdrawals, difference],
+                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true,
+                                                    plugins: {
+                                                        legend: {
+                                                            position: 'top',
+                                                        },
+                                                        tooltip: {
+                                                            callbacks: {
+                                                                label: function(context) {
+                                                                    var label = context.label || '';
+                                                                    if (label) {
+                                                                        label += ': ';
+                                                                    }
+                                                                    if (context.raw !== null) {
+                                                                        label += context.raw;
+                                                                    }
+                                                                    return label;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                        @endpush
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     @foreach($brand->banks as $data)
                         @if(in_array($data->account_code, permissions())) 
                         <div class="col-md-2 mt-1">
@@ -179,7 +421,6 @@
     <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto"></audio>
 </main>
 @push('jsscript')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function firstAlert(){
         var alertSound = document.getElementById('first-alert');
