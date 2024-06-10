@@ -48,7 +48,7 @@ class AggregateController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        $brands = Bank::where('status', 1)->pluck('name', 'id')
+        $brands = Brand::where('status', 1)->pluck('name', 'id')
             ->prepend('Select Brand', '');
         return view(self::DIRECTORY.'.create', compact('title','url','directory','brands'));
     }
@@ -113,7 +113,7 @@ class AggregateController extends Controller
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        $brands = Bank::where('status', 1)->pluck('name', 'id')
+        $brands = Brand::where('status', 1)->pluck('name', 'id')
             ->prepend('Select Brand', '');
         return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','brands'));
     }
