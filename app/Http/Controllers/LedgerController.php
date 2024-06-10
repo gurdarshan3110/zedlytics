@@ -172,10 +172,10 @@ class LedgerController extends Controller
                           </tr>';
             }
         }
-        $carbonDate = Carbon::parse($date); 
+        //$carbonDate = Carbon::parse($date); 
 
-        $previousDate = $carbonDate->subDay(); 
-        return json_encode(array('balance'=>closingBalance($previousDate->toDateString(),$bank_id),'html'=>$html));
+        //$previousDate = $carbonDate->subDay(); 
+        return json_encode(array('balance'=>closingBalance($date,$bank_id),'html'=>$html));
     }
 
     public function saveLedger(Request $request)
