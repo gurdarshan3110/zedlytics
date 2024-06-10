@@ -2,8 +2,10 @@
     <table class="table table-bordered table-striped w-100 align-middle" id="record-table-inactives">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Code</th>
+            <th>Brand</th>
+            <th>Equity</th>
+            <th>Deposit</th>
+            <th>Withdraw</th>
             <th>Status</th>
             <th  style="width:15%;">Action</th>
         </tr>
@@ -28,8 +30,10 @@
                 serverSide: true,
                 ajax: "/{{$url}}/list?status=0",
                 columns: [
-                    {data: 'name', name: 'name'},
-                    {data: 'account_code', name: 'account_code'},
+                    {data: 'brand', name: 'brand'},
+                    {data: 'equity', name: 'equity'},
+                    {data: 'deposit', name: 'deposit'},
+                    {data: 'withdraw', name: 'withdraw'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action',className:'action'},
                     
