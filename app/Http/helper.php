@@ -35,6 +35,6 @@ function sumLedgerAmount($type,$date,$bank_id){
 }
 
 function closingBalance($date,$bank_id){
-    $balance = CashbookLedger::where('bank_id', $bank_id)->whereDate('ledger_date', $date)->sum('amount');
+    $balance = CashbookLedger::where('bank_id', $bank_id)->whereDate('ledger_date','<', $date)->sum('amount');
     return $balance;
 }
