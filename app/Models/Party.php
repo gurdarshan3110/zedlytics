@@ -21,4 +21,5 @@ class Party extends Model
     {
         return $this->hasMany(PartyAccount::class);
     }
+
 }

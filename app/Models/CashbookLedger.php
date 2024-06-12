@@ -259,4 +259,18 @@ class CashbookLedger extends Model
         return $balance;
     }
 
+    public function parking($startDate,$endDate,$bank_id)
+    {
+        $records = self::where('brand_id',$this->id)->whereBetween('ledger_date', [$startDate, $endDate]);
+        $totalDeposits = $records->sum('deposit');
+        $totalWithdrawals = $records->sum('withdraw');
+        $totalEquity = $records->sum('equity');
+
+        return [
+            'deposit' => $totalDeposits,
+            'withdraw' => $totalWithdrawals,
+            'equity' => $totalEquity,
+        ];
+    }
+
 }

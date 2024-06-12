@@ -62,6 +62,7 @@
                     $withdrawals = 0;
                     $gap = 0;
                     $todayEquityRecords = $brand->equityRecords($startDate->toDateString(),$startDate->toDateString());
+                    $todayParkings = $brand->parkings($startDate->toDateString());
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
                     <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light"><strong>{{$brand->name}}</strong> Financials</h5>
@@ -116,7 +117,7 @@
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
                                             <div class="card-text mt-3 fw-bold parking text-dark">
                                                 <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $brand->parkings($startDate,$endDate) }}</div>
+                                                <div class="w-100">{{ $todayParkings }}</div>
                                             </div>
                                         </div>
                                         @push('jsscript')
@@ -174,6 +175,7 @@
                                     $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
                                     $gap = $deposits - $withdrawals;
                                     $yesterdayEquityRecords = $brand->equityRecords($yesterdayStartDate->toDateString(),$yesterdayStartDate->toDateString());
+                                    $yesterdayParkings = $brand->parkings($yesterdayStartDate->toDateString());
                                     ?>
                                     <div class="row">
                                         <!-- First half of the card -->
@@ -220,7 +222,7 @@
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
                                             <div class="card-text mt-3 fw-bold parking text-dark">
                                                 <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $brand->parkings($yesterdayStartDate,$yesterdayEndDate) }}</div>
+                                                <div class="w-100">{{ $yesterdayParkings }}</div>
                                             </div>
                                         </div>
                                         @push('jsscript')
@@ -278,6 +280,7 @@
                                     $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
                                     $gap = $deposits - $withdrawals;
                                     $monthEquityRecords = $brand->equityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
+                                    $monthParkings = $brand->parkings($monthEndDate->toDateString());
                                     ?>
                                     <div class="row">
                                         <!-- First half of the card -->
@@ -312,7 +315,7 @@
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
                                             <div class="card-text mt-3 fw-bold parking text-dark">
                                                 <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $brand->parkings($monthStartDate,$monthEndDate) }}</div>
+                                                <div class="w-100">{{ $monthParkings }}</div>
                                             </div>
                                         </div>
                                         @push('jsscript')

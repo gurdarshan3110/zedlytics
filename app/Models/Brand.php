@@ -77,8 +77,12 @@ class Brand extends Model
         ];
     }
 
-    public function parkings($startDate,$endDate)
+    public function parkings($startDate)
     {
-        return 0;
+        return number_format($this->hasManyThrough(CashbookLedger::class, Bank::class)
+                    ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_PARTY_VAL)
+                    ->where('ledger_date', '<=', $startDate)
+                    ->where('cashbook_ledger.account_code', 'like', '%PARKING%')
+                    ->sum('cashbook_ledger.amount'), 2, '.', '');
     }
 }
