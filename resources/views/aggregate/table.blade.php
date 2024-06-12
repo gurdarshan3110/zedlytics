@@ -3,6 +3,7 @@
         <thead>
         <tr>
             <th>Brand</th>
+            <th>Date</th>
             <th>Equity</th>
             <th>Deposit</th>
             <th>Withdraw</th>
@@ -31,6 +32,7 @@
                 ajax: "/{{$url}}/list?status=1",
                 columns: [
                     {data: 'brand', name: 'brand'},
+                    {data: 'date', name: 'date'},
                     {data: 'equity', name: 'equity'},
                     {data: 'deposit', name: 'deposit'},
                     {data: 'withdraw', name: 'withdraw'},

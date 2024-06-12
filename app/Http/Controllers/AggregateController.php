@@ -109,14 +109,15 @@ class AggregateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Model $brand)
+    public function edit(Model $aggregate)
     {
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
         $brands = Brand::where('status', 1)->pluck('name', 'id')
             ->prepend('Select Brand', '');
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','brands'));
+        $equityrecord = $aggregate;
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','brands','aggregate','equityrecord'));
     }
 
     /**
@@ -127,7 +128,7 @@ class AggregateController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, Model $equityrecord)
+    public function update(Request $request, Model $aggregate)
     {
         $input = $request->all();
         $rules = [
@@ -150,7 +151,7 @@ class AggregateController extends Controller
                     ->withInput();
         }
         
-        $equityrecord->update($input);
+        $aggregate->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');
@@ -182,6 +183,12 @@ class AggregateController extends Controller
                 $brand = $row->brand->name;
 
                 return $brand;
+            })
+
+            ->addColumn('date', function ($row) {
+                $date = Carbon::parse($row->ledger_date)->format('d/m/Y');
+
+                return $date;
             })
 
             ->addColumn('equity', function ($row) {

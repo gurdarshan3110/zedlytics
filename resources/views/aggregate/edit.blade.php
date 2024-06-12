@@ -23,7 +23,7 @@
         </div>
         <div class="card mb-4">
             <div class="card-body">
-                {{ html()->model($equityrecord)->form('PUT', route($url.'.update',$equityrecord))->autocomplete(false)->open() }}
+                {{ html()->model($aggregate)->form('PUT', route($url.'.update',$aggregate))->autocomplete(false)->open() }}
                     <div class="row">
                         @include($directory.'.fields')
                         <div class="col-sm-12 mt-5">
