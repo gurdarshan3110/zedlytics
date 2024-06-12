@@ -280,7 +280,7 @@
                                     $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
                                     $gap = $deposits - $withdrawals;
                                     $monthEquityRecords = $brand->equityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
-                                    $monthParkings = $brand->parkings($monthEndDate->toDateString());
+                                    $monthParkings = $brand->parkingsupto($monthEndDate->toDateString());
                                     ?>
                                     <div class="row">
                                         <!-- First half of the card -->
