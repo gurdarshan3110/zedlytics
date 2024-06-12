@@ -303,8 +303,10 @@
                     var hintList = $('<div>').addClass('hint-list');
 
                     hints.forEach(function(hint, index) {
-                        var hintItem = $('<div>').addClass('hint-item').text(hint);
+                        var hintItem = $('<div>').addClass('hint-item');
+                        hintItem.text(hint);
                         hintItem.on('click', function() {
+                            //alert(hint);
                             $(element).text(hint);
                             $hintContainer.empty().hide();
                         });
@@ -339,7 +341,7 @@
 
         // Hide hints when moving to the next cell
         $('#data-container').on('focusout', 'tr td:first-child[contenteditable="true"]', function() {
-            $hintContainer.empty().hide();
+            //$hintContainer.empty().hide();
         });
 
         $('#data-container').on('focusin', 'tr td:first-child[contenteditable="true"]', function() {
