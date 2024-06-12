@@ -86,7 +86,7 @@ class AggregateController extends Controller
         $input['user_id'] = Auth::user()->id;
         $equity = Model::create($input);
 
-        return redirect()->route(self::URL.'.index', $brand->id)->with('success', self::FNAME.' created successfully.');
+        return redirect()->route(self::URL.'.index', $equity->id)->with('success', self::FNAME.' created successfully.');
     }
 
     /**
