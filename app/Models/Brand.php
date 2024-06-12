@@ -79,18 +79,20 @@ class Brand extends Model
 
     public function parkings($startDate)
     {
-        return number_format($this->hasManyThrough(CashbookLedger::class, Bank::class)
+        $amount = $this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_PARTY_VAL)
                     ->where('ledger_date', '=', $startDate)
                     ->where('cashbook_ledger.account_code', 'like', '%PARKING%')
-                    ->sum('cashbook_ledger.amount'), 2, '.', '');
+                    ->sum('cashbook_ledger.amount');
+        return (($amount>0)?number_format((-1*$amount), 2, '.', ''):number_format(abs($amount), 2, '.', ''));
     }
     public function parkingsupto($startDate)
     {
-        return number_format($this->hasManyThrough(CashbookLedger::class, Bank::class)
+        $amount = $this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_PARTY_VAL)
                     ->where('ledger_date', '<=', $startDate)
                     ->where('cashbook_ledger.account_code', 'like', '%PARKING%')
-                    ->sum('cashbook_ledger.amount'), 2, '.', '');
+                    ->sum('cashbook_ledger.amount');
+        return (($amount>0)?number_format((-1*$amount), 2, '.', ''):number_format(abs($amount), 2, '.', ''));
     }
 }
