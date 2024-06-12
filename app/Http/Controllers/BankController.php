@@ -173,6 +173,8 @@ class BankController extends Controller
      */
     public function destroy(Model $bank)
     {
+        $account = Account::where('account_code',$bank->account_code)->first();
+        $account->delete();
         $bank->delete();
         
         return redirect()->route(self::URL.'.index')
