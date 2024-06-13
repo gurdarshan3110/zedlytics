@@ -68,14 +68,14 @@
                     <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light"><strong>{{$brand->name}}</strong> Financials</h5>
                     @if(in_array('dashboard charts', permissions()))
                     <div class="row mt-2">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials</h5>
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                                 <div class="card-text fw-bold deposit text-dark">
                                                     <div class="w-100 fw-bold">Deposits:</div> 
                                                     <div class="w-100">{{ $brand->todaysDeposits() }} 
@@ -87,7 +87,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                                 <div class="card-text mt-3 fw-bold withdraw">
                                                     <div class="w-100 fw-bold">Withdraw:</div> 
                                                     <div class="w-100">{{ $brand->todaysWithdrawals() }}
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials</h5>
@@ -180,7 +180,7 @@
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$yesterdayStartDate->toDateString()}}/{{$brand->id}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                                 <div class="card-text fw-bold deposit text-dark">
                                                     <div class="w-100 fw-bold">Deposits:</div> 
                                                     <div class="w-100">{{ $deposits }}
@@ -192,7 +192,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$yesterdayStartDate->toDateString()}}/{{$brand->id}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
                                                 <div class="card-text mt-3 fw-bold withdraw">
                                                     <div class="w-100 fw-bold">Withdraw:</div> 
                                                     <div class="w-100">{{ $withdrawals }}
@@ -271,223 +271,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials</h5>
-                                    <?php
-                                    $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
-                                    $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
-                                    $gap = $deposits - $withdrawals;
-                                    $monthEquityRecords = $brand->equityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
-                                    $monthParkings = $brand->parkingsupto($monthEndDate->toDateString());
-                                    ?>
-                                    <div class="row">
-                                        <!-- First half of the card -->
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text fw-bold deposit text-dark">
-                                                <div class="w-100 fw-bold">Deposits:</div> 
-                                                <div class="w-100">{{ $deposits }}</div>
-                                            </div>
-                                            <div class="card-text mt-3 fw-bold withdraw">
-                                                <div class="w-100 fw-bold">Withdraw:</div> 
-                                                <div class="w-100">{{ $withdrawals }}</div>
-                                            </div>
-                                            <div class="card-text mt-3 fw-bold gap">
-                                                <div class="w-100 fw-bold">Gap:</div> 
-                                                <div class="w-100">{{ $gap}}</div>
-                                            </div>
-                                        </div>
-                                        <!-- Second half of the card -->
-                                        <div class="col-md-6">
-                                            <canvas id="myPieChart{{$brand->id}}c" width="50" height="50"></canvas>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold equity text-dark">
-                                                <div class="w-100 fw-bold">Equity:</div> 
-                                                <div class="w-100">{{ $monthEquityRecords==null?0:$monthEquityRecords['equity'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold parking text-dark">
-                                                <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $monthParkings }}</div>
-                                            </div>
-                                        </div>
-                                        @push('jsscript')
-                                        <script>
-                                            var todaysDeposits = @json($deposits); 
-                                            var todaysWithdrawals = @json($withdrawals); 
-                                            var difference = todaysDeposits - todaysWithdrawals;
-                                            var id = '{{$brand->id}}';
-                                            difference = difference.toFixed(2);
-                                            var ctx = document.getElementById('myPieChart'+id+'c').getContext('2d');
-                                            var myPieChart = new Chart(ctx, {
-                                                type: 'pie',
-                                                data: {
-                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
-                                                    datasets: [{
-                                                        data: [todaysDeposits, todaysWithdrawals, difference],
-                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-                                                    }]
-                                                },
-                                                options: {
-                                                    responsive: true,
-                                                    plugins: {
-                                                        legend: {
-                                                            position: 'top',
-                                                        },
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: function(context) {
-                                                                    var label = context.label || '';
-                                                                    if (label) {
-                                                                        label += ': ';
-                                                                    }
-                                                                    if (context.raw !== null) {
-                                                                        label += context.raw;
-                                                                    }
-                                                                    return label;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        </script>
-                                        @endpush
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     @endif
                 @endif
             @endforeach
         </div>
-        @if(in_array('dashboard charts', permissions()))
-        <div class="row mt-2">
-            <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light">Complete Overview</strong></h5>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials</h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
-                                    <div class="card-text fw-bold deposit text-dark">
-                                        <div class="w-100 fw-bold">Deposits:</div> 
-                                        <div class="w-100">{{ $todaysDeposits }}</div>
-                                    </div>
-                                </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
-                                    <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw:</div> 
-                                        <div class="w-100">{{ $todaysWithdrawals }}</div>
-                                    </div>
-                                </a>
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $todaysDeposits - $todaysWithdrawals }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart" width="50" height="50"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials</h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
-                                    <div class="card-text fw-bold deposit">
-                                        <div class="w-100 fw-bold">Deposits:</div> 
-                                        <div class="w-100">{{ $yesterdayDeposits }}</div>
-                                    </div>
-                                </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
-                                    <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw:</div> 
-                                        <div class="w-100">{{ $yesterdayWithdrawals }}</div>
-                                    </div>
-                                </a>
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart2" width="50" height="50"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials</h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text fw-bold deposit">
-                                    <div class="w-100 fw-bold">Deposits:</div> 
-                                    <div class="w-100">{{ $monthlyDeposits }}</div>
-                                </div>
-
-                                <div class="card-text mt-3 fw-bold withdraw">
-                                    <div class="w-100 fw-bold">Withdraw:</div> 
-                                    <div class="w-100">{{ $monthlyWithdrawals }}</div>
-                                </div>
-
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $monthlyDeposits -$monthlyWithdrawals }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart3" width="50" height="50"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <!-- Bar charts for Today's Credit, Debit, and Balance -->
-            <div class="col-md-6">
-                <h5 class="card-title">Today's Chart</h5>
-                <canvas id="todayChart"></canvas>
-            </div>
-            <!-- Bar charts for Last 7 Days Credit, Debit, and Balance -->
-            <div class="col-md-6">
-                <h5 class="card-title">Bank's Chart</h5>
-                <canvas id="bankChart"></canvas>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <!-- Bar charts for Last Month Credit, Debit, and Balance -->
-            <div class="col-md-6">
-                <h5 class="card-title">Week's Chart</h5>
-                <canvas id="weekChart"></canvas>
-            </div>
-            <div class="col-md-6">
-                <h5 class="card-title">Month's Chart</h5>
-                <canvas id="monthChart"></canvas>
-            </div>
-
-        </div>
-        @endif
+        
     </div>
     <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" preload="auto"></audio>
     <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto"></audio>

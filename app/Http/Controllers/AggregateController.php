@@ -82,7 +82,7 @@ class AggregateController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-        $input['ledger_date'] = Carbon::today()->toDateString();
+        //$input['ledger_date'] = Carbon::today()->toDateString();
         $input['user_id'] = Auth::user()->id;
         $equity = Model::create($input);
 

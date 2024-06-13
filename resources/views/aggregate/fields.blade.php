@@ -3,6 +3,11 @@
     {{ html()->select('brand_id', $brands)->class('form-control') }}
 </div>
 <div class="form-group col-sm-6">
+    {{ html()->label('Date') }}
+    {{ html()->date('ledger_date')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Deposit') }}
     {{ html()->text('deposit')->class('form-control') }}
 </div>

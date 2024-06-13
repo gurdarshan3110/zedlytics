@@ -30,7 +30,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
 
-    Route::get('/financial-details/{day}', [DashboardController::class, 'finDetails'])->name('financial-details');
+    Route::get('/financial-details/{day}/{brand}', [DashboardController::class, 'finDetails'])->name('financial-details');
+    Route::get('/employee-dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('dashboard', DashboardController::class);
 
     Route::get('/employees/list', [EmployeeController::class, 'list'])->name('employees.list');

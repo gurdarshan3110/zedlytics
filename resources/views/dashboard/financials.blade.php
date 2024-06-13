@@ -52,12 +52,13 @@
 </main>
 @push('jsscript')
 <script>
+    var brand = '{{$brand}}';
     $(document).ready(function() {
         $('#date').change(function() {
             var selectedDate = $(this).val();
 
             var baseUrl = window.location.href.split('/')[0]+'/'+window.location.href.split('/')[1]+'/'+window.location.href.split('/')[2]+'/'+window.location.href.split('/')[3];
-            window.location.href = baseUrl + '/' + selectedDate;
+            window.location.href = baseUrl + '/' + selectedDate + '/' + brand;
         });
     });
 </script>

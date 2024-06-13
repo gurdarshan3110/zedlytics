@@ -12,7 +12,21 @@
 
             <div class="mt-auto w-75 align-items-end d-flex justify-content-end">
                 @if(in_array('view ledger date', permissions()))
-                <input type="date" id="date" class="form-control w-25" value="{{ date('Y-m-d') }}"/>
+                    @if(in_array('restrict ledger date', permissions()))
+                    @php
+                        $yesterday = \Carbon\Carbon::yesterday()->toDateString();
+                        $today = \Carbon\Carbon::today()->toDateString();
+                    @endphp
+                    {{ html()->date('date')
+                        ->class('form-control w-25')
+                        ->id('date')
+                        ->attribute('min', $yesterday)
+                        ->attribute('max', $today) }}
+                    @else
+                    {{ html()->date('date')
+                        ->class('form-control w-25')
+                        ->id('date')}}
+                    @endif
                 @else
                 <input type="hidden" id="date" value="{{ date('Y-m-d') }}"/>
                 @endif
