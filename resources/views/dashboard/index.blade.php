@@ -411,7 +411,7 @@
                             <div class="col-md-6 d-flex flex-column justify-content-center">
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
                                     <div class="card-text fw-bold deposit">
-                                        <div class="w-100 fw-bold">Deposits: {{ $yesterdayDeposits['deposit'] }}</div> 
+                                        <div class="w-100 fw-bold">Deposits: {{ $yesterdayDeposits['count'] }}</div> 
                                         <div class="w-100">{{ $yesterdayDeposits['deposit'] }}</div>
                                     </div>
                                 </a>
