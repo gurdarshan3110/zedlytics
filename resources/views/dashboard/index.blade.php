@@ -379,19 +379,19 @@
                             <div class="col-md-6 d-flex flex-column justify-content-center">
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
                                     <div class="card-text fw-bold deposit text-dark">
-                                        <div class="w-100 fw-bold">Deposits:</div> 
-                                        <div class="w-100">{{ $todaysDeposits }}</div>
+                                        <div class="w-100 fw-bold">Deposits: {{ $todaysDeposits['count'] }}</div> 
+                                        <div class="w-100">{{ $todaysDeposits['deposit'] }}</div>
                                     </div>
                                 </a>
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
                                     <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw:</div> 
-                                        <div class="w-100">{{ $todaysWithdrawals }}</div>
+                                        <div class="w-100 fw-bold">Withdraw: {{ $todaysWithdrawals['count'] }}</div> 
+                                        <div class="w-100">{{ $todaysWithdrawals['withdraw'] }}</div>
                                     </div>
                                 </a>
                                 <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $todaysDeposits - $todaysWithdrawals }}</div>
+                                    <div class="w-100">{{ $todaysDeposits['deposit'] - $todaysWithdrawals['withdraw'] }}</div>
                                 </div>
                             </div>
                             <!-- Second half of the card -->
@@ -411,19 +411,19 @@
                             <div class="col-md-6 d-flex flex-column justify-content-center">
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
                                     <div class="card-text fw-bold deposit">
-                                        <div class="w-100 fw-bold">Deposits:</div> 
-                                        <div class="w-100">{{ $yesterdayDeposits }}</div>
+                                        <div class="w-100 fw-bold">Deposits: {{ $yesterdayDeposits['deposit'] }}</div> 
+                                        <div class="w-100">{{ $yesterdayDeposits['deposit'] }}</div>
                                     </div>
                                 </a>
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
                                     <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw:</div> 
-                                        <div class="w-100">{{ $yesterdayWithdrawals }}</div>
+                                        <div class="w-100 fw-bold">Withdraw: {{ $yesterdayWithdrawals['count'] }}</div> 
+                                        <div class="w-100">{{ $yesterdayWithdrawals['withdraw'] }}</div>
                                     </div>
                                 </a>
                                 <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $yesterdayDeposits -$yesterdayWithdrawals }}</div>
+                                    <div class="w-100">{{ $yesterdayDeposits['deposit'] - $yesterdayWithdrawals['withdraw'] }}</div>
                                 </div>
                             </div>
                             <!-- Second half of the card -->
@@ -442,18 +442,18 @@
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
                                 <div class="card-text fw-bold deposit">
-                                    <div class="w-100 fw-bold">Deposits:</div> 
-                                    <div class="w-100">{{ $monthlyDeposits }}</div>
+                                    <div class="w-100 fw-bold">Deposits: {{ $monthlyDeposits['count'] }}</div> 
+                                    <div class="w-100">{{ $monthlyDeposits['deposit'] }}</div>
                                 </div>
 
                                 <div class="card-text mt-3 fw-bold withdraw">
-                                    <div class="w-100 fw-bold">Withdraw:</div> 
-                                    <div class="w-100">{{ $monthlyWithdrawals }}</div>
+                                    <div class="w-100 fw-bold">Withdraw: {{ $monthlyWithdrawals['count'] }}</div> 
+                                    <div class="w-100">{{ $monthlyWithdrawals['withdraw'] }}</div>
                                 </div>
 
                                 <div class="card-text mt-3 fw-bold gap">
                                     <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $monthlyDeposits -$monthlyWithdrawals }}</div>
+                                    <div class="w-100">{{ $monthlyDeposits['deposit'] -$monthlyWithdrawals['withdraw'] }}</div>
                                 </div>
                             </div>
                             <!-- Second half of the card -->

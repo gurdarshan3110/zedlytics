@@ -128,47 +128,64 @@ class CashbookLedger extends Model
     public static function getTodaysDeposits()
     {
         $today = now()->startOfDay();
-        $deposits = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+        $query = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
                     ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
-                    ->where('ledger_date', '>=', $today)
-                    ->sum('amount');
-        $deposits = number_format((float)$deposits, 2, '.', '');
-        return $deposits;
+                    ->where('ledger_date', '>=', $today);
+                    //->sum('amount');
+        //$deposits = number_format((float)$deposits, 2, '.', '');
+
+        $deposit = $query->sum('amount');
+        $count = $query->count();
+
+        $formattedDeposit = number_format((float)$deposit, 2, '.', '');
+
+        return ['deposit' => (($formattedDeposit==null)?0:$formattedDeposit), 'count' =>  (($count==null)?0:$count)];
+        //return $deposits;
     }
 
     public static function getTodaysWithdrawals()
     {
         $today = now()->startOfDay();
-        $withdrawal = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+        $query = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
                     ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
-                    ->where('ledger_date', '>=', $today)
-                    ->sum('amount');
+                    ->where('ledger_date', '>=', $today);
 
-        $withdrawal = number_format((float)$withdrawal, 2, '.', '');
+        $withdrawal = $query->sum('amount');
+        $count = $query->count();
 
-        return abs($withdrawal);
+        $formattedWithdrawal = number_format((float)abs($withdrawal), 2, '.', '');
+
+        return ['withdraw' => (($formattedWithdrawal==null)?0:$formattedWithdrawal), 'count' =>  (($count==null)?0:$count)];
     }
 
     public static function getDepositsBetween($startDate, $endDate)
     {
-        $deposits = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
+        $query = self::where('type', self::LEDGER_TYPE_CREDIT_VAL)
                         ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
-                        ->whereBetween('ledger_date', [$startDate, $endDate])
-                        ->sum('amount');
-        $deposits = number_format((float)$deposits, 2, '.', '');
-        return $deposits;
+                        ->whereBetween('ledger_date', [$startDate, $endDate]);
+                        //->sum('amount');
+        //$deposits = number_format((float)$deposits, 2, '.', '');
+        $deposit = $query->sum('amount');
+        $count = $query->count();
+
+        $formattedDeposit = number_format((float)$deposit, 2, '.', '');
+
+        return ['deposit' => (($formattedDeposit==null)?0:$formattedDeposit), 'count' =>  (($count==null)?0:$count)];
     }
 
     public static function getWithdrawalsBetween($startDate, $endDate)
     {
-        $withdrawal = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
+        $query = self::where('type', self::LEDGER_TYPE_DEBIT_VAL)
                         ->where('account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
-                        ->whereBetween('ledger_date', [$startDate, $endDate])
-                        ->sum('amount');
+                        ->whereBetween('ledger_date', [$startDate, $endDate]);
+                        //->sum('amount');
 
-        $withdrawal = number_format((float)$withdrawal, 2, '.', '');
+        $withdrawal = $query->sum('amount');
+        $count = $query->count();
 
-        return abs($withdrawal);
+        $formattedWithdrawal = number_format((float)abs($withdrawal), 2, '.', '');
+
+        return ['withdraw' => (($formattedWithdrawal==null)?0:$formattedWithdrawal), 'count' =>  (($count==null)?0:$count)];
     }
 
     public static function getDataForPeriod($startDate, $endDate)
