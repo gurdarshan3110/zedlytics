@@ -11428,6 +11428,21 @@ body {
   border-radius: 4px;
 }
 
+.bank-row{
+  background-color: #7FFFD4;
+  border-color: #7FFFD4;
+}
+
+.party-row{
+  background-color: #FFEBCD;
+  border-color: #FFEBCD;
+}
+
+.client-row{
+  background-color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+
 .active-account {
     color: var(--bs-btn-hover-color);
     background-color: var(--bs-btn-hover-bg);

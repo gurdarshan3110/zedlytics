@@ -159,7 +159,8 @@ class LedgerController extends Controller
                       </tr>';
         } else {
             foreach ($rows as $row) {
-                $html .= '<tr>
+                $account_type = (($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'));
+                $html .= '<tr class="'.$account_type.'">
                             <td class="excel-cell" contenteditable="true">'.$row->account_code.'</td>
                             <td class="excel-cell" contenteditable="true">'.$row->utr_no.'</td>
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_CREDIT_VAL) ? $row->amount : '').'</td>
@@ -213,7 +214,7 @@ class LedgerController extends Controller
                     $ledgerData
                 );
             }
-            return response()->json(['success' => true, 'message' => 'Data saved successfully']);
+            return response()->json(['success' => true, 'message' => 'Data saved successfully','background' => (($account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row')),'transaction_id'=>$data[8]]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error saving data: ' . $e->getMessage()]);
         }

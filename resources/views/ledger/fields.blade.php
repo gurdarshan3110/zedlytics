@@ -31,7 +31,7 @@
               <tbody id="data-container">
                 @if($ledger!=null)
                   @foreach($ledger as $row)
-                  <tr>
+                  <tr class="{{(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'))}}">
                     <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
@@ -102,6 +102,17 @@
                 success: function(response) {
                   $('#response-status').addClass('green-blinking');
                   $('#response-status').removeClass('red-blinking');
+                   var transactionId = response.transaction_id;
+                    var backgroundColor = response.background;
+                    
+                    // Find the row containing the cell with the hidden transaction_id
+                    var row = $('td.hide-cell').filter(function() {
+                        return $(this).text() == transactionId;
+                    }).closest('tr');
+                    
+                    // Change the background color of the row
+                    //row.className= backgroundColor;
+                    row.addClass(backgroundColor);
                 },
                 error: function(xhr, status, error) {
                   $('#response-status').addClass('green-blinking');

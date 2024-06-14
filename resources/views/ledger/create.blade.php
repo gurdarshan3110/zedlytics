@@ -11,6 +11,8 @@
             </h3>
 
             <div class="mt-auto w-75 align-items-end d-flex justify-content-end">
+                <div class="bank-row ms-2 p-2 rounded">Bank</div>
+                <div class="party-row ms-2 p-2 rounded me-2">Party</div>
                 @if(in_array('view ledger date', permissions()))
                     @if(in_array('restrict ledger date', permissions()))
                     @php
@@ -23,9 +25,13 @@
                         ->attribute('min', $yesterday)
                         ->attribute('max', $today) }}
                     @else
+                    @php
+                    $today = \Carbon\Carbon::today()->toDateString();
+                    @endphp
                     {{ html()->date('date')
                         ->class('form-control w-25')
-                        ->id('date')}}
+                        ->id('date')
+                        ->value($today)}}
                     @endif
                 @else
                 <input type="hidden" id="date" value="{{ date('Y-m-d') }}"/>
