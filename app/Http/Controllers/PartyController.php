@@ -81,7 +81,7 @@ class PartyController extends Controller
         $input['type'] = Account::PARTY_ACCOUNT;
         $party = Model::create($input);
         $account = Account::create($input);
-        $account->banks()->attach($party);
+        $account->parties()->attach($party);
 
         return redirect()->route(self::URL.'.index', $party->id)->with('success', self::FNAME.' created successfully.');
     }
