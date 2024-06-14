@@ -29,38 +29,68 @@ class Brand extends Model
 
     public function todaysDeposits()
     {
-        return $this->hasManyThrough(CashbookLedger::class, Bank::class)
-                    ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
-                    ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
-                    ->whereDate('cashbook_ledger.ledger_date', now()->toDateString())
-                    ->sum('cashbook_ledger.amount');;
+        $query = $this->hasManyThrough(CashbookLedger::class, Bank::class)
+                      ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
+                      ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
+                      ->whereDate('cashbook_ledger.ledger_date', now()->toDateString());
+
+        $deposit = $query->sum('cashbook_ledger.amount');
+        $count = $query->count();
+
+        $formattedDeposit = number_format((float)$deposit, 2, '.', '');
+
+        return ['deposit' => (($formattedDeposit==null)?0:$formattedDeposit), 'count' =>  (($count==null)?0:$count)];
     }
+
 
     public function depositsBetween($startDate,$endDate)
     {
-        return $this->hasManyThrough(CashbookLedger::class, Bank::class)
+        $deposit = $this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('ledger_date', [$startDate, $endDate])
-                    ->sum('cashbook_ledger.amount');;
+                    ->sum('cashbook_ledger.amount');
+        $count = $this->hasManyThrough(CashbookLedger::class, Bank::class)
+                    ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
+                    ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
+                    ->whereBetween('ledger_date', [$startDate, $endDate])
+                    ->count();
+
+        return ['deposit' => $deposit, 'count' => $count];
+
     }
 
     public function todaysWithdrawals()
     {
-        return number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
+        $withdraw = number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereDate('cashbook_ledger.ledger_date', now()->toDateString())
                     ->sum('cashbook_ledger.amount')), 2, '.', '');
+        $count = $this->hasManyThrough(CashbookLedger::class, Bank::class)
+                    ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
+                    ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
+                    ->whereDate('cashbook_ledger.ledger_date', now()->toDateString())
+                ->count();
+
+        return ['withdraw' => $withdraw, 'count' => $count];
     }
 
     public function withdrawalsBetween($startDate,$endDate)
     {
-        return number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
+        $withdraws = number_format(abs($this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('ledger_date', [$startDate, $endDate])
                     ->sum('cashbook_ledger.amount')), 2, '.', '');
+        $count = $this->hasManyThrough(CashbookLedger::class, Bank::class)
+                    ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
+                    ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
+                    ->whereBetween('ledger_date', [$startDate, $endDate])
+                    ->count();
+
+        return ['withdraw' => $withdraws, 'count' => $count];
+
     }
 
     public function equityRecords($startDate,$endDate)
