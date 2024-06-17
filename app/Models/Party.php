@@ -14,6 +14,7 @@ class Party extends Model
         'account_code',
         'name',
         'description',
+        'type',
         'status',
     ];
 

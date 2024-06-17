@@ -18,6 +18,16 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('Type') }}
+    <?php 
+    $status = '';
+    if(!empty($party) && $party['type'] != '2' ){ $type = $party['type'];} else{ $type = 1; } 
+    ?>
+    
+    {{ html()->select('type')->class('form-control')->options(['2'=>'Party','1'=>'Bank Account','0'=>'Pool Account']) }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Status') }}
     <?php 
     $status = '';

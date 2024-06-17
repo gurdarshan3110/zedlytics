@@ -78,8 +78,8 @@ class PartyController extends Controller
                     ->withInput();
         }
 
-        $input['type'] = Account::PARTY_ACCOUNT;
         $party = Model::create($input);
+        $input['type'] = Account::PARTY_ACCOUNT;
         $account = Account::create($input);
         $account->parties()->attach($party);
 
