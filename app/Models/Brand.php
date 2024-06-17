@@ -50,7 +50,7 @@ class Brand extends Model
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('ledger_date', [$startDate, $endDate]);
 
-        $deposit = number_format(abs($query->sum('cashbook_ledger.amount'), 2, '.', '');
+        $deposit = number_format(abs($query->sum('cashbook_ledger.amount')), 2, '.', '');
         $count = $query->count();
 
         return ['deposit' => $deposit, 'count' => $count];
@@ -63,7 +63,7 @@ class Brand extends Model
                     ->where('cashbook_ledger.type', CashbookLedger::LEDGER_TYPE_DEBIT_VAL)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereDate('cashbook_ledger.ledger_date', now()->toDateString());
-        $withdraw = number_format(abs($query->sum('cashbook_ledger.amount'), 2, '.', '');
+        $withdraw = number_format(abs($query->sum('cashbook_ledger.amount')), 2, '.', '');
         $count = $query->count();
 
         return ['withdraw' => $withdraw, 'count' => $count];
@@ -76,7 +76,7 @@ class Brand extends Model
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)
                     ->whereBetween('ledger_date', [$startDate, $endDate]);
 
-        $withdraws = number_format(abs($query->sum('cashbook_ledger.amount'), 2, '.', '');
+        $withdraws = number_format(abs($query->sum('cashbook_ledger.amount')), 2, '.', '');
         $count = $query->count();
 
         return ['withdraw' => $withdraws, 'count' => $count];
