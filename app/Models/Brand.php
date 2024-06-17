@@ -92,7 +92,7 @@ class Brand extends Model
         $carbonEndDate = Carbon::parse($endDate);
 
         if ($carbonEndDate->isFuture()) {
-            $currentDate = Carbon::today()->toDateString();
+            $currentDate = Carbon::now()->subDays(2)->toDateString();
             $records = EquityRecord::where('brand_id',$this->id)->whereBetween('ledger_date', [$currentDate, $currentDate]);
             $totalEquity = $records->sum('equity');
         }else{
