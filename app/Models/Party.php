@@ -10,6 +10,9 @@ class Party extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const POOL_TYPE_ZERO = 0;
+    public const BANK_TYPE_ZERO = 1;
+
     protected $fillable = [
         'account_code',
         'name',

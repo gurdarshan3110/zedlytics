@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Brand extends Model
 {
@@ -88,7 +89,15 @@ class Brand extends Model
         $records = EquityRecord::where('brand_id',$this->id)->whereBetween('ledger_date', [$startDate, $endDate]);
         $totalDeposits = $records->sum('deposit');
         $totalWithdrawals = $records->sum('withdraw');
-        $totalEquity = $records->sum('equity');
+        $carbonEndDate = Carbon::parse($endDate);
+
+        if ($carbonEndDate->isFuture()) {
+            $currentDate = Carbon::today()->toDateString();
+            $records = EquityRecord::where('brand_id',$this->id)->whereBetween('ledger_date', [$currentDate, $currentDate]);
+            $totalEquity = $records->sum('equity');
+        }else{
+            $totalEquity = $records->sum('equity');
+        }
 
         return [
             'deposit' => $totalDeposits,

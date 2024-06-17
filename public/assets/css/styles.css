@@ -11448,6 +11448,17 @@ body {
     border-color: var(--bs-btn-hover-border-color);
 }
 
+.paginate_button {
+  padding: 2px 2px;
+  text-decoration: none;
+  border: 1px solid #fff;
+  color:#000;
+}
+
+.paginate_button.fs-7.active-menu-item{
+  color:#8c399b;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

@@ -16,7 +16,7 @@
                 @if(in_array('view ledger date', permissions()))
                     @if(in_array('restrict ledger date', permissions()))
                     @php
-                        $yesterday = \Carbon\Carbon::yesterday()->toDateString();
+                        $yesterday = \Carbon\Carbon::now()->subDays(3)->toDateString();
                         $today = \Carbon\Carbon::today()->toDateString();
                     @endphp
                     {{ html()->date('date')

@@ -13,6 +13,7 @@
               <tbody>
                 <tr>
                   <th class="excel-cell">Account ID</th>
+                  <th class="excel-cell">Date</th>
                   <th class="excel-cell">Utr No.</th>
                   <th class="excel-cell text-end">Credit</th>
                   <th class="excel-cell text-end">Debit</th>
@@ -33,6 +34,7 @@
                   @foreach($ledger as $row)
                   <tr class="{{(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'))}}">
                     <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
+                    <td class="excel-cell" contenteditable="true">{{$row->ledger_date}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
@@ -44,17 +46,6 @@
                   </tr>
                   @endforeach
                 @endif
-                <tr class="highlight-row">
-                  <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell text-end" contenteditable="true"></td>
-                  <td class="excel-cell text-end" contenteditable="true"></td>
-                  <td class="excel-cell text-end"></td>
-                  <td class="excel-cell" contenteditable="true"></td>
-                  <td class="excel-cell"></td>
-                  <td class="excel-cell"></td>
-                  <td class="hide-cell"></td>
-                </tr>
               </tbody>
             </table>
             <div id="hint-container"></div>
@@ -68,7 +59,7 @@
             var bank = '{{$bankId}}';
             
             $.ajax({
-                url: '/ledger/data/'+selectedDate+'/'+bank,  
+                url: '/pool/data/'+selectedDate+'/'+bank,  
                 type: 'GET',
                 //data: { date: selectedDate },
                 success: function(response) {
@@ -87,11 +78,11 @@
             $('#response-status').removeClass('green-blinking');
             $('#response-status').addClass('red-blinking');
             var bank = '{{$bankId}}';
-            var date = $('#date').val();
+            //var date = $('#date').val();
             data.push(bank);
-            data.push(date);
+            //data.push(date);
             $.ajax({
-                url: '{{ route("save.ledger") }}',
+                url: '{{ route("save.pool") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: JSON.stringify(data), 
@@ -266,8 +257,8 @@
         var initialBalance = parseFloat($('#bank_' + bank).val()); 
         var balance = isNaN(initialBalance) ? 0 : initialBalance;
         $('#excel-grid tbody tr').each(function() {
-            var credit = parseFloat($(this).find('.excel-cell').eq(2).text());
-            var debit = parseFloat($(this).find('.excel-cell').eq(3).text());
+            var credit = parseFloat($(this).find('.excel-cell').eq(3).text());
+            var debit = parseFloat($(this).find('.excel-cell').eq(4).text());
             
             if (!isNaN(credit)) {
                 totalCredit += credit;
@@ -277,7 +268,7 @@
             }
             
             balance = initialBalance + totalCredit - totalDebit;
-            $(this).find('.excel-cell').eq(4).text(balance.toFixed(2));
+            $(this).find('.excel-cell').eq(5).text(balance.toFixed(2));
         });
     }
 

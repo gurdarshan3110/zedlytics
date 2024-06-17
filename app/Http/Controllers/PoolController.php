@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Account;
 use App\Models\Bank;
+use App\Models\Party;
 use App\Models\CashbookLedger as Model;
 use App\Models\User;
 use DataTables;
 use Carbon\Carbon;
 
-class LedgerController extends Controller
+class PoolController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,10 +23,10 @@ class LedgerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    const TITLE = 'Ledger';
-    const URL = 'ledger';
-    const DIRECTORY = 'ledger';
-    const FNAME = 'Ledger';
+    const TITLE = 'Pool';
+    const URL = 'pool';
+    const DIRECTORY = 'pool';
+    const FNAME = 'Pool';
 
     public function index()
     {
@@ -142,26 +143,24 @@ class LedgerController extends Controller
     }
 
     public function fetchdata(Request $request,$date,$bank_id){
-        $rows = Model::whereDate('ledger_date', $date)->where('bank_id',$bank_id)->get();
+        //$rows = Model::whereDate('ledger_date', $date)->where('bank_id',$bank_id)->get();
+        $rows = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
+                      ->whereHas('party', function ($query) {
+                          $query->where('type', Party::POOL_TYPE_ZERO);
+                      })
+                      ->whereDate('ledger_date', $date)
+                      ->where('bank_id',$bank_id)
+                      ->get();
 
         $html = '';
         if ($rows->isEmpty()) {
-            $html .= '<tr>
-                        <td class="excel-cell" contenteditable="true"></td>
-                        <td class="excel-cell" contenteditable="true"></td>
-                        <td class="excel-cell text-end" contenteditable="true"></td>
-                        <td class="excel-cell text-end" contenteditable="true"></td>
-                        <td class="excel-cell text-end"></td>
-                        <td class="excel-cell" contenteditable="true"></td>
-                        <td class="excel-cell"></td>
-                        <td class="excel-cell"></td>
-                        <td class="hide-cell"></td>
-                      </tr>';
+            $html .= '';
         } else {
             foreach ($rows as $row) {
                 $account_type = (($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'));
                 $html .= '<tr class="'.$account_type.'">
                             <td class="excel-cell" contenteditable="true">'.$row->account_code.'</td>
+                            <td class="excel-cell" contenteditable="true">'.Carbon::parse($row->ledger_date)->format('d/m/Y').'</td>
                             <td class="excel-cell" contenteditable="true">'.$row->utr_no.'</td>
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_CREDIT_VAL) ? $row->amount : '').'</td>
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_DEBIT_VAL) ? abs($row->amount) : '').'</td>
@@ -186,31 +185,33 @@ class LedgerController extends Controller
         //dd($account);
         $account_type = (($account==null)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::CLIENT_ACCOUNT)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::BANK_ACCOUNT)?Model::ACCOUNT_TYPE_BANK_VAL:Model::ACCOUNT_TYPE_PARTY_VAL)));
 
+        $carbonDate = Carbon::createFromFormat('d/m/Y', $data[1]);
+        $dbFormatDate = $carbonDate->format('Y-m-d');
         $ledgerData = [
             'account_code' => $data[0],
             'account_type' => $account_type,
-            'utr_no' => $data[1],
-            'transaction_id' => $data[8],
+            'utr_no' => $data[2],
+            'transaction_id' => $data[9],
             'employee_id' => Auth::user()->id,
-            'ledger_date' => $data[10],
-            'remarks' => $data[5],
-            'bank_id' => $data[9]
+            'ledger_date' => $dbFormatDate,
+            'remarks' => $data[6],
+            'bank_id' => $data[10]
         ];
 
         // Check if either credit or debit amount is provided and set accordingly
-        if (!is_null($data[2])) {
-            $ledgerData['amount'] = $data[2];
+        if (!is_null($data[3])) {
+            $ledgerData['amount'] = $data[3];
             $ledgerData['type'] = Model::LEDGER_TYPE_CREDIT_VAL;
-        } elseif (!is_null($data[3])) {
-            $ledgerData['amount'] = -abs($data[3]);
+        } elseif (!is_null($data[4])) {
+            $ledgerData['amount'] = -abs($data[4]);
             $ledgerData['type'] = Model::LEDGER_TYPE_DEBIT_VAL;
         }
 
-
+        //dd($ledgerData);
         try {
             if($ledgerData['amount']!=null){
                 Model::updateOrCreate(
-                    ['bank_id' => $data[9], 'transaction_id' => $data[8],'ledger_date'=> $data[10]],
+                    ['bank_id' => $data[10], 'transaction_id' => $data[9]],
                     $ledgerData
                 );
             }
@@ -233,7 +234,14 @@ class LedgerController extends Controller
 
     public function list()
     {
-        $data = Model::withTrashed()->latest()->limit(200)->get();
+        $data = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
+                      ->whereHas('party', function ($query) {
+                          $query->where('type', Party::POOL_TYPE_ZERO);
+                      })
+                      ->withTrashed()
+                      ->latest()
+                      ->limit(200)
+                      ->get();
 
         return DataTables::of($data)
 
