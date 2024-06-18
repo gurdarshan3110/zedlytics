@@ -23,7 +23,9 @@ function dateFormatdMYHia($date){
 }
  
 function permissions(){
-    return $permissions = Auth::user()->roles()->with('permissions')->get()->pluck('permissions')->flatten()->pluck('name')->toArray();
+    
+    $permissions = Auth::user()->roles()->with('permissions')->get()->pluck('permissions')->flatten()->pluck('name')->toArray();
+    return $permissions;
 }
 
 function bankAccount($account_code){

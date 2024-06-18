@@ -80,7 +80,6 @@ class EmployeeController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-
         $input['employee_code'] = Model::generateEmployeeCode($input['name']);
         $input['user_type'] = User::USER_EMPLOYEE;
         $employee = Model::create($input);
@@ -240,7 +239,7 @@ class EmployeeController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-
+        $user->removeRole($user->role);
         $employee->update($input);
         $user->update(['name' => $request->name,'email' => $request->email,'role' => $request->role]);
         $user->assignRole($input['role']);
