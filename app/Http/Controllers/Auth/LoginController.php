@@ -62,7 +62,13 @@ class LoginController extends Controller
 
         // Check if login was successful and user has the correct user type
         if ($loginSuccess && in_array(Auth::user()->user_type, $userTypes)) {
-            return redirect()->intended('/dashboard');
+            $permissions = permissions();
+            $permissionKey = (($i==0)?'dashboard':'view ' . $module->url);
+            if(in_array('employee dashboard',$permissions)){
+                return redirect()->intended('/employee-dashboard');
+            }else{
+                return redirect()->intended('/dashboard');
+            }
         } else {
             // Authentication failed
             return redirect()->back()
