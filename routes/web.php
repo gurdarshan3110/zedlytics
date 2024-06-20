@@ -29,6 +29,7 @@ Route::get('/', function () {
 });
 Auth::routes();
 
+
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
 
     Route::get('/financial-details/{day}/{brand}', [DashboardController::class, 'finDetails'])->name('financial-details');
@@ -84,6 +85,11 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::get('/aggregate/list', [AggregateController::class, 'list'])->name('aggregate.list');
     Route::resource('aggregate', AggregateController::class);
+
+    Route::get('/enable-two-factor-authentication',[LoginController::class, 'enable2Fa'])->name('two.factor');
+
+    Route::get('/two-factor-authentication',[LoginController::class, 'twoFactor'])->name('twofactor.authentication');
+     
 
 
 });

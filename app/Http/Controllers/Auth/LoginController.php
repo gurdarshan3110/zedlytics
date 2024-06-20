@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use PragmaRX\Google2FALaravel\Support\Authenticator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class LoginController extends Controller
 {
@@ -28,6 +30,27 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
+    public function twoFactor(){
+        if (Auth::check()) {
+            $title ="Two Factor Authentication";
+            return view('twofactor.index',compact('title'));
+        }
+        return view('auth.login');
+    }
+
+    public function enable2Fa()
+    {
+        $response = Http::post('/user/two-factor-authentication');
+
+        // Handle the response
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            // Handle error
+            return response()->json(['error' => 'Request failed'], $response->status());
+        }
+    }
+
     public function login(Request $request)
     {
         // Validate the input
@@ -38,9 +61,6 @@ class LoginController extends Controller
 
         // Get the credentials from the request
         $credentials = $request->only('email', 'password');
-
-        // Define the user types that are allowed to login
-        $userTypes = [User::USER_SUPER_ADMIN, User::USER_EMPLOYEE];
 
         // Attempt to authenticate using the provided identifier
         $loginSuccess = false;
@@ -60,19 +80,50 @@ class LoginController extends Controller
             $loginSuccess = Auth::attempt(['employee_code' => $credentials['email'], 'password' => $credentials['password']]);
         }
 
-        // Check if login was successful and user has the correct user type
-        if ($loginSuccess && in_array(Auth::user()->user_type, $userTypes)) {
-            $permissions = permissions();
-            if(in_array('dashboard',$permissions)){
-                return redirect()->intended('/dashboard');
-            }else{
-                return redirect()->intended('/employee-dashboard');
+        // Check if login was successful
+        if ($loginSuccess) {
+            // Check if 2FA is enabled for the user
+            $user = Auth::user();
+
+            if ($user->google2fa_enable) {
+                // 2FA is enabled, redirect to 2FA verification
+                return $this->redirectTo2FA($request, $user);
+            } else {
+                // 2FA is not enabled, proceed to dashboard
+                return $this->redirectToDashboard($user);
             }
         } else {
             // Authentication failed
             return redirect()->back()
-                    ->with('error','Invalid credentials')
-                    ->withInput();
+                ->with('error','Invalid credentials')
+                ->withInput();
+        }
+    }
+
+    protected function redirectTo2FA(Request $request, $user)
+    {
+        // Generate and store the secret key for the user
+        $google2fa_url = (new Authenticator)->generateSecretKey();
+        $user->google2fa_secret = $google2fa_url['secret'];
+        $user->save();
+
+        // Redirect to the 2FA verification page
+        return redirect('2fa')->with([
+            'user' => $user,
+            'google2fa_url' => $google2fa_url,
+        ]);
+    }
+
+    protected function redirectToDashboard($user)
+    {
+        // Define the user types that are allowed to login
+        $userTypes = [User::USER_SUPER_ADMIN, User::USER_EMPLOYEE];
+
+        // Check if user type is allowed to access dashboard
+        if (in_array($user->user_type, $userTypes)) {
+            return redirect()->intended('/dashboard');
+        } else {
+            return redirect()->intended('/employee-dashboard');
         }
     }
 

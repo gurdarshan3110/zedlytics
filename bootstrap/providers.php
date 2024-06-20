@@ -3,6 +3,7 @@
 return [
     App\Providers\AppServiceProvider::class,
     App\Providers\EventServiceProvider::class,
+    App\Providers\FortifyServiceProvider::class,
     Illuminate\Auth\AuthServiceProvider::class,
     Spatie\Html\HtmlServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
