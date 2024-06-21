@@ -71,7 +71,7 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $permissions = permissions();
-        if(!in_array('dashboard',$permissions)){
+        if(!in_array('employee-dashboard',$permissions)){
             return redirect()->intended('/dashboard');
         }
         $title = self::TITLE;
