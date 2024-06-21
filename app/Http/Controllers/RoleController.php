@@ -133,6 +133,7 @@ class RoleController extends Controller
     {
         $input = $request->all();
         ;
+        $input['permissions'] = array_diff($input['permissions'], ['dashboard']);
         $rules = [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
