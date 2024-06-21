@@ -83,6 +83,7 @@ class RoleController extends Controller
             'name' => $input['name'],
             'guard_name' => 'web',
         ]);
+        $input['permissions'] = array_diff($input['permissions'], ['dashboard']);
 
         $permissions = Permission::whereIn('id', $input['permissions'])->get();
         $role->givePermissionTo($permissions);
