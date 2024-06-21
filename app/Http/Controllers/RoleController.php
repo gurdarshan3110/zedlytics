@@ -83,7 +83,8 @@ class RoleController extends Controller
             'name' => $input['name'],
             'guard_name' => 'web',
         ]);
-        $input['permissions'] = array_diff($input['permissions'], ['dashboard']);
+        $permission = Permission::select('id')->where('name', 'dashboard')->first();
+        $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
 
         $permissions = Permission::whereIn('id', $input['permissions'])->get();
         $role->givePermissionTo($permissions);
@@ -133,7 +134,8 @@ class RoleController extends Controller
     {
         $input = $request->all();
         ;
-        $input['permissions'] = array_diff($input['permissions'], ['dashboard']);
+        $permission = Permission::select('id')->where('name', 'dashboard')->first();
+        $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
         $rules = [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
@@ -150,7 +152,6 @@ class RoleController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-
         // Update the role name
         $role->update([
             'name' => $request->input('name'),
