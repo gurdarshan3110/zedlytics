@@ -68,6 +68,10 @@ class RoleController extends Controller
 
         $validator = Validator::make($input, $rules);
         
+        if(in_array('employee dashboard',permissions())){
+            $permission = Permission::select('id')->where('name', 'dashboard')->first();
+            $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
+        }
         if ($validator->fails()) {
             $errors = '';
             foreach ($validator->errors()->all() as $error) {
@@ -83,8 +87,6 @@ class RoleController extends Controller
             'name' => $input['name'],
             'guard_name' => 'web',
         ]);
-        $permission = Permission::select('id')->where('name', 'dashboard')->first();
-        $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
 
         $permissions = Permission::whereIn('id', $input['permissions'])->get();
         $role->givePermissionTo($permissions);
@@ -133,9 +135,11 @@ class RoleController extends Controller
     public function update(Request $request, Model $role)
     {
         $input = $request->all();
-        ;
-        $permission = Permission::select('id')->where('name', 'dashboard')->first();
-        $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
+        
+        if(in_array('employee dashboard',permissions())){
+            $permission = Permission::select('id')->where('name', 'dashboard')->first();
+            $input['permissions'] = array_diff($input['permissions'], [$permission->id]);
+        }
         $rules = [
             'name' => 'required|string|max:255',
             'permissions' => 'required|array',
