@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\Employee as Model;
 use App\Models\UserEmployee;
 use App\Models\MacAddress;
+use App\Models\ModelHasRole;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use DataTables;
@@ -239,7 +240,8 @@ class EmployeeController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-        $user->removeRole($user->role);
+        ModelHasRole::where('model_id',$user->id)->delete();
+        //$user->removeRole($user->role);
         $employee->update($input);
         $user->update(['name' => $request->name,'email' => $request->email,'role' => $request->role]);
         $user->assignRole($input['role']);
