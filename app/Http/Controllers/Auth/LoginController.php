@@ -117,10 +117,11 @@ class LoginController extends Controller
     protected function redirectToDashboard($user)
     {
         // Define the user types that are allowed to login
-        $userTypes = [User::USER_SUPER_ADMIN, User::USER_EMPLOYEE];
+        $permissions = permissions();
+
 
         // Check if user type is allowed to access dashboard
-        if (in_array($user->user_type, $userTypes)) {
+        if (in_array('dashboard', $permissions)) {
             return redirect()->intended('/dashboard');
         } else {
             return redirect()->intended('/employee-dashboard');
