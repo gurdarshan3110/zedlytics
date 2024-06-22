@@ -34,7 +34,7 @@
                   @foreach($ledger as $row)
                   <tr class="{{(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==\App\Models\CashbookLedger::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'))}}">
                     <td class="excel-cell" contenteditable="true">{{$row->account_code}}</td>
-                    <td class="excel-cell" contenteditable="true">{{$row->ledger_date}}</td>
+                    <td class="excel-cell" contenteditable="true">{{\Carbon\Carbon::parse($row->ledger_date)->format('d/m/Y')}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->utr_no}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_CREDIT_VAL)?$row->amount:'')}}</td>
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
@@ -149,33 +149,33 @@
                     if ($currentCell.is(':focus')) {
                         if ($currentCell.closest('td').is(':nth-child(3)')) {
                             if ($currentCell.text() != '') {
-                                var newRow = '<tr>';
-                                var i = 0;
+                                // var newRow = '<tr>';
+                                // var i = 0;
 
-                                $('#excel-head tbody th').each(function() {
-                                    cellValue = Math.floor(Date.now() / 1000);
-                                    newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
-                                    i++;
-                                });
-                                newRow += '</tr>';
-                                $('#excel-grid tbody').append(newRow);
-                                $nextRow = $currentRow.next(); // Get the newly created row
-                                $nextRow.find('.excel-cell').eq(0).focus(); // Set focus to the first cell in the new row
+                                // $('#excel-head tbody th').each(function() {
+                                //     cellValue = Math.floor(Date.now() / 1000);
+                                //     newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
+                                //     i++;
+                                // });
+                                // newRow += '</tr>';
+                                // $('#excel-grid tbody').append(newRow);
+                                // $nextRow = $currentRow.next(); // Get the newly created row
+                                // $nextRow.find('.excel-cell').eq(0).focus(); 
                             }else{
                               $nextCell = $cells.eq(currentIndex + 1);
                               $nextCell.focus();
                             }
                         }else if ($currentCell.closest('td').is(':nth-child(4)')) {
                             if ($currentCell.text() != '') {
-                                var newRow = '<tr>';
-                                var i = 0;
-                                $('#excel-head tbody th').each(function() {
-                                    cellValue = Math.floor(Date.now() / 1000);
-                                    newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
-                                    i++;
-                                });
-                                newRow += '</tr>';
-                                $('#excel-grid tbody').append(newRow);
+                                // var newRow = '<tr>';
+                                // var i = 0;
+                                // $('#excel-head tbody th').each(function() {
+                                //     cellValue = Math.floor(Date.now() / 1000);
+                                //     newRow += '<td class="excel-cell ' + ((i == 8) ? 'hide-cell' : '') + (((i == 2) || (i == 3) || (i == 4)) ? 'text-end' : '') + '" '+(((i == 6) || (i == 7) || (i == 4)) ? '' : 'contenteditable="true"')+'></td>';
+                                //     i++;
+                                // });
+                                // newRow += '</tr>';
+                                // $('#excel-grid tbody').append(newRow);
                                 $nextRow = $currentRow.next(); // Get the newly created row
                                 $nextRow.find('.excel-cell').eq(0).focus(); // Set focus to the first cell in the new row
                             }else{
