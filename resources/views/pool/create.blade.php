@@ -3,7 +3,7 @@
 @section('content')
 
 <main>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4 bg-pool">
         <div class="d-flex">
             <h3 class="mt-4 w-25 d-flex align-items-center">
                 {{$title}}  
@@ -11,8 +11,6 @@
             </h3>
 
             <div class="mt-auto w-75 align-items-end d-flex justify-content-end">
-                <div class="bank-row ms-2 p-2 rounded">Bank</div>
-                <div class="party-row ms-2 p-2 rounded me-2">Party</div>
                 @if(in_array('view ledger date', permissions()))
                     @php
                         $yesterday = \Carbon\Carbon::now()->subDays(3)->toDateString();
@@ -45,7 +43,7 @@
                 @if(in_array($account->account_code, permissions()))
                 <?php $bank = bankAccount($account->account_code);?>
                 <div class="col-sm-2 mb-1">
-                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-primary ms-1 fs-7 w-100 {{(($bankId==$bank->id)?'active-account':'')}}" tooltip="New">
+                    <a href="/{{ $url.'/create/'.$account->id}}" class="btn btn-secondary ms-1 fs-7 w-100 {{(($bankId==$bank->id)?'active-account':'')}}" tooltip="New">
                         <span class=" d-md-inline">{{$account->account_code}}</span><br>
                         <span class=" d-md-inline">{{$bank->bankBalance()}}</span>
                         <input type="hidden" id="bank_{{$bank->id}}" value="{{$bank->closingBalance(date('Y-m-d',strtotime('-1 day')))}}"/>

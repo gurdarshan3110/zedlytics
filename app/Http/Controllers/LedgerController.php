@@ -294,6 +294,11 @@ class LedgerController extends Controller
                 return $created_by;
             })
 
+            ->addColumn('transaction_id', function ($row) {
+                $transaction_id = $row->transaction_id;
+                return $transaction_id;
+            })
+
             ->addColumn('deleted', function ($row) {
                 $deleted = $row->trashed();
                 return $deleted;

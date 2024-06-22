@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive bg-pool">
     <table class="table table-bordered table-striped w-100 align-middle fs-6" id="record-table">
         <thead>
         <tr>
@@ -10,6 +10,7 @@
             <th width="10%">Ledger Date</th>
             <th width="19%">Entry Date</th>
             <th width="15%">Created By</th>
+            <th width="15%">Transaction Id</th>
             <th width="5%">Action</th>
         </tr>
         </thead>
@@ -41,6 +42,7 @@
                     {data: 'ledger_date', name: 'ledger_date'},
                     {data: 'entry_date', name: 'entry_date'},
                     {data: 'created_by', name: 'created_by'},
+                    {data: 'transaction_id', name: 'transaction_id'},
                     {data: 'action', name: 'action'}
                 ],
                 order: [[0, 'desc']], // Sort by ID in descending order
