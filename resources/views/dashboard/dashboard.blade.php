@@ -75,7 +75,7 @@
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
                                                 <div class="card-text fw-bold deposit text-dark">
                                                     <div class="w-100 fw-bold">Deposits: {{ $brand->todaysDeposits()['count'] }}</div> 
                                                     <div class="w-100">{{ $brand->todaysDeposits()['deposit'] }} 
@@ -87,7 +87,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
                                                 <div class="card-text mt-3 fw-bold withdraw">
                                                     <div class="w-100 fw-bold">Withdraw: {{ $brand->todaysWithdrawals()['count'] }}</div> 
                                                     <div class="w-100">{{ $brand->todaysWithdrawals()['withdraw'] }}
@@ -180,7 +180,7 @@
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
                                                 <div class="card-text fw-bold deposit text-dark">
                                                     <div class="w-100 fw-bold">Deposits: {{ $deposits['count'] }}</div> 
                                                     <div class="w-100">{{ $deposits['deposit'] }}
