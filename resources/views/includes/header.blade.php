@@ -21,21 +21,13 @@
             <a class="navbar-brand ps-3" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}">
                 <img src="{{asset('/assets/images/watermark.png')}}" class="logo"/>
             </a>
-            <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <ul class="navbar-nav d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li>
-                            <form method="POST" action="{{route('logout')}}">
-                                @csrf
-                                <button type="submit" class="dropdown-item" onclick = "return confirm('Are you sure?')">Logout</button>
-                            </form>
-                    </ul>
-                </li>
-            </ul>
+            <!-- Sidebar Toggle-->
+            <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" action="{{route('logout')}}">
+                        @csrf
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" onclick = "return confirm('Are you sure?')" type="submit">
+                <i class="fa fa-power-off fs-3 text-danger"></i>
+                    </button>
+            </form>
+            
         </nav>

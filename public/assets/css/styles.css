@@ -11453,14 +11453,22 @@ body {
 }
 
 .paginate_button {
-  padding: 2px 2px;
+  background: #d797e257;
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: #000;
+  margin-right: 2px;
   text-decoration: none;
-  border: 1px solid #fff;
-  color:#000;
+  cursor: pointer;
 }
 
 .paginate_button.fs-7.active-menu-item{
-  color:#8c399b;
+  background: #8c399b;
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 @media (max-width: 576px) {
