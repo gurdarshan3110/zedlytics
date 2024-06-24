@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials</h5>
+                                    <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials <span class="text-end">{{$brand->name}}</span></h5>
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -169,7 +169,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials</h5>
+                                    <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
@@ -192,7 +192,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}">
+                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
                                                 <div class="card-text mt-3 fw-bold withdraw">
                                                     <div class="w-100 fw-bold">Withdraw: {{ $withdrawals['count'] }}</div> 
                                                     <div class="w-100">{{ $withdrawals['withdraw'] }}
