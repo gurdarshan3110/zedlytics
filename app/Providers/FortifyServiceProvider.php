@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -36,7 +40,22 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return Limit::perMinute(50)->by($throttleKey);
+        });
+        Fortify::authenticateUsing(function (Request $request) {
+            $login = $request->email;
+            if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+                $user = User::where('email', $login)->first();
+            } else {
+                $user = User::where('employee_code', $login)->first();
+            }
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+            throw ValidationException::withMessages([
+                'login' => [trans('auth.failed')],
+            ]);
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

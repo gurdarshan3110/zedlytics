@@ -34,16 +34,16 @@
                                                 <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" />
                                                 <label for="inputEmail">Email address</label>
                                             </div>
-                                            @if ($errors->has('email'))
-                                                <div class="fv-plugins-message-container invalid-feedback">{{ $errors->first('email') }}</div>
-                                              @endif
+                                            @error('login')
+            <span class="text-light text-xs">{{ $message }}</span>
+        @enderror
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="password" name="password" type="password" placeholder="Password" />
                                                 <label for="inputPassword">Password</label>
                                             </div>
-                                            @if ($errors->has('password'))
-                                              <div class="fv-plugins-message-container invalid-feedback">{{ $errors->first('password') }}</div>
-                                            @endif
+                                            @error('password')
+            <span class="text-light text-xs">{{ $message }}</span>
+        @enderror
                                             <div class="fv-plugins-message-container invalid-feedback pt-5 pb-5">{{session()->get('error')}}</div>
                                             <!-- <div class="form-check mb-3">
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />

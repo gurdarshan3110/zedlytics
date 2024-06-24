@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Laravel\Fortify\Features;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -52,52 +53,76 @@ class LoginController extends Controller
         }
     }
 
+    // public function login(Request $request)
+    // {
+    //     // Validate the input
+    //     $request->validate([
+    //         'email' => 'required',
+    //         'password' => 'required|min:4',
+    //     ]);
+
+    //     // Get the credentials from the request
+    //     $credentials = $request->only('email', 'password');
+
+    //     // Attempt to authenticate using the provided identifier
+    //     $loginSuccess = false;
+
+    //     // Check if identifier is email
+    //     if (filter_var($credentials['email'], FILTER_VALIDATE_EMAIL)) {
+    //         $loginSuccess = Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']]);
+    //     }
+        
+    //     // Check if identifier is phone number
+    //     if (!$loginSuccess) {
+    //         $loginSuccess = Auth::attempt(['phone_no' => $credentials['email'], 'password' => $credentials['password']]);
+    //     }
+
+    //     // Check if identifier is employee code
+    //     if (!$loginSuccess) {
+    //         $loginSuccess = Auth::attempt(['employee_code' => $credentials['email'], 'password' => $credentials['password']]);
+    //     }
+
+    //     // Check if login was successful
+    //     if ($loginSuccess) {
+    //         // Check if 2FA is enabled for the user
+    //         $user = Auth::user();
+    //         if (Auth::user()->two_factor_secret) {
+    //             // 2FA is enabled, redirect to 2FA verification
+    //             redirect()->route('two-factor-challenge');
+    //         } else {
+    //             // 2FA is not enabled, proceed to dashboard
+    //             return $this->redirectToDashboard($user);
+    //         }
+    //     } else {
+    //         // Authentication failed
+    //         return redirect()->back()
+    //             ->with('error','Invalid credentials')
+    //             ->withInput();
+    //     }
+    // }
+
     public function login(Request $request)
     {
-        // Validate the input
         $request->validate([
-            'email' => 'required',
-            'password' => 'required|min:4',
+            'login' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        // Get the credentials from the request
-        $credentials = $request->only('email', 'password');
+        $login = $request->input('login');
+        $password = $request->input('password');
 
-        // Attempt to authenticate using the provided identifier
-        $loginSuccess = false;
+        // Determine if the input is a phone number, username, or email
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : (is_numeric($login) ? 'phone_number' : 'employee_code');
 
-        // Check if identifier is email
-        if (filter_var($credentials['email'], FILTER_VALIDATE_EMAIL)) {
-            $loginSuccess = Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']]);
-        }
-        
-        // Check if identifier is phone number
-        if (!$loginSuccess) {
-            $loginSuccess = Auth::attempt(['phone_no' => $credentials['email'], 'password' => $credentials['password']]);
+        // Attempt to authenticate the user
+        if (Auth::attempt([$fieldType => $login, 'password' => $password])) {
+            $request->session()->regenerate();
+            return redirect()->intended(config('fortify.home'));
         }
 
-        // Check if identifier is employee code
-        if (!$loginSuccess) {
-            $loginSuccess = Auth::attempt(['employee_code' => $credentials['email'], 'password' => $credentials['password']]);
-        }
-
-        // Check if login was successful
-        if ($loginSuccess) {
-            // Check if 2FA is enabled for the user
-            $user = Auth::user();
-            if (Auth::user()->two_factor_secret) {
-                // 2FA is enabled, redirect to 2FA verification
-                redirect()->route('two-factor-challenge');
-            } else {
-                // 2FA is not enabled, proceed to dashboard
-                return $this->redirectToDashboard($user);
-            }
-        } else {
-            // Authentication failed
-            return redirect()->back()
-                ->with('error','Invalid credentials')
-                ->withInput();
-        }
+        throw ValidationException::withMessages([
+            'login' => [trans('auth.failed')],
+        ]);
     }
 
     protected function redirectTo2FA(Request $request, $user)
