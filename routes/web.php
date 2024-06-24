@@ -16,9 +16,10 @@ use App\Http\Controllers\AggregateController;
 use App\Http\Controllers\PoolController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\TwoFactorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckMacAddress;
-
+use Laravel\Fortify\Features;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -27,8 +28,6 @@ Route::get('/', function () {
 
     return view('auth/login');
 });
-Auth::routes();
-
 
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
 
@@ -86,9 +85,8 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::get('/aggregate/list', [AggregateController::class, 'list'])->name('aggregate.list');
     Route::resource('aggregate', AggregateController::class);
 
-    Route::get('/enable-two-factor-authentication',[LoginController::class, 'enable2Fa'])->name('two.factor');
-
-    Route::get('/two-factor-authentication',[LoginController::class, 'twoFactor'])->name('twofactor.authentication');
+    
+    Route::resource('two-factor',TwoFactorController::class);
      
 
 

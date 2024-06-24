@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Laravel\Fortify\Features;
 
 class LoginController extends Controller
 {
@@ -84,10 +85,9 @@ class LoginController extends Controller
         if ($loginSuccess) {
             // Check if 2FA is enabled for the user
             $user = Auth::user();
-
-            if ($user->google2fa_enable) {
+            if (Auth::user()->two_factor_secret) {
                 // 2FA is enabled, redirect to 2FA verification
-                return $this->redirectTo2FA($request, $user);
+                redirect()->route('two-factor-challenge');
             } else {
                 // 2FA is not enabled, proceed to dashboard
                 return $this->redirectToDashboard($user);

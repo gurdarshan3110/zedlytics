@@ -130,7 +130,16 @@ return [
     |
     */
 
-    'views' => false,
+    'views' => [
+        'two-factor-challenge' => 'auth.two-factor-challenge',
+        // ... other view paths
+    ],
+
+    'redirects' => [
+        'login' => '/dashboard', // Redirect after successful login, adjust as needed
+        'two-factor-challenge' => '/two-factor-challenge', // Redirect for 2FA challenge
+        // ... other redirection settings
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -150,7 +159,7 @@ return [
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
-            'confirm' => true,
+            //'confirm' => false,
             'confirmPassword' => true,
             // 'window' => 0,
         ]),
