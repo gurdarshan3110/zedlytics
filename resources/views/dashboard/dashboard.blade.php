@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials <span class="text-end">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials </span><span class="text-end">{{$brand->name}}</span></h5>
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -169,7 +169,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
