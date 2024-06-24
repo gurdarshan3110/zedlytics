@@ -73,7 +73,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-success p-2 rounded text-light "><span class="text-start">{{date('d/m/Y',strtotime($startDate))}} Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -171,7 +171,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-primary rounded p-2 text-light "><span class="text-start">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
@@ -276,7 +276,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials<span class="text-end">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-secondary p-2 rounded text-light "><span class="text-start">Monthly Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
@@ -373,7 +373,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light text-center">{{date('d/m/Y',strtotime($startDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-success p-2 rounded text-light "><span class="text-start">{{date('d/m/Y',strtotime($startDate))}} Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -405,7 +405,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-primary rounded p-2 text-light text-center">{{date('d/m/Y',strtotime($endDate))}} Financials<span class="text-end">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-primary rounded p-2 text-light"><span class="text-start">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -437,7 +437,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-secondary p-2 rounded text-light text-center">Monthly Financials<span class="text-end">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-secondary p-2 rounded text-light"><span class="text-start">Monthly Financials</span><span class="text-end">{{$brand->name}}</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
