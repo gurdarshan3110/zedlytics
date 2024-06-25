@@ -28,6 +28,26 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('IFSC') }}
+    {{ html()->text('ifsc')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Branch') }}
+    {{ html()->text('branch')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('City') }}
+    {{ html()->text('city')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('State') }}
+    {{ html()->text('state')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('RM') }}
     {{ html()->text('rm')->class('form-control')->autocomplete(false) }}
 </div>
@@ -40,6 +60,16 @@
 <div class="form-group col-sm-6">
     {{ html()->label('Second Limit') }}
     {{ html()->number('second_limit')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Lean Balance') }}
+    {{ html()->number('lean_balance')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Commission Rate') }}
+    {{ html()->number('commission_rate')->class('form-control')->autocomplete(false) }}
 </div>
 
 <div class="form-group col-sm-6">

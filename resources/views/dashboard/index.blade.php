@@ -3,6 +3,14 @@
 @section('content')
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function autoReload() {
+        setTimeout(function() {
+            location.reload();
+        }, 120000); 
+    }
+    window.onload = autoReload;
+</script>
 @endpush
 <main>
     <div class="container-fluid px-4">
@@ -19,7 +27,7 @@
                     $bankAccountCodes = $brand->banks->pluck('account_code')->toArray();
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
-                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light">Account Details for <strong>{{$brand->name}}</strong></h5>
+                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light">Account Details for <strong>{{$brand->name}}</strong> <strong class="ms-2">(Balance: {{$brand->brandBalance()}})</strong></h5>
                     @foreach($brand->banks as $data)
                         @if(in_array($data->account_code, permissions())) 
                         <div class="col-md-2 mt-1">

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::resource('dashboard', DashboardController::class);
 
     Route::get('/employees/list', [EmployeeController::class, 'list'])->name('employees.list');
+    Route::delete('/employees/two-factor-authentication/{employee}', [EmployeeController::class, 'twofactor'])->name('employees.twofactor');
     Route::get('/employees/{employee}/reset', [EmployeeController::class, 'reset'])->name('employees.reset');
     Route::put('/employees/{employee}/password', [EmployeeController::class, 'resetpassword'])->name('employees.password');
     Route::get('/employees/{employee}/mac', [EmployeeController::class, 'mac'])->name('employees.mac');

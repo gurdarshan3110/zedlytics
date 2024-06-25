@@ -43,6 +43,15 @@ class Brand extends Model
         return ['deposit' => (($formattedDeposit==null)?0:$formattedDeposit), 'count' =>  (($count==null)?0:$count)];
     }
 
+    public function brandBalance()
+    {
+        $query = $this->hasManyThrough(CashbookLedger::class, Bank::class);
+
+        $deposit = number_format(abs($query->sum('cashbook_ledger.amount')), 2, '.', '');
+
+        return $deposit;
+
+    }
 
     public function depositsBetween($startDate,$endDate)
     {

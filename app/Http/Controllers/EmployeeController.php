@@ -250,6 +250,19 @@ class EmployeeController extends Controller
                          ->with('success', self::FNAME.' updated successfully.');
     }
 
+    public function twofactor(Request $request, Model $employee)
+    {
+        $input = $request->all();
+        $user = User::where('email', $employee->email)->first();
+        
+        $user->two_factor_secret = null;
+        $user->two_factor_recovery_codes = null;
+        $user->save();
+        
+        return redirect()->route(self::URL.'.index')
+                         ->with('success', self::FNAME.' 2Fa removed successfully.');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

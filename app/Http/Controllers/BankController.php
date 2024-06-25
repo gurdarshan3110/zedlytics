@@ -195,10 +195,22 @@ class BankController extends Controller
                 return $name;
             })
 
+            ->addColumn('brand', function ($row) {
+                $brand = $row->brand;
+
+                return $brand;
+            })
+
             ->addColumn('account_no', function ($row) {
-                $account_no = $row->account_no;
+                $account_no = $row->account_no.'/'.$row->ifsc;
 
                 return $account_no;
+            })
+
+            ->addColumn('address', function ($row) {
+                $address = $row->branch.' '.$row->city.' '.$row->state;
+
+                return $address;
             })
 
             ->addColumn('account_code', function ($row) {
@@ -211,6 +223,18 @@ class BankController extends Controller
                 $rm = $row->rm;
 
                 return $rm;
+            })
+
+            ->addColumn('lean_balance', function ($row) {
+                $lean_balance = $row->lean_balance;
+
+                return $lean_balance;
+            })
+
+            ->addColumn('commission_rate', function ($row) {
+                $commission_rate = $row->commission_rate;
+
+                return $commission_rate;
             })
 
             ->addColumn('status', function ($row) {

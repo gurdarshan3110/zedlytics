@@ -3,9 +3,13 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Account No</th>
+            <th>Brand</th>
+            <th>Account No/IFSC</th>
             <th>Code</th>
+            <th>Branch</th>
             <th>RM</th>
+            <th>Lean</th>
+            <th>Commission</th>
             <th>Status</th>
             <th  style="width:15%;">Action</th>
         </tr>
@@ -31,9 +35,13 @@
                 ajax: "/{{$url}}/list?status=1",
                 columns: [
                     {data: 'name', name: 'name'},
+                    {data: 'brand', name: 'brand'},
                     {data: 'account_no', name: 'account_no'},
                     {data: 'account_code', name: 'account_code'},
+                    {data: 'address', name: 'address'},
                     {data: 'rm', name: 'rm'},
+                    {data: 'lean_balance', name: 'lean_balance'},
+                    {data: 'commission_rate', name: 'commission_rate'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action',className:'action'},
                     

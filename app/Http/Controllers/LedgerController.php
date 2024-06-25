@@ -307,7 +307,7 @@ class LedgerController extends Controller
             ->addColumn('action', function ($row) {
                 $msg = 'Are you sure ! Please enter remarks?';
                 $action = '';
-                if (!$row->trashed()) {
+                if (!$row->trashed() && in_array('delete '.self::DIRECTORY, permissions())) {
                     $action = '<form id="deleteForm'.$row->id.'" action="'.route(self::URL.'.destroy', [$row]).'" method="post">
                                 '.csrf_field().'
                                 '.method_field('DELETE').'

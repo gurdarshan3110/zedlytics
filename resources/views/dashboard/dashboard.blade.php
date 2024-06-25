@@ -3,6 +3,14 @@
 @section('content')
 @push('jsscript')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function autoReload() {
+        setTimeout(function() {
+            location.reload();
+        }, 120000); 
+    }
+    window.onload = autoReload;
+</script>
 @endpush
 <main>
     <div class="container-fluid px-4">

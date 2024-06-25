@@ -37,3 +37,4 @@
     
     {{ html()->select('status')->class('form-control')->options(['1'=>'Active','0'=>'Deactive']) }}
 </div>
+

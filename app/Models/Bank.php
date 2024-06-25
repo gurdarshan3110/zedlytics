@@ -19,7 +19,17 @@ class Bank extends Model
         'second_limit',
         'status',
         'rm',
-        'brand_id'
+        'brand_id',
+        'ifsc',
+        'branch',
+        'city',
+        'state',
+        'commission_rate',
+        'lean_balance',
+    ];
+
+    protected $appends = [
+        'brand'
     ];
 
     public function accounts()
@@ -49,5 +59,13 @@ class Bank extends Model
         $balance=0;
         $balance = CashbookLedger::where('bank_id', $this->id)->whereDate('ledger_date','<=', $date)->sum('amount');
         return $balance;
+    }
+
+    public function getBrandAttribute()
+    {
+        if($this->brand_id==null){
+            return null;
+        }
+        return Brand::select('name')->where('id', $this->brand_id)->first()->name;
     }
 }

@@ -32,6 +32,17 @@
                         </div>
                     </div>
                 {{ html()->form()->close() }}
+                <div class="row">
+                    <div class="col-sm-12 text-end">
+                        {{ html()->model($employee)->form('DELETE', route($url.'.twofactor',$employee))->open() }}
+                            @csrf
+                            @if ($employee->users[0]->two_factor_secret)
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">Disable 2FA</button>
+                            @endif
+                        {{ html()->form()->close() }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
