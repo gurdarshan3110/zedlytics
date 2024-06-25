@@ -229,8 +229,8 @@
                                         </div>
                                         @push('jsscript')
                                         <script>
-                                            var todaysDeposits = @json($deposits); 
-                                            var todaysWithdrawals = @json($withdrawals); 
+                                            var todaysDeposits = @json($deposits['deposit']); 
+                                            var todaysWithdrawals = @json($withdrawals['withdraw']); 
                                             var difference = todaysDeposits - todaysWithdrawals;
                                             var id = '{{$brand->id}}';
                                             difference = difference.toFixed(2);
@@ -318,8 +318,8 @@
                                         </div>
                                         @push('jsscript')
                                         <script>
-                                            var todaysDeposits = @json($deposits); 
-                                            var todaysWithdrawals = @json($withdrawals); 
+                                            var todaysDeposits = @json($deposits['deposit']); 
+                                            var todaysWithdrawals = @json($withdrawals['withdraw']); 
                                             var difference = todaysDeposits - todaysWithdrawals;
                                             var id = '{{$brand->id}}';
                                             difference = difference.toFixed(2);
@@ -373,7 +373,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -405,7 +405,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -437,7 +437,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -594,8 +594,8 @@
         }
     });
 
-    var todaysDeposits = @json($todaysDeposits); 
-    var todaysWithdrawals = @json($todaysWithdrawals); 
+    var todaysDeposits = @json($todaysDeposits['deposit']); 
+    var todaysWithdrawals = @json($todaysWithdrawals['withdraw']); 
     var difference = todaysDeposits - todaysWithdrawals;
     difference = difference.toFixed(2);
     var ctx = document.getElementById('myPieChart').getContext('2d');
@@ -632,8 +632,8 @@
         }
     });
 
-    var yesterdayDeposits = @json($yesterdayDeposits); 
-    var yesterdayWithdrawals = @json($yesterdayWithdrawals); 
+    var yesterdayDeposits = @json($yesterdayDeposits['deposit']); 
+    var yesterdayWithdrawals = @json($yesterdayWithdrawals['withdraw']); 
     var yesterdaydifference = yesterdayDeposits - yesterdayWithdrawals;
     yesterdaydifference = yesterdaydifference.toFixed(2);
     var ctx = document.getElementById('myPieChart2').getContext('2d');
@@ -670,8 +670,8 @@
         }
     });
 
-    var monthlyDeposits = @json($monthlyDeposits); 
-    var monthlyWithdrawals = @json($monthlyWithdrawals); 
+    var monthlyDeposits = @json($monthlyDeposits['deposit']); 
+    var monthlyWithdrawals = @json($monthlyWithdrawals['withdraw']); 
     var monthlydifference = monthlyDeposits - monthlyWithdrawals;
     monthlydifference = monthlydifference.toFixed(2);
     var ctx = document.getElementById('myPieChart3').getContext('2d');
