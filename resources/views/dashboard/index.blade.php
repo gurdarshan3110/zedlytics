@@ -17,6 +17,9 @@
         <div class="d-flex">
             <h3 class="mt-4 w-95">
                 {{$title}} @if(Auth::user()->user_type==\App\Models\User::USER_SUPER_ADMIN): Balance {{$totalBalance}}@endif
+
+                (Withdrawal Requests : {{$withdrawRequests}})
+                
             </h3>
         </div>
         

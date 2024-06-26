@@ -6,6 +6,7 @@ use App\Models\CashbookLedger;
 use App\Models\Bank;
 use App\Models\Brand;
 use Carbon\Carbon;
+use App\Models\WithdrawRequest;
 
 class DashboardController extends Controller
 {
@@ -45,6 +46,7 @@ class DashboardController extends Controller
         //$endDate = Carbon::tomorrow()->endOfDay();
 
         $brands = Brand::where('status',1)->get();
+        $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -65,6 +67,7 @@ class DashboardController extends Controller
             'yesterdayEndDate',
             'monthStartDate',
             'monthEndDate',
+            'withdrawRequests'
         ));
     }
 
