@@ -137,7 +137,7 @@
                                         <script>
                                             var todaysDeposits = @json($brand->todaysDeposits()); 
                                             var todaysWithdrawals = @json($brand->todaysWithdrawals()); 
-                                            var difference = todaysDeposits - todaysWithdrawals;
+                                            var difference = todaysDeposits['deposit'] - todaysWithdrawals['withdraw'];
                                             var id = {{$brand->id}};
                                             difference = difference.toFixed(2);
                                             var ctx = document.getElementById('myPieChart'+id+'a').getContext('2d');
@@ -146,7 +146,7 @@
                                                 data: {
                                                     labels: ['Deposits', 'Withdrawals', 'Gap'],
                                                     datasets: [{
-                                                        data: [todaysDeposits, todaysWithdrawals, difference],
+                                                        data: [todaysDeposits['deposit'], todaysWithdrawals['withdraw'], difference],
                                                         backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
                                                     }]
                                                 },
