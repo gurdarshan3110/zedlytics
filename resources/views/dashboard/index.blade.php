@@ -509,11 +509,11 @@
 <script>
     function firstAlert(){
         var alertSound = document.getElementById('first-alert');
-        alertSound.play();
+        //alertSound.play();
     }
     function secondAlert(){
         var alertSound = document.getElementById('second-alert');
-        alertSound.play();
+        //alertSound.play();
     }
     // Prepare data for charts
     const todayData = @json($todayData);
