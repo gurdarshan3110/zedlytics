@@ -15,17 +15,20 @@ class Brand extends Model
         'account_code',
         'name',
         'description',
+        'username',
+        'password',
+        'company_name',
         'status',
     ];
 
     public function accounts()
     {
-        return $this->hasMany(BrandAccount::class);
+        return $this->hasMany(BrandAccount::class)->where('status', 1);
     }
 
     public function banks()
     {
-        return $this->hasMany(Bank::class);
+        return $this->hasMany(Bank::class)->where('status', 1);
     }
 
     public function todaysDeposits()

@@ -5,7 +5,11 @@
     if(!empty($bank) && $bank['brand_id'] != '' ){ $brand = $bank['brand_id'];} else{ $brand = ''; } 
     ?>
     
-    {{ html()->select('brand_id')->class('form-control')->options($brands) }}
+    @if ($brand != '')
+        {{ html()->select('brand_id', $brands)->class('form-control')->attributes(['disabled' => 'disabled']) }}
+    @else
+        {{ html()->select('brand_id', $brands)->class('form-control') }}
+    @endif
 </div>
 
 <div class="form-group col-sm-6">

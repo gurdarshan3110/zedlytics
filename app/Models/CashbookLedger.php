@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\LedgerLog;
 
 class CashbookLedger extends Model
 {
@@ -44,6 +45,53 @@ class CashbookLedger extends Model
     protected $appends = [
         'current_balance'//,'bank_balance','balance'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($ledger) {
+
+            LedgerLog::create([
+                'cashbook_ledger_id' => $ledger->id,
+                'user_id' => Auth::id(),
+                'action' => 'created',
+                'description' => 'Created a new ledger entry',
+            ]);
+        });
+
+        static::updating(function ($ledger) {
+
+            $original = $ledger->getOriginal();
+            $changes = [];
+            foreach ($ledger->getAttributes() as $key => $value) {
+                if ($original[$key] != $value) {
+                    $changes[$key] = [
+                        'old' => $original[$key],
+                        'new' => $value
+                    ];
+                }
+            }
+            if ($changes) {
+                //dd($changes);
+                LedgerLog::create([
+                    'cashbook_ledger_id' => $ledger->id,
+                    'user_id' => Auth::id(),
+                    'action' => 'updated',
+                    'description' => json_encode($changes),
+                ]);
+            }
+        });
+
+        static::deleted(function ($ledger) {
+            LedgerLog::create([
+                'cashbook_ledger_id' => $ledger->id,
+                'user_id' => Auth::id(),
+                'action' => 'deleted',
+                'description' => 'Deleted the ledger entry',
+            ]);
+        });
+    }
 
     public function getBankBalanceAttribute()
     {
@@ -121,6 +169,7 @@ class CashbookLedger extends Model
     {
         $balance=0;
         $balance = self::where('bank_id', $bank_id)
+                    
                         ->sum('amount');
         return $balance;
     }
@@ -193,6 +242,7 @@ class CashbookLedger extends Model
         $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
                     ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
                     ->where('cashbook_ledger.account_type', self::ACCOUNT_TYPE_CLIENT_VAL)
+                    ->where('banks.status',1) 
                     ->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
                     ->whereNull('cashbook_ledger.deleted_at') 
                     ->groupBy('banks.account_code', 'cashbook_ledger.type')
@@ -231,6 +281,7 @@ class CashbookLedger extends Model
         $data = self::selectRaw('banks.account_code, cashbook_ledger.type, SUM(cashbook_ledger.amount) as total')
                     ->join('banks', 'cashbook_ledger.bank_id', '=', 'banks.id')
                     //->whereBetween('cashbook_ledger.ledger_date', [$startDate, $endDate])
+                    ->where('banks.status',1) 
                     ->whereNull('cashbook_ledger.deleted_at') 
                     ->groupBy('banks.account_code', 'cashbook_ledger.type')
                     ->get();

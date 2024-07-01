@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckMacAddress;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\WithdrawRequestController;
+use App\Http\Controllers\LedgerLogController;
+
 
 
 Route::get('/', function () {
@@ -32,6 +34,9 @@ Route::get('/', function () {
 });
 
 Route::get('/fetch-withdraw-requests', [WithdrawRequestController::class, 'pushWithdrawRequestsToDB']);
+
+Route::get('/ledger-logs/list', [LedgerLogController::class, 'list'])->name('ledger-logs.list');
+Route::get('/ledger-logs', [LedgerLogController::class, 'index'])->name('ledger-logs.index');
 
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
 

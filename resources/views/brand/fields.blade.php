@@ -14,6 +14,21 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('Username') }}
+    {{ html()->text('username')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Password') }}
+    {{ html()->text('password')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Company Name') }}
+    {{ html()->text('company_name')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Status') }}
     <?php 
     $status = '';
