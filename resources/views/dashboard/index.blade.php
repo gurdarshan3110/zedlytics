@@ -409,6 +409,18 @@
                             <div class="col-md-6">
                                 <canvas id="myPieChart" width="50" height="50"></canvas>
                             </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold equity text-dark">
+                                    <div class="w-100 fw-bold">Equity:</div> 
+                                    <div class="w-100">{{ $todayEquity==null?0:$todayEquity['equity'] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold parking text-dark">
+                                    <div class="w-100 fw-bold">Parking:</div> 
+                                    <div class="w-100">{{ $todayParkings }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -441,6 +453,18 @@
                             <div class="col-md-6">
                                 <canvas id="myPieChart2" width="50" height="50"></canvas>
                             </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold equity text-dark">
+                                    <div class="w-100 fw-bold">Equity:</div> 
+                                    <div class="w-100">{{ $yesterdayEquity==null?0:$yesterdayEquity['equity'] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold parking text-dark">
+                                    <div class="w-100 fw-bold">Parking:</div> 
+                                    <div class="w-100">{{ $yesterdayParkings }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -470,6 +494,18 @@
                             <!-- Second half of the card -->
                             <div class="col-md-6">
                                 <canvas id="myPieChart3" width="50" height="50"></canvas>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold equity text-dark">
+                                    <div class="w-100 fw-bold">Equity:</div> 
+                                    <div class="w-100">{{ $monthEquity==null?0:$monthEquity['equity'] }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-column justify-content-center">
+                                <div class="card-text mt-3 fw-bold parking text-dark">
+                                    <div class="w-100 fw-bold">Parking:</div> 
+                                    <div class="w-100">{{ $monthParkings }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>

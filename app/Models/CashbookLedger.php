@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\LedgerLog;
+use Carbon\Carbon;
 
 class CashbookLedger extends Model
 {
@@ -169,7 +170,7 @@ class CashbookLedger extends Model
     {
         $balance=0;
         $balance = self::where('bank_id', $bank_id)
-                    
+
                         ->sum('amount');
         return $balance;
     }
@@ -205,6 +206,37 @@ class CashbookLedger extends Model
         $formattedWithdrawal = number_format((float)abs($withdrawal), 2, '.', '');
 
         return ['withdraw' => (($formattedWithdrawal==null)?0:$formattedWithdrawal), 'count' =>  (($count==null)?0:$count)];
+    }
+
+    public static function getEquityRecords($startDate,$endDate)
+    {
+        $records = EquityRecord::whereBetween('ledger_date', [$startDate, $endDate]);
+        $totalDeposits = $records->sum('deposit');
+        $totalWithdrawals = $records->sum('withdraw');
+        $carbonEndDate = Carbon::parse($endDate);
+
+        if ($carbonEndDate->isFuture()) {
+            $currentDate = Carbon::now()->subDays(2)->toDateString();
+            $records = EquityRecord::whereBetween('ledger_date', [$currentDate, $currentDate]);
+            $totalEquity = $records->sum('equity');
+        }else{
+            $totalEquity = $records->sum('equity');
+        }
+
+        return [
+            'deposit' => $totalDeposits,
+            'withdraw' => $totalWithdrawals,
+            'equity' => $totalEquity,
+        ];
+    }
+
+    public static function getParkings($startDate)
+    {
+        $amount = self::where('account_type', self::ACCOUNT_TYPE_PARTY_VAL)
+                    ->where('ledger_date', '=', $startDate)
+                    ->where('account_code', 'like', '%PARKING%')
+                    ->sum('amount');
+        return (($amount>0)?number_format((-1*$amount), 2, '.', ''):number_format(abs($amount), 2, '.', ''));
     }
 
     public static function getDepositsBetween($startDate, $endDate)

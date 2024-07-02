@@ -233,7 +233,7 @@ class LedgerController extends Controller
 
     public function list()
     {
-        $data = Model::withTrashed()->latest()->limit(200)->get();
+        $data = Model::withTrashed()->latest()->limit(500)->get();
 
         return DataTables::of($data)
 
