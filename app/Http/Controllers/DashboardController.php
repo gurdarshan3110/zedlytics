@@ -45,7 +45,7 @@ class DashboardController extends Controller
 
         $monthlyDeposits = CashbookLedger::getDepositsBetween($monthStartDate, $monthEndDate);
         $monthlyWithdrawals = CashbookLedger::getWithdrawalsBetween($monthStartDate, $monthEndDate);
-        $monthlyParkings = CashbookLedger::getParkings($monthStartDate->toDateString());
+        $monthlyParkings = CashbookLedger::getParkings($monthEndDate->toDateString());
         $monthlyEquity = CashbookLedger::getEquityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
 
         $startDate = Carbon::today()->endOfDay();
