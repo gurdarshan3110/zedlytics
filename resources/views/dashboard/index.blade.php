@@ -391,13 +391,25 @@
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
                                     <div class="card-text fw-bold deposit text-dark">
                                         <div class="w-100 fw-bold">Deposits: {{ $todaysDeposits['count'] }}</div> 
-                                        <div class="w-100">{{ $todaysDeposits['deposit'] }}</div>
+                                        <div class="w-100">{{ $todaysDeposits['deposit'] }}
+                                           @if($todaysEquity!=null && $deposits['deposit']==$todaysEquity['deposit'])
+                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                            @else
+                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
                                     <div class="card-text mt-3 fw-bold withdraw">
                                         <div class="w-100 fw-bold">Withdraw: {{ $todaysWithdrawals['count'] }}</div> 
-                                        <div class="w-100">{{ $todaysWithdrawals['withdraw'] }}</div>
+                                        <div class="w-100">{{ $todaysWithdrawals['withdraw'] }}
+                                            @if($todaysEquity!=null && $todaysWithdrawals['withdraw']==$todaysEquity['withdraw'])
+                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                            @else
+                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                                 <div class="card-text mt-3 fw-bold gap">
@@ -435,13 +447,25 @@
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
                                     <div class="card-text fw-bold deposit">
                                         <div class="w-100 fw-bold">Deposits: {{ $yesterdayDeposits['count'] }}</div> 
-                                        <div class="w-100">{{ $yesterdayDeposits['deposit'] }}</div>
+                                        <div class="w-100">{{ $yesterdayDeposits['deposit'] }}
+                                            @if($yesterdaysEquity!=null && $yesterdayDeposits['deposit']==$yesterdaysEquity['deposit'])
+                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                            @else
+                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
                                     <div class="card-text mt-3 fw-bold withdraw">
                                         <div class="w-100 fw-bold">Withdraw: {{ $yesterdayWithdrawals['count'] }}</div> 
-                                        <div class="w-100">{{ $yesterdayWithdrawals['withdraw'] }}</div>
+                                        <div class="w-100">{{ $yesterdayWithdrawals['withdraw'] }}
+                                            @if($yesterdaysEquity!=null && $yesterdayWithdrawals['withdraw']==$yesterdaysEquity['withdraw'])
+                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                            @else
+                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                            @endif
+                                        </div>
                                     </div>
                                 </a>
                                 <div class="card-text mt-3 fw-bold gap">
@@ -478,12 +502,24 @@
                             <div class="col-md-6 d-flex flex-column justify-content-center">
                                 <div class="card-text fw-bold deposit">
                                     <div class="w-100 fw-bold">Deposits: {{ $monthlyDeposits['count'] }}</div> 
-                                    <div class="w-100">{{ $monthlyDeposits['deposit'] }}</div>
+                                    <div class="w-100">{{ $monthlyDeposits['deposit'] }}
+                                        @if($monthlyEquity!=null && $monthlyDeposits['deposit']==$monthlyEquity['deposit'])
+                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                        @else
+                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="card-text mt-3 fw-bold withdraw">
                                     <div class="w-100 fw-bold">Withdraw: {{ $monthlyWithdrawals['count'] }}</div> 
-                                    <div class="w-100">{{ $monthlyWithdrawals['withdraw'] }}</div>
+                                    <div class="w-100">{{ $monthlyWithdrawals['withdraw'] }}
+                                        @if($monthlyEquity!=null && $monthlyWithdrawals['withdraw']==$monthlyEquity['withdraw'])
+                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
+                                        @else
+                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="card-text mt-3 fw-bold gap">
