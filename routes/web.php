@@ -34,6 +34,8 @@ Route::get('/', function () {
 });
 
 Route::get('/fetch-withdraw-requests', [WithdrawRequestController::class, 'pushWithdrawRequestsToDB']);
+Route::get('/fetch-base-currency-data', [WithdrawRequestController::class, 'fetchBaseCurrencyData']);
+Route::get('/fetch-open-positions', [WithdrawRequestController::class, 'fetchOpenPositions']);
 
 Route::get('/ledger-logs/list', [LedgerLogController::class, 'list'])->name('ledger-logs.list');
 Route::get('/ledger-logs', [LedgerLogController::class, 'index'])->name('ledger-logs.index');
