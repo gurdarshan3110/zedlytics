@@ -392,7 +392,7 @@
                                     <div class="card-text fw-bold deposit text-dark">
                                         <div class="w-100 fw-bold">Deposits: {{ $todaysDeposits['count'] }}</div> 
                                         <div class="w-100">{{ $todaysDeposits['deposit'] }}
-                                           @if($todaysEquity!=null && $deposits['deposit']==$todaysEquity['deposit'])
+                                           @if($todaysEquity!=null && $todaysDeposits['deposit']==$todaysEquity['deposit'])
                                             <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
                                             @else
                                             <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
