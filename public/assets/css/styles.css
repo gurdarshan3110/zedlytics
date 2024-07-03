@@ -11471,7 +11471,7 @@ body {
   cursor: pointer;
 }
 
-.flex.justify-between.flex-1.sm:hidden{
+flex.justify-between.flex-1.sm\:hidden {
   display: none;
 }
 
