@@ -51,7 +51,7 @@
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
-                            <td>{{ $position['previousNetQty'] }}</td>
+                            <td>{{ $position['netQty'] - $position['previousNetQty'] }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @php
@@ -60,9 +60,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-center">
+                <!-- <div class="d-flex justify-content-center">
                     {{ $positions->links() }}
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
