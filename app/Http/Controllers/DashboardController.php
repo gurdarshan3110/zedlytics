@@ -93,14 +93,14 @@ class DashboardController extends Controller
                 });
 
             // Paginate the results manually since we are using collections
-            $perPage = 10;
-            $page = request()->get('page', 1);
-            $total = $positions->count();
-            $results = $positions->slice(($page - 1) * $perPage, $perPage)->values();
-            $positions = new \Illuminate\Pagination\LengthAwarePaginator($results, $total, $perPage, $page, [
-                'path' => request()->url(),
-                'query' => request()->query(),
-            ]);
+            // $perPage = 10;
+            // $page = request()->get('page', 1);
+            // $total = $positions->count();
+            // $results = $positions->slice(($page - 1) * $perPage, $perPage)->values();
+            // $positions = new \Illuminate\Pagination\LengthAwarePaginator($results, $total, $perPage, $page, [
+            //     'path' => request()->url(),
+            //     'query' => request()->query(),
+            // ]);
         }
         return view('dashboard.index', compact(
             'title',
