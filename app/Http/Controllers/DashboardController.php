@@ -58,28 +58,41 @@ class DashboardController extends Controller
         $positions = [];
         if(Auth::user()->role=='Partner'){
             $positions = OpenPosition::with('baseCurrency')
-                ->get()
-                ->groupBy('posCurrencyID')
-                ->map(function ($group) {
-                    $longQty = $group->where('posType', 1)->sum('openAmount');
-                    $shortQty = $group->where('posType', 2)->sum('openAmount');
-                    $longDeals = $group->where('posType', 1)->count();
-                    $shortDeals = $group->where('posType', 2)->count();
-                    $netQty = round($longQty,2) - round($shortQty,2);
+            ->get()
+            ->groupBy('posCurrencyID')
+            ->map(function (Collection $group) {
+                // Get all but the last entry
+                $allButLast = $group->slice(0, -1);
 
-                    $firstPosition = $group->first();
+                // Calculate metrics for all but the last entry
+                $longQty = $allButLast->where('posType', 1)->sum('openAmount');
+                $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
+                $longDeals = $allButLast->where('posType', 1)->count();
+                $shortDeals = $allButLast->where('posType', 2)->count();
+                $netQty = round($longQty, 2) - round($shortQty, 2);
 
-                    return [
-                        'parent' => $firstPosition->baseCurrency->parent,
-                        'currency_name' => $firstPosition->baseCurrency->name,
-                        'longDeals' => $longDeals,
-                        'longQty' => $longQty,
-                        'shortDeals' => $shortDeals,
-                        'shortQty' => $shortQty,
-                        'netQty' => $netQty,
-                        'lastChange' => $firstPosition->updated_at,
-                    ];
-                });
+                // Calculate metrics for the last entry
+                $lastEntry = $group->last();
+                $lastLongQty = $lastEntry->posType == 1 ? $lastEntry->openAmount : 0;
+                $lastShortQty = $lastEntry->posType == 2 ? $lastEntry->openAmount : 0;
+
+                $firstPosition = $group->first();
+
+                return [
+                    'parent' => $firstPosition->baseCurrency->parent,
+                    'currency_name' => $firstPosition->baseCurrency->name,
+                    'longDeals' => $longDeals,
+                    'longQty' => $longQty,
+                    'shortDeals' => $shortDeals,
+                    'shortQty' => $shortQty,
+                    'netQty' => $netQty,
+                    'lastChange' => $lastEntry->updated_at,
+                    'previousNetQty' => round($longQty - $shortQty, 2),
+                ];
+            });
+
+            // Ensure that $positions is paginated
+            $positions = $positions->paginate(10);
         }
         return view('dashboard.index', compact(
             'title',

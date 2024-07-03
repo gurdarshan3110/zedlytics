@@ -34,6 +34,7 @@
                             <th>Short Qty</th>
                             <th>Net Qty</th>
                             <th>Last Change</th>
+                            <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,6 +51,7 @@
                             <td class="text-end">{{ $position['shortDeals'] }}</td>
                             <td class="text-end">{{ $position['shortQty'] }}</td>
                             <td class="text-end">{{ $position['netQty'] }}</td>
+                            <td class="text-end">{{ $position['previousNetQty'] }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @php
