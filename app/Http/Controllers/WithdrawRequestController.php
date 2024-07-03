@@ -124,7 +124,7 @@ class WithdrawRequestController extends Controller
         $fromDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
-        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=125,139&withDemo=false&fromDate='.$fromDate.'&toDate='.$toDate);
+        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=&withDemo=false&fromDate='.$fromDate.'&toDate='.$toDate);
 
         $data = $response->json();
         //dd($data);
