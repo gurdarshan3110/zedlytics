@@ -51,7 +51,7 @@
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
-                            <td>{{ $position['netQty'] - $position['previousNetQty'] }}</td>
+                            <td>{{ round($position['netQty'],2) - round($position['previousNetQty'],2) }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @php
