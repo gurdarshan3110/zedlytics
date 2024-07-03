@@ -142,7 +142,7 @@ class WithdrawRequestController extends Controller
                     'openCommission' => $item['openCommission'],
                     'currentPrice' => $item['currentPrice'],
                     'referenceCurrencyId' => $item['referenceCurrencyId'],
-                    'posComment' => $item['posComment'],
+                    'posComment' => $item['posComment'] ?? null,
                 ]
             );
         }
