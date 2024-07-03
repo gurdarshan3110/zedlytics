@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\WithdrawRequest;
 use App\Models\OpenPosition;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class DashboardController extends Controller
 {
@@ -58,41 +59,41 @@ class DashboardController extends Controller
         $positions = [];
         if(Auth::user()->role=='Partner'){
             $positions = OpenPosition::with('baseCurrency')
-            ->get()
-            ->groupBy('posCurrencyID')
-            ->map(function (Collection $group) {
-                // Get all but the last entry
-                $allButLast = $group->slice(0, -1);
+                ->get()
+                ->groupBy('posCurrencyID')
+                ->map(function (Illuminate\Database\Eloquent\Collection $group) {
+                    // Get all but the last entry
+                    $allButLast = $group->slice(0, -1);
 
-                // Calculate metrics for all but the last entry
-                $longQty = $allButLast->where('posType', 1)->sum('openAmount');
-                $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
-                $longDeals = $allButLast->where('posType', 1)->count();
-                $shortDeals = $allButLast->where('posType', 2)->count();
-                $netQty = round($longQty, 2) - round($shortQty, 2);
+                    // Calculate metrics for all but the last entry
+                    $longQty = $allButLast->where('posType', 1)->sum('openAmount');
+                    $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
+                    $longDeals = $allButLast->where('posType', 1)->count();
+                    $shortDeals = $allButLast->where('posType', 2)->count();
+                    $netQty = round($longQty, 2) - round($shortQty, 2);
 
-                // Calculate metrics for the last entry
-                $lastEntry = $group->last();
-                $lastLongQty = $lastEntry->posType == 1 ? $lastEntry->openAmount : 0;
-                $lastShortQty = $lastEntry->posType == 2 ? $lastEntry->openAmount : 0;
+                    // Calculate metrics for the last entry
+                    $lastEntry = $group->last();
+                    $lastLongQty = $lastEntry->posType == 1 ? $lastEntry->openAmount : 0;
+                    $lastShortQty = $lastEntry->posType == 2 ? $lastEntry->openAmount : 0;
 
-                $firstPosition = $group->first();
+                    $firstPosition = $group->first();
 
-                return [
-                    'parent' => $firstPosition->baseCurrency->parent,
-                    'currency_name' => $firstPosition->baseCurrency->name,
-                    'longDeals' => $longDeals,
-                    'longQty' => $longQty,
-                    'shortDeals' => $shortDeals,
-                    'shortQty' => $shortQty,
-                    'netQty' => $netQty,
-                    'lastChange' => $lastEntry->updated_at,
-                    'previousNetQty' => round($longQty - $shortQty, 2),
-                ];
-            });
+                    return [
+                        'parent' => $firstPosition->baseCurrency->parent,
+                        'currency_name' => $firstPosition->baseCurrency->name,
+                        'longDeals' => $longDeals,
+                        'longQty' => $longQty,
+                        'shortDeals' => $shortDeals,
+                        'shortQty' => $shortQty,
+                        'netQty' => $netQty,
+                        'lastChange' => $lastEntry->updated_at,
+                        'previousNetQty' => round($longQty - $shortQty, 2),
+                    ];
+                });
 
-            // Ensure that $positions is paginated
-            //$positions = $positions->paginate(10);
+            // Convert the collection to a length-aware paginator instance
+            $positions = $positions->paginate(10);
         }
         return view('dashboard.index', compact(
             'title',
