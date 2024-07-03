@@ -37,9 +37,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $serial=1;
+                        @endphp
                         @foreach($positions as $k => $position)
                         <tr>
-                             <td>{{ $k + 1 }}</td>
+                             <td>{{ $serial }}</td>
                             <td>{{ $position['parent'] }}</td>
                             <td>{{ $position['currency_name'] }}</td>
                             <td class="text-end">{{ $position['longDeals'] }}</td>
@@ -49,6 +52,9 @@
                             <td class="text-end">{{ $position['netQty'] }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
+                        @php
+                        $serial++;
+                        @endphp
                         @endforeach
                     </tbody>
                 </table>
