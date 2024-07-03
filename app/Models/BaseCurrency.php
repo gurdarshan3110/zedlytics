@@ -12,7 +12,7 @@ class BaseCurrency extends Model
     protected $table = 'base_currencies';
 
     protected $fillable = [
-        'name', 'used', 'open_day', 'close_day', 'open_time', 'close_time', 
+        'base_id','name', 'used', 'open_day', 'close_day', 'open_time', 'close_time', 
         'daily_close_time_from1', 'daily_close_time_to1', 'daily_close_time_from2', 
         'daily_close_time_to2', 'daily_close_time_from3', 'daily_close_time_to3', 
         'tick_digits', 'closed', 'reference_currency_id', 'decimal_digits', 'sell_only', 
@@ -23,8 +23,20 @@ class BaseCurrency extends Model
         'auto_cancel_sltp_orders', 'auto_cancel_entry_orders', 'auto_switch_feed_seconds'
     ];
 
+    protected $appends = [
+        'parent'
+    ];
+
     public function positions()
     {
         return $this->hasMany(OpenPosition::class, 'posCurrencyID');
+    }
+
+    public function getParentAttribute()
+    {
+        if($this->parent_id==null){
+            return null;
+        }
+        return BaseCurrency::select('name')->where('id', $this->parent_id)->first()->name;
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Bank;
 use App\Models\Brand;
 use Carbon\Carbon;
 use App\Models\WithdrawRequest;
+use App\Models\OpenPosition;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -53,6 +55,32 @@ class DashboardController extends Controller
 
         $brands = Brand::where('status',1)->get();
         $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
+        $positions = [];
+        if(Auth::user()->role=='Partner'){
+            $positions = OpenPosition::with('baseCurrency')
+                ->get()
+                ->groupBy('posCurrencyID')
+                ->map(function ($group) {
+                    $longDeals = $group->where('posType', 1)->sum('openAmount');
+                    $shortDeals = $group->where('posType', 2)->sum('openAmount');
+                    $longQty = $group->where('posType', 1)->count();
+                    $shortQty = $group->where('posType', 2)->count();
+                    $netQty = $longQty - $shortQty;
+
+                    $firstPosition = $group->first();
+
+                    return [
+                        'parent' => $firstPosition->baseCurrency->parent,
+                        'currency_name' => $firstPosition->baseCurrency->name,
+                        'longDeals' => $longDeals,
+                        'longQty' => $longQty,
+                        'shortDeals' => $shortDeals,
+                        'shortQty' => $shortQty,
+                        'netQty' => $netQty,
+                        'lastChange' => $firstPosition->updated_at,
+                    ];
+                });
+        }
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -79,7 +107,8 @@ class DashboardController extends Controller
             'yesterdayEndDate',
             'monthStartDate',
             'monthEndDate',
-            'withdrawRequests'
+            'withdrawRequests',
+            'positions'
         ));
     }
 

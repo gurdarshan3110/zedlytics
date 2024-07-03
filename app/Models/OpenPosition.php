@@ -15,8 +15,24 @@ class OpenPosition extends Model
         'referenceCurrencyId', 'posComment'
     ];
 
+    protected $appends = [
+        'parent', 'currency_name'
+    ];
+
     public function baseCurrency()
     {
         return $this->belongsTo(BaseCurrency::class, 'posCurrencyID');
+    }
+
+    // Accessor for parent
+    public function getParentAttribute()
+    {
+        return $this->baseCurrency ? $this->baseCurrency->parent : null;
+    }
+
+    // Accessor for currency name
+    public function getCurrencyNameAttribute()
+    {
+        return $this->baseCurrency ? $this->baseCurrency->name : null;
     }
 }

@@ -26,7 +26,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            
+            dd(Auth::user()->user_type)
             return redirect()->intended('/dashboard');
         }
         return view('auth.login');
@@ -148,8 +148,10 @@ class LoginController extends Controller
         // Check if user type is allowed to access dashboard
         if (in_array('dashboard', $permissions)) {
             return redirect()->intended('/dashboard');
-        } else {
+        } else if (in_array('employee dashboard', $permissions)) { 
             return redirect()->intended('/employee-dashboard');
+        }else{
+            return redirect()->intended('/open-positions');
         }
     }
 

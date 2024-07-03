@@ -13,6 +13,49 @@
 </script>
 @endpush
 <main>
+    @if(Auth::user()->role=='Partner')
+    <div class="container-fluid px-4">
+        <div class="d-flex">
+            <h3 class="mt-4 w-95">
+                FUTURES
+            </h3>
+        </div>
+        <div class="row mt-2">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sno</th>
+                            <th>Script Parent</th>
+                            <th>Script Name</th>
+                            <th>Long Deals</th>
+                            <th>Long Qty</th>
+                            <th>Short Deals</th>
+                            <th>Short Qty</th>
+                            <th>Net Qty</th>
+                            <th>Last Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($positions as $k =>$position)
+                        <tr>
+                             <td>{{ $k + 1 }}</td>
+                            <td>{{ $position['parent'] }}</td>
+                            <td>{{ $position['currency_name'] }}</td>
+                            <td>{{ $position['longDeals'] }}</td>
+                            <td>{{ $position['longQty'] }}</td>
+                            <td>{{ $position['shortDeals'] }}</td>
+                            <td>{{ $position['shortQty'] }}</td>
+                            <td>{{ $position['netQty'] }}</td>
+                            <td>{{ $position['lastChange'] }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @else
     <div class="container-fluid px-4">
         <div class="d-flex">
             <h3 class="mt-4 w-95">
@@ -576,220 +619,221 @@
     </div>
     <audio id="first-alert" src="{{asset('/assets/alerts/first-alert.wav')}}" preload="auto"></audio>
     <audio id="second-alert" src="{{asset('/assets/alerts/second-alert.wav')}}" preload="auto"></audio>
+    @push('jsscript')
+    <script>
+        function firstAlert(){
+            var alertSound = document.getElementById('first-alert');
+            //alertSound.play();
+        }
+        function secondAlert(){
+            var alertSound = document.getElementById('second-alert');
+            //alertSound.play();
+        }
+        // Prepare data for charts
+        const todayData = @json($todayData);
+        const weekData = @json($weekData);
+        const monthData = @json($monthData);
+        const bankData = @json($bankData);
+
+        function generateChartData(data) {
+            return {
+                labels: data.map(item => item.account_code),
+                datasets: [
+                    {
+                        label: 'Deposit',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        data: data.map(item => item.credit)
+                    },
+                    {
+                        label: 'Withdraw',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        data: data.map(item => item.debit)
+                    },
+                    {
+                        label: 'Balance',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        data: data.map(item => item.balance)
+                    }
+                ]
+            };
+        }
+
+        // Create a chart for today
+        new Chart(document.getElementById('todayChart'), {
+            type: 'bar',
+            data: generateChartData(todayData),
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Create a chart for week
+        new Chart(document.getElementById('weekChart'), {
+            type: 'bar',
+            data: generateChartData(weekData),
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Create a chart for month
+        new Chart(document.getElementById('monthChart'), {
+            type: 'bar',
+            data: generateChartData(monthData),
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('bankChart'), {
+            type: 'bar',
+            data: generateChartData(bankData),
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var todaysDeposits = @json($todaysDeposits['deposit']); 
+        var todaysWithdrawals = @json($todaysWithdrawals['withdraw']); 
+        var difference = todaysDeposits - todaysWithdrawals;
+        difference = difference.toFixed(2);
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Deposits', 'Withdrawals', 'Gap'],
+                datasets: [{
+                    data: [todaysDeposits, todaysWithdrawals, difference],
+                    backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.raw !== null) {
+                                    label += context.raw;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var yesterdayDeposits = @json($yesterdayDeposits['deposit']); 
+        var yesterdayWithdrawals = @json($yesterdayWithdrawals['withdraw']); 
+        var yesterdaydifference = yesterdayDeposits - yesterdayWithdrawals;
+        yesterdaydifference = yesterdaydifference.toFixed(2);
+        var ctx = document.getElementById('myPieChart2').getContext('2d');
+        var myPieChart2 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Deposits', 'Withdrawals', 'Gap'],
+                datasets: [{
+                    data: [yesterdayDeposits, yesterdayWithdrawals, yesterdaydifference],
+                    backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.raw !== null) {
+                                    label += context.raw;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var monthlyDeposits = @json($monthlyDeposits['deposit']); 
+        var monthlyWithdrawals = @json($monthlyWithdrawals['withdraw']); 
+        var monthlydifference = monthlyDeposits - monthlyWithdrawals;
+        monthlydifference = monthlydifference.toFixed(2);
+        var ctx = document.getElementById('myPieChart3').getContext('2d');
+        var myPieChart3 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Deposits', 'Withdrawals', 'Gap'],
+                datasets: [{
+                    data: [monthlyDeposits, monthlyWithdrawals, monthlydifference],
+                    backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.raw !== null) {
+                                    label += context.raw;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    @endpush
+    @endif
 </main>
-@push('jsscript')
-<script>
-    function firstAlert(){
-        var alertSound = document.getElementById('first-alert');
-        //alertSound.play();
-    }
-    function secondAlert(){
-        var alertSound = document.getElementById('second-alert');
-        //alertSound.play();
-    }
-    // Prepare data for charts
-    const todayData = @json($todayData);
-    const weekData = @json($weekData);
-    const monthData = @json($monthData);
-    const bankData = @json($bankData);
-
-    function generateChartData(data) {
-        return {
-            labels: data.map(item => item.account_code),
-            datasets: [
-                {
-                    label: 'Deposit',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    data: data.map(item => item.credit)
-                },
-                {
-                    label: 'Withdraw',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    data: data.map(item => item.debit)
-                },
-                {
-                    label: 'Balance',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    data: data.map(item => item.balance)
-                }
-            ]
-        };
-    }
-
-    // Create a chart for today
-    new Chart(document.getElementById('todayChart'), {
-        type: 'bar',
-        data: generateChartData(todayData),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Create a chart for week
-    new Chart(document.getElementById('weekChart'), {
-        type: 'bar',
-        data: generateChartData(weekData),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    // Create a chart for month
-    new Chart(document.getElementById('monthChart'), {
-        type: 'bar',
-        data: generateChartData(monthData),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    new Chart(document.getElementById('bankChart'), {
-        type: 'bar',
-        data: generateChartData(bankData),
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    var todaysDeposits = @json($todaysDeposits['deposit']); 
-    var todaysWithdrawals = @json($todaysWithdrawals['withdraw']); 
-    var difference = todaysDeposits - todaysWithdrawals;
-    difference = difference.toFixed(2);
-    var ctx = document.getElementById('myPieChart').getContext('2d');
-    var myPieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Deposits', 'Withdrawals', 'Gap'],
-            datasets: [{
-                data: [todaysDeposits, todaysWithdrawals, difference],
-                backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.raw !== null) {
-                                label += context.raw;
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    var yesterdayDeposits = @json($yesterdayDeposits['deposit']); 
-    var yesterdayWithdrawals = @json($yesterdayWithdrawals['withdraw']); 
-    var yesterdaydifference = yesterdayDeposits - yesterdayWithdrawals;
-    yesterdaydifference = yesterdaydifference.toFixed(2);
-    var ctx = document.getElementById('myPieChart2').getContext('2d');
-    var myPieChart2 = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Deposits', 'Withdrawals', 'Gap'],
-            datasets: [{
-                data: [yesterdayDeposits, yesterdayWithdrawals, yesterdaydifference],
-                backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.raw !== null) {
-                                label += context.raw;
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    var monthlyDeposits = @json($monthlyDeposits['deposit']); 
-    var monthlyWithdrawals = @json($monthlyWithdrawals['withdraw']); 
-    var monthlydifference = monthlyDeposits - monthlyWithdrawals;
-    monthlydifference = monthlydifference.toFixed(2);
-    var ctx = document.getElementById('myPieChart3').getContext('2d');
-    var myPieChart3 = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Deposits', 'Withdrawals', 'Gap'],
-            datasets: [{
-                data: [monthlyDeposits, monthlyWithdrawals, monthlydifference],
-                backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.raw !== null) {
-                                label += context.raw;
-                            }
-                            return label;
-                        }
-                    }
-                }
-            }
-        }
-    });
-</script>
-@endpush
 @endsection
