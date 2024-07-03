@@ -42,11 +42,11 @@
                              <td>{{ $k + 1 }}</td>
                             <td>{{ $position['parent'] }}</td>
                             <td>{{ $position['currency_name'] }}</td>
-                            <td>{{ $position['longDeals'] }}</td>
-                            <td>{{ $position['longQty'] }}</td>
-                            <td>{{ $position['shortDeals'] }}</td>
-                            <td>{{ $position['shortQty'] }}</td>
-                            <td>{{ $position['netQty'] }}</td>
+                            <td class="text-end">{{ $position['longDeals'] }}</td>
+                            <td class="text-end">{{ $position['longQty'] }}</td>
+                            <td class="text-end">{{ $position['shortDeals'] }}</td>
+                            <td class="text-end">{{ $position['shortQty'] }}</td>
+                            <td class="text-end">{{ $position['netQty'] }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @endforeach
