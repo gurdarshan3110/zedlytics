@@ -58,7 +58,7 @@ class DashboardController extends Controller
         $positions = [];
         if(Auth::user()->role=='Partner'){
             $positions = OpenPosition::with('baseCurrency')
-                ->paginate(10)
+                ->get()
                 ->groupBy('posCurrencyID')
                 ->map(function ($group) {
                     $longDeals = $group->where('posType', 1)->sum('openAmount');
