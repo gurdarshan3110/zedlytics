@@ -121,7 +121,7 @@ class WithdrawRequestController extends Controller
         $this->login();
         // $fromDate = Carbon::now()->subMinute()->format('Y-m-d H:i:s');
         // $toDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
-        $fromDate = '2020-01-01';
+        $fromDate = '2020-01-01 00:00:00';
         //$fromDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
