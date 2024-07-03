@@ -61,7 +61,7 @@ class DashboardController extends Controller
             $positions = OpenPosition::with('baseCurrency')
                 ->get()
                 ->groupBy('posCurrencyID')
-                ->map(function (Illuminate\Database\Eloquent\Collection $group) {
+                ->map(function (Collection $group) {
                     // Get all but the last entry
                     $allButLast = $group->slice(0, -1);
 
@@ -88,12 +88,19 @@ class DashboardController extends Controller
                         'shortQty' => $shortQty,
                         'netQty' => $netQty,
                         'lastChange' => $lastEntry->updated_at,
-                        'previousNetQty' => round($longQty - $shortQty, 2),
+                        'previousNetQty' => round($netQty, 2),
                     ];
                 });
 
-            // Convert the collection to a length-aware paginator instance
-            $positions = $positions->paginate(10);
+            // Paginate the results manually since we are using collections
+            $perPage = 10;
+            $page = request()->get('page', 1);
+            $total = $positions->count();
+            $results = $positions->slice(($page - 1) * $perPage, $perPage)->values();
+            $positions = new \Illuminate\Pagination\LengthAwarePaginator($results, $total, $perPage, $page, [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]);
         }
         return view('dashboard.index', compact(
             'title',

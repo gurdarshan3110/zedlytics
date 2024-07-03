@@ -43,15 +43,15 @@
                         @endphp
                         @foreach($positions as $k => $position)
                         <tr>
-                             <td>{{ $serial }}</td>
+                            <td>{{ $serial) }}</td>
                             <td>{{ $position['parent'] }}</td>
                             <td>{{ $position['currency_name'] }}</td>
-                            <td class="text-end">{{ $position['longDeals'] }}</td>
-                            <td class="text-end">{{ $position['longQty'] }}</td>
-                            <td class="text-end">{{ $position['shortDeals'] }}</td>
-                            <td class="text-end">{{ $position['shortQty'] }}</td>
-                            <td class="text-end">{{ $position['netQty'] }}</td>
-                            <td class="text-end">{{ $position['previousNetQty'] }}</td>
+                            <td>{{ $position['longDeals'] }}</td>
+                            <td>{{ $position['longQty'] }}</td>
+                            <td>{{ $position['shortDeals'] }}</td>
+                            <td>{{ $position['shortQty'] }}</td>
+                            <td>{{ $position['netQty'] }}</td>
+                            <td>{{ $position['previousNetQty'] }}</td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @php
@@ -60,7 +60,9 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                <div class="d-flex justify-content-center">
+                    {{ $positions->links() }}
+                </div>
             </div>
         </div>
     </div>
