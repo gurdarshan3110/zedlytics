@@ -61,10 +61,10 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('posCurrencyID')
                 ->map(function ($group) {
-                    $longDeals = $group->where('posType', 1)->sum('openAmount');
-                    $shortDeals = $group->where('posType', 2)->sum('openAmount');
-                    $longQty = $group->where('posType', 1)->count();
-                    $shortQty = $group->where('posType', 2)->count();
+                    $longQty = $group->where('posType', 1)->sum('openAmount');
+                    $shortQty = $group->where('posType', 2)->sum('openAmount');
+                    $longDeals = $group->where('posType', 1)->count();
+                    $shortDeals = $group->where('posType', 2)->count();
                     $netQty = $longQty - $shortQty;
 
                     $firstPosition = $group->first();
