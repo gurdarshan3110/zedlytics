@@ -65,7 +65,7 @@ class DashboardController extends Controller
                     $shortQty = $group->where('posType', 2)->sum('openAmount');
                     $longDeals = $group->where('posType', 1)->count();
                     $shortDeals = $group->where('posType', 2)->count();
-                    $netQty = $longQty - $shortQty;
+                    $netQty = $longQty .'-'. $shortQty.' = '.$longQty - $shortQty;
 
                     $firstPosition = $group->first();
 
