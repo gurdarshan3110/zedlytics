@@ -21,7 +21,7 @@ class OpenPosition extends Model
 
     public function baseCurrency()
     {
-        return $this->belongsTo(BaseCurrency::class, 'posCurrencyID');
+        return $this->belongsTo(BaseCurrency::class, 'posCurrencyID', 'base_id');
     }
 
     // Accessor for parent

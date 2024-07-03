@@ -37,6 +37,6 @@ class BaseCurrency extends Model
         if($this->parent_id==null){
             return null;
         }
-        return BaseCurrency::select('name')->where('id', $this->parent_id)->first()->name;
+        return BaseCurrency::select('name')->where('base_id', $this->parent_id)->first()->name;
     }
 }
