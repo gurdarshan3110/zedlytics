@@ -17,7 +17,11 @@ class CreateOpenPositionsTable extends Migration
             $table->id();
             $table->integer('ticketID')->unique();
             $table->integer('userID');
-            $table->foreignId('posCurrencyID')->constrained('base_currencies', 'base_id');
+            $table->unsignedBigInteger('posCurrencyID');
+            $table->foreign('posCurrencyID')
+            ->references('base_id')
+            ->on('base_currencies')
+            ->onDelete('cascade'); 
             $table->timestamp('posDate');
             $table->decimal('openAmount', 15, 2);
             $table->decimal('closeAmount', 15, 2);
