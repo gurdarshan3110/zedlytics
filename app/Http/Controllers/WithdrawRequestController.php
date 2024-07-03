@@ -117,14 +117,17 @@ class WithdrawRequestController extends Controller
     public function fetchOpenPositions()
     {
         $this->login();
-        $fromDate = Carbon::now()->subMinute()->format('Y-m-d H:i:s');
-        $toDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
+        // $fromDate = Carbon::now()->subMinute()->format('Y-m-d H:i:s');
+        // $toDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
+        $fromDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+
         $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=125,139&withDemo=false&fromDate='.$fromDate.'&toDate='.$toDate);
 
         $data = $response->json();
-
+        //dd($data);
         foreach ($data['data'] as $item) {
-            Position::updateOrCreate(
+            OpenPosition::updateOrCreate(
                 ['ticketID' => $item['ticketID']],
                 [
                     'userID' => $item['userID'],
