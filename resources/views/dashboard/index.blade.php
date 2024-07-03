@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($positions as $k =>$position)
+                        @foreach($positions as $k => $position)
                         <tr>
                              <td>{{ $k + 1 }}</td>
                             <td>{{ $position['parent'] }}</td>
@@ -52,7 +52,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
     </div>
