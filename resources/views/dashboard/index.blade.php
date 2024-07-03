@@ -43,7 +43,7 @@
                         @endphp
                         @foreach($positions as $k => $position)
                         <tr>
-                            <td>{{ $serial) }}</td>
+                            <td>{{ $serial }}</td>
                             <td>{{ $position['parent'] }}</td>
                             <td>{{ $position['currency_name'] }}</td>
                             <td>{{ $position['longDeals'] }}</td>
