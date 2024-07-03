@@ -15,7 +15,7 @@ class CreateBaseCurrenciesTable extends Migration
     {
         Schema::create('base_currencies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('base_id');
+            $table->unsignedBigInteger('base_id')->index(); 
             $table->string('name');
             $table->boolean('used')->default(false);
             $table->integer('open_day');
