@@ -11471,6 +11471,10 @@ body {
   cursor: pointer;
 }
 
+.flex.justify-between.flex-1.sm:hidden{
+  display: none;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;
