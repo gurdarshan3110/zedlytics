@@ -92,7 +92,7 @@ class DashboardController extends Controller
             });
 
             // Ensure that $positions is paginated
-            $positions = $positions->paginate(10);
+            //$positions = $positions->paginate(10);
         }
         return view('dashboard.index', compact(
             'title',
