@@ -94,27 +94,10 @@ class DashboardController extends Controller
                     // Calculate changeQty if the second-to-last cron job time is available
                     $changeQty = 0;
                     if ($lastCronJobTime) {
-                        $changeQtyLong = $allButLast
-                            ->where('posType', 1)
+                        $changeQty = $allButLast
                             ->where('posDate', '>', $lastCronJobTime)
                             ->sum('openAmount');
-                        $changeQtyLong1 = $allButLast
-                            ->where('posType', 1)
-                            ->where('posDate', '>', $lastCronJobTime)
-                            ->sum('closeAmount');
-                        $changeQtyLong = $changeQtyLong-$changeQtyLong1;
-
-                        $changeQtyShort = $allButLast
-                            ->where('posType', 2)
-                            ->where('posDate', '>', $lastCronJobTime)
-                            ->sum('openAmount');
-                        $changeQtyShort1 = $allButLast
-                            ->where('posType', 2)
-                            ->where('posDate', '>', $lastCronJobTime)
-                            ->sum('closeAmount');
-                        $changeQtyShort = $changeQtyShort+$changeQtyShort1;
-
-                        $changeQty = $changeQtyLong1. '+'. $changeQtyShort1;
+                        
                     }
 
                     $firstPosition = $group->first();
