@@ -106,7 +106,7 @@ class DashboardController extends Controller
                         'shortDeals' => $shortDeals,
                         'shortQty' => abs($shortQty),
                         'netQty' => $netQty,
-                        'lastChange' => $lastEntry1->updated_at,
+                        'lastChange' => $lastCronJobTime,
                         'changeQty' => $changeQty,
                     ];
                 });
