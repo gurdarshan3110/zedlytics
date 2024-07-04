@@ -79,7 +79,7 @@ class DashboardController extends Controller
                     $changeQty = 0;
                     if ($lastCronJobTime) {
                         $changeQty = $allButLast
-                            ->where('updated_at', '>', $lastCronJobTime)
+                            ->where('created_at', '>', $lastCronJobTime)
                             ->sum('openAmount');
                     }
 
