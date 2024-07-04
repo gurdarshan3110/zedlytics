@@ -97,6 +97,10 @@ class DashboardController extends Controller
                         $changeQty = $allButLast
                             ->where('posDate', '>', $lastCronJobTime)
                             ->sum('openAmount');
+                        $changeQty1 = $allButLast
+                            ->where('posDate', '>', $lastCronJobTime)
+                            ->sum('closeAmount');
+                        $changeQty = $changeQty+$changeQty1;
                     }
 
                     $firstPosition = $group->first();
