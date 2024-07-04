@@ -20,9 +20,25 @@
                 FUTURES
             </h3>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-2 mb-2">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@0.9.15/dist/css/bootstrap-multiselect.css">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="filterParent">Filter by Script Parent:</label>
+                        <select id="filterParent" class="form-control" multiple>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="filterName">Filter by Script Name:</label>
+                        <select id="filterName"  class="form-control" multiple>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <table id="positionsTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sno</th>
@@ -45,13 +61,18 @@
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>{{ $position['parent'] }}</td>
-                            <td>{{ $position['currency_name'] }}</td>
+                            <td><a href="/segregate-positions/{{$position['currency_id']}}" class="text-decoration-none" target="_blank">{{ $position['currency_name'] }}</a></td>
                             <td>{{ $position['longDeals'] }}</td>
                             <td>{{ $position['longQty'] }}</td>
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
-                            <td>{{ round($position['netQty'],2) - round($position['previousNetQty'],2) }}</td>
+                            @php
+                                $netChange = round($position['netQty'], 2) - round($position['previousNetQty'], 2);
+                            @endphp
+                            <td class="{{ $netChange >= $position['netQty'] ? 'bg-success text-light' : 'bg-danger text-light' }}">
+                                {{ $netChange }}
+                            </td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
                         @php
@@ -60,6 +81,71 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@0.9.15/dist/js/bootstrap-multiselect.min.js"></script>
+                <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+
+                <script>
+                    $(document).ready(function() {
+                        var table = $('#positionsTable').DataTable({
+                            dom: 'lrtip'
+                        });
+
+                        // Initialize Bootstrap Multiselect
+                        $('#filterParent').multiselect({
+                            includeSelectAllOption: true,
+                            nonSelectedText: 'Select Script Parent',
+                            buttonWidth: '100%'
+                        });
+                        $('#filterName').multiselect({
+                            includeSelectAllOption: true,
+                            nonSelectedText: 'Select Script Name',
+                            buttonWidth: '100%'
+                        });
+
+                        // Populate filter options
+                        function populateFilterOptions() {
+                            var parentOptions = new Set();
+                            var nameOptions = new Set();
+
+                            table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                                var data = this.data();
+                                parentOptions.add(data[1]);
+                                nameOptions.add(data[2]);
+                            });
+
+                            $('#filterParent').html('');
+                            $('#filterName').html('');
+
+                            parentOptions.forEach(function(option) {
+                                $('#filterParent').append('<option value="' + option + '">' + option + '</option>');
+                            });
+                            nameOptions.forEach(function(option) {
+                                $('#filterName').append('<option value="' + option + '">' + option + '</option>');
+                            });
+
+                            $('#filterParent').multiselect('rebuild');
+                            $('#filterName').multiselect('rebuild');
+                        }
+
+                        populateFilterOptions();
+
+                        function filterTable() {
+                            var parentValues = $('#filterParent').val();
+                            var nameValues = $('#filterName').val();
+
+                            table.columns(1).search(parentValues ? parentValues.join('|') : '', true, false).draw();
+                            table.columns(2).search(nameValues ? nameValues.join('|') : '', true, false).draw();
+                        }
+
+                        $('#filterParent').on('change', filterTable);
+                        $('#filterName').on('change', filterTable);
+                    });
+                </script>
             </div>
         </div>
     </div>

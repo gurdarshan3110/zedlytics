@@ -77,18 +77,20 @@ class DashboardController extends Controller
                     $lastLongQty = $lastEntry->posType == 1 ? $lastEntry->openAmount : 0;
                     $lastShortQty = $lastEntry->posType == 2 ? $lastEntry->openAmount : 0;
 
+                    $previousNetQty = round($lastLongQty, 2) - round($lastShortQty, 2);
                     $firstPosition = $group->first();
 
                     return [
                         'parent' => $firstPosition->baseCurrency->parent,
                         'currency_name' => $firstPosition->baseCurrency->name,
+                        'currency_id' => $firstPosition->posCurrencyID,
                         'longDeals' => $longDeals,
                         'longQty' => $longQty,
                         'shortDeals' => $shortDeals,
                         'shortQty' => $shortQty,
                         'netQty' => $netQty,
                         'lastChange' => $lastEntry->updated_at,
-                        'previousNetQty' => round($netQty, 2),
+                        'previousNetQty' => round($previousNetQty, 2),
                     ];
                 });
 
@@ -205,5 +207,29 @@ class DashboardController extends Controller
                 'date','banks','brand'
             ));
         }
+    }
+    public function segregatePositions($id){
+        $positionName = OpenPosition::with('baseCurrency')->where('posCurrencyID', $id)->first();
+        $title = ' Segregate Values for '.$positionName->baseCurrency->name;
+
+        $positions = OpenPosition::where('posCurrencyID', $id)->get(); 
+        $posType1 = [];
+        $posType2 = [];
+
+        foreach ($positions as $position) {
+            if ($position->posType == 1) {
+                $posType1[] = $position;
+            } elseif ($position->posType == 2) {
+                $posType2[] = $position;
+            }
+        }
+
+        $long=$posType1;
+        $short=$posType2;
+        return view('dashboard.segregatepositions', compact(
+            'title',
+            'long',
+            'short',
+        ));
     }
 }

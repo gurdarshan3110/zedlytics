@@ -43,6 +43,9 @@ Route::get('/ledger-logs', [LedgerLogController::class, 'index'])->name('ledger-
 Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($router) {
 
     Route::get('/financial-details/{day}/{brand}', [DashboardController::class, 'finDetails'])->name('financial-details');
+
+    Route::get('/segregate-positions/{currency}', [DashboardController::class, 'segregatePositions'])->name('segregate-positions');
+
     Route::get('/employee-dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::resource('dashboard', DashboardController::class);
 
