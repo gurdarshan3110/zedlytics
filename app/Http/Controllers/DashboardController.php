@@ -59,8 +59,19 @@ class DashboardController extends Controller
         $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
         $positions = [];
         if(Auth::user()->role=='Partner'){
-            $lastCronJob = CronJob::latest()->skip(1)->first();
-            $lastCronJobTime = $lastCronJob ? $lastCronJob->hit_time : null;
+            $lastCronJob = CronJob::latest()->skip(1)->first();  
+            $lastCronJobTime = null;
+
+            if ($lastCronJob) {
+                // Create a DateTime object from the hit_time in Indian time (assuming the stored time is in Indian Standard Time)
+                $dateTimeIndian = new DateTime($lastCronJob->hit_time, new DateTimeZone('Asia/Kolkata'));
+
+                // Convert the time to Saudi time
+                $dateTimeIndian->setTimezone(new DateTimeZone('Asia/Riyadh'));
+
+                // Format the DateTime object to a string (or you can use the DateTime object directly)
+                $lastCronJobTime = $dateTimeIndian->format('Y-m-d H:i:s');
+            }
             $positions = OpenPosition::with('baseCurrency')
                 ->get()
                 ->groupBy('posCurrencyID')
