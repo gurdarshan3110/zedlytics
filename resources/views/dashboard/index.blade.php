@@ -68,10 +68,10 @@
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
                             @php
-                                $netChange =  round($position['previousNetQty'], 2) - round($position['netQty'], 2);
+                                $netChange = round($position['netQty'], 2) - round($position['previousNetQty'], 2);
                             @endphp
                             <td class="{{ $netChange >= $position['netQty'] ? 'bg-success text-light' : 'bg-danger text-light' }}">
-                               {{$position['netQty']}} - {{$position['previousNetQty']}} = {{ $netChange }}
+                                {{ $netChange }}
                             </td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
@@ -86,8 +86,8 @@
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@0.9.15/dist/js/bootstrap-multiselect.min.js"></script>
-                <!-- <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-                <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script> -->
+                <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script> 
 
                 <script>
                     $(document).ready(function() {

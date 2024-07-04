@@ -63,7 +63,7 @@ class DashboardController extends Controller
                 ->groupBy('posCurrencyID')
                 ->map(function (Collection $group) {
                     // Get all but the last entry
-                    $allButLast = $group->slice(0, -1);
+                    $allButLast = $group;
 
                     // Calculate metrics for all but the last entry
                     $longQty = $allButLast->where('posType', 1)->sum('openAmount');
@@ -73,9 +73,10 @@ class DashboardController extends Controller
                     $netQty = round($longQty, 2) - round($shortQty, 2);
 
                     // Calculate metrics for the last entry
-                    $lastEntry = $group->last();
-                    $lastLongQty = $lastEntry->posType == 1 ? $lastEntry->openAmount : 0;
-                    $lastShortQty = $lastEntry->posType == 2 ? $lastEntry->openAmount : 0;
+                    $lastEntry = $group->slice(0, -1);
+                    $lastEntry1 = $group->last();
+                    $lastLongQty = $lastEntry->where('posType', 1)->sum('openAmount');
+                    $lastShortQty = $lastEntry->where('posType', 2)->sum('openAmount');
 
                     $previousNetQty = round($lastLongQty, 2) - round($lastShortQty, 2);
                     $firstPosition = $group->first();
@@ -89,7 +90,7 @@ class DashboardController extends Controller
                         'shortDeals' => $shortDeals,
                         'shortQty' => $shortQty,
                         'netQty' => $netQty,
-                        'lastChange' => $lastEntry->updated_at,
+                        'lastChange' => $lastEntry1->updated_at,
                         'previousNetQty' => round($previousNetQty, 2),
                     ];
                 });
