@@ -64,7 +64,7 @@ class DashboardController extends Controller
 
             if ($lastCronJob) {
                 // Create a DateTime object from the hit_time in Indian time (assuming the stored time is in Indian Standard Time)
-                $dateTimeIndian = new \DateTime($lastCronJob->hit_time, new \DateTimeZone('Asia/Kolkata'));
+                $dateTimeIndian = new \DateTime($lastCronJob->created_at, new \DateTimeZone('Asia/Kolkata'));
 
                 // Convert the time to Saudi time
                 $dateTimeIndian->setTimezone(new \DateTimeZone('Asia/Riyadh'));
