@@ -114,7 +114,7 @@ class DashboardController extends Controller
                             ->sum('closeAmount');
                         $changeQtyShort = $changeQtyShort+$changeQtyShort1;
 
-                        $changeQty = $changeQtyLong. '+'. $changeQtyShort1;
+                        $changeQty = $changeQtyLong1. '+'. $changeQtyShort1;
                     }
 
                     $firstPosition = $group->first();
