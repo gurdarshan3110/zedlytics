@@ -68,10 +68,10 @@
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
                             @php
-                                $netChange = round($position['netQty'], 2) - round($position['previousNetQty'], 2);
+                                $netChange =  round($position['previousNetQty'], 2) - round($position['netQty'], 2);
                             @endphp
                             <td class="{{ $netChange >= $position['netQty'] ? 'bg-success text-light' : 'bg-danger text-light' }}">
-                                {{ $netChange }}
+                               {{$position['netQty']}} - {{$position['previousNetQty']}} = {{ $netChange }}
                             </td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>
@@ -91,9 +91,10 @@
 
                 <script>
                     $(document).ready(function() {
-                        // var table = $('#positionsTable').DataTable({
-                        //     dom: 'lrtip'
-                        // });
+                        var table = $('#positionsTable').DataTable({
+                            dom: 'lrtip',
+                            pageLength: -1
+                        });
 
                         // Initialize Bootstrap Multiselect
                         $('#filterParent').multiselect({
