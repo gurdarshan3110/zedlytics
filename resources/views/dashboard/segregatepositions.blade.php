@@ -24,7 +24,7 @@
                 <tbody>
                     @php $serial1 = 1; @endphp
                     @foreach($long as $position)
-                    <tr class="bg-success">
+                    <tr class="bg-success text-light">
                         <td>{{ $serial1 }}</td>
                         <td>{{ $position->userID }}</td>
                         <td>{{ $position->openAmount - $position->closeAmount }}</td>
@@ -49,7 +49,7 @@
                 <tbody>
                     @php $serial2 = 1; @endphp
                     @foreach($short as $position)
-                    <tr class="bg-danger">
+                    <tr class="bg-danger text-light">
                         <td>{{ $serial2 }}</td>
                         <td>{{ $position->userID }}</td>
                         <td>{{ abs($position->openAmount + $position->closeAmount) }}</td>
