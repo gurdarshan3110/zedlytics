@@ -90,7 +90,7 @@ class DashboardController extends Controller
                     $changeQty = 0;
                     if ($lastCronJobTime) {
                         $changeQty = $allButLast
-                            ->where('created_at', '>', $lastCronJobTime)
+                            ->where('posDate', '>', $lastCronJobTime)
                             ->sum('openAmount');
                     }
 
@@ -106,7 +106,7 @@ class DashboardController extends Controller
                         'shortDeals' => $shortDeals,
                         'shortQty' => abs($shortQty),
                         'netQty' => $netQty,
-                        'lastChange' => $lastCronJobTime,
+                        'lastChange' => $lastEntry1->updated_at,
                         'changeQty' => $changeQty,
                     ];
                 });
