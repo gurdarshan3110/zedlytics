@@ -12,7 +12,7 @@
         	<h2>{{$title}}</h2>
         </div>
         <div class="col-md-6">
-            <h2>Positions with Long</h2>
+            <h2>Long</h2>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -27,7 +27,7 @@
                     <tr class="bg-success text-light">
                         <td>{{ $serial1 }}</td>
                         <td>{{ $position->userID }}</td>
-                        <td>{{ $position->openAmount - $position->closeAmount }}</td>
+                        <td class="text-end">{{ $position->openAmount - $position->closeAmount }}</td>
                     </tr>
                     @php $serial1++; @endphp
                     @endforeach
@@ -37,7 +37,7 @@
 
         <!-- Table for posType2 -->
         <div class="col-md-6">
-            <h2>Positions with Short</h2>
+            <h2>Short</h2>
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -52,7 +52,7 @@
                     <tr class="bg-danger text-light">
                         <td>{{ $serial2 }}</td>
                         <td>{{ $position->userID }}</td>
-                        <td>{{ abs($position->openAmount + $position->closeAmount) }}</td>
+                        <td class="text-end">{{ abs($position->openAmount + $position->closeAmount) }}</td>
                     </tr>
                     @php $serial2++; @endphp
                     @endforeach
