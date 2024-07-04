@@ -86,14 +86,14 @@
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@0.9.15/dist/js/bootstrap-multiselect.min.js"></script>
-                <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-                <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+                <!-- <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script> -->
 
                 <script>
                     $(document).ready(function() {
-                        var table = $('#positionsTable').DataTable({
-                            dom: 'lrtip'
-                        });
+                        // var table = $('#positionsTable').DataTable({
+                        //     dom: 'lrtip'
+                        // });
 
                         // Initialize Bootstrap Multiselect
                         $('#filterParent').multiselect({
