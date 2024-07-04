@@ -73,7 +73,7 @@ class DashboardController extends Controller
                     $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
                     $longDeals = $allButLast->where('posType', 1)->count();
                     $shortDeals = $allButLast->where('posType', 2)->count();
-                    $netQty = round($longQty, 2) - round($shortQty, 2);
+                    $netQty = round($longQty, 2) + round($shortQty, 2);
 
                     // Calculate changeQty if the second-to-last cron job time is available
                     $changeQty = 0;
