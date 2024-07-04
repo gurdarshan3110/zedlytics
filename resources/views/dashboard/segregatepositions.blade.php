@@ -27,7 +27,7 @@
                     <tr class="bg-success">
                         <td>{{ $serial1 }}</td>
                         <td>{{ $position->userID }}</td>
-                        <td>{{ $position->openAmount }} - {{ $position->closeAmount }} = {{ $position->openAmount - $position->closeAmount }}</td>
+                        <td>{{ $position->openAmount - $position->closeAmount }}</td>
                     </tr>
                     @php $serial1++; @endphp
                     @endforeach
@@ -52,7 +52,7 @@
                     <tr class="bg-danger">
                         <td>{{ $serial2 }}</td>
                         <td>{{ $position->userID }}</td>
-                        <td>{{ abs($position->openAmount) }} - {{ abs($position->closeAmount) }} = {{ abs($position->openAmount - $position->closeAmount) }}</td>
+                        <td>{{ abs($position->openAmount + $position->closeAmount) }}</td>
                     </tr>
                     @php $serial2++; @endphp
                     @endforeach
