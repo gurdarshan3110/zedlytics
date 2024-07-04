@@ -105,16 +105,16 @@ class DashboardController extends Controller
                         $changeQtyLong = $changeQtyLong-$changeQtyLong1;
 
                         $changeQtyShort = $allButLast
-                            ->where('posType', 1)
+                            ->where('posType', 2)
                             ->where('posDate', '>', $lastCronJobTime)
                             ->sum('openAmount');
                         $changeQtyShort1 = $allButLast
-                            ->where('posType', 1)
+                            ->where('posType', 2)
                             ->where('posDate', '>', $lastCronJobTime)
                             ->sum('closeAmount');
                         $changeQtyShort = $changeQtyShort+$changeQtyShort1;
 
-                        $changeQty = $changeQtyLong1. '+'. $changeQtyShort1;
+                        $changeQty = $changeQtyLong. '+'. $changeQtyShort;
                     }
 
                     $firstPosition = $group->first();
