@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\WithdrawRequest;
 use App\Models\BaseCurrency;
 use App\Models\OpenPosition;
+use App\Models\CronJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -123,6 +124,7 @@ class WithdrawRequestController extends Controller
         // $toDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
         OpenPosition::truncate();
         BaseCurrency::truncate();
+        CronJob::create(['cron_job_name'=>'Open Position']);
         $this->fetchBaseCurrencyData();
         $fromDate = '2020-01-01 00:00:00';
         //$fromDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
@@ -139,7 +141,7 @@ class WithdrawRequestController extends Controller
                     'userID' => $item['userID'],
                     'posCurrencyID' => $item['posCurrencyID'],
                     'posDate' => $item['posDate'],
-                    'openAmount' => $item['openAmount'],
+                    'openAmount' => $item['posType'] == 1 ? $item['openAmount'] : -$item['openAmount'],
                     'closeAmount' => $item['closeAmount'],
                     'posPrice' => $item['posPrice'],
                     'posType' => $item['posType'],

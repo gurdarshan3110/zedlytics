@@ -67,11 +67,8 @@
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
                             <td>{{ $position['netQty'] }}</td>
-                            @php
-                                $netChange = round($position['netQty'], 2) - round($position['previousNetQty'], 2);
-                            @endphp
-                            <td class="{{ $netChange >= $position['netQty'] ? 'bg-success text-light' : 'bg-danger text-light' }}">
-                                {{ $netChange }}
+                            <td class="{{ $position['changeQty'] >= 0 ? 'bg-success text-light' : 'bg-danger text-light' }}">
+                                {{ $position['changeQty'] }}
                             </td>
                             <td>{{ $position['lastChange'] }}</td>
                         </tr>

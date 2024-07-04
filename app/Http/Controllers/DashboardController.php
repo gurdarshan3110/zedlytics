@@ -8,6 +8,7 @@ use App\Models\Brand;
 use Carbon\Carbon;
 use App\Models\WithdrawRequest;
 use App\Models\OpenPosition;
+use App\Models\CronJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
@@ -58,10 +59,12 @@ class DashboardController extends Controller
         $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
         $positions = [];
         if(Auth::user()->role=='Partner'){
+            $lastCronJob = CronJob::latest()->skip(1)->first();
+            $lastCronJobTime = $lastCronJob ? $lastCronJob->hit_time : null;
             $positions = OpenPosition::with('baseCurrency')
                 ->get()
                 ->groupBy('posCurrencyID')
-                ->map(function (Collection $group) {
+                ->map(function (Collection $group) use ($lastCronJobTime) {
                     // Get all but the last entry
                     $allButLast = $group;
 
@@ -72,14 +75,16 @@ class DashboardController extends Controller
                     $shortDeals = $allButLast->where('posType', 2)->count();
                     $netQty = round($longQty, 2) - round($shortQty, 2);
 
-                    // Calculate metrics for the last entry
-                    $lastEntry = $group->slice(0, -1);
-                    $lastEntry1 = $group->last();
-                    $lastLongQty = $lastEntry->where('posType', 1)->sum('openAmount');
-                    $lastShortQty = $lastEntry->where('posType', 2)->sum('openAmount');
+                    // Calculate changeQty if the second-to-last cron job time is available
+                    $changeQty = 0;
+                    if ($lastCronJobTime) {
+                        $changeQty = $allButLast
+                            ->where('updated_at', '>', $lastCronJobTime)
+                            ->sum('openAmount');
+                    }
 
-                    $previousNetQty = round($lastLongQty, 2) - round($lastShortQty, 2);
                     $firstPosition = $group->first();
+                    $lastEntry1 = $group->last();
 
                     return [
                         'parent' => $firstPosition->baseCurrency->parent,
@@ -88,22 +93,12 @@ class DashboardController extends Controller
                         'longDeals' => $longDeals,
                         'longQty' => $longQty,
                         'shortDeals' => $shortDeals,
-                        'shortQty' => $shortQty,
+                        'shortQty' => abs($shortQty),
                         'netQty' => $netQty,
                         'lastChange' => $lastEntry1->updated_at,
-                        'previousNetQty' => round($previousNetQty, 2),
+                        'changeQty' => $changeQty,
                     ];
                 });
-
-            // Paginate the results manually since we are using collections
-            // $perPage = 10;
-            // $page = request()->get('page', 1);
-            // $total = $positions->count();
-            // $results = $positions->slice(($page - 1) * $perPage, $perPage)->values();
-            // $positions = new \Illuminate\Pagination\LengthAwarePaginator($results, $total, $perPage, $page, [
-            //     'path' => request()->url(),
-            //     'query' => request()->query(),
-            // ]);
         }
         return view('dashboard.index', compact(
             'title',

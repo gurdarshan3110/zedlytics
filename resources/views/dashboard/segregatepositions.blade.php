@@ -52,7 +52,7 @@
                     <tr class="bg-danger">
                         <td>{{ $serial2 }}</td>
                         <td>{{ $position->userID }}</td>
-                        <td>{{ $position->openAmount }}</td>
+                        <td>{{ abs($position->openAmount) }}</td>
                     </tr>
                     @php $serial2++; @endphp
                     @endforeach
