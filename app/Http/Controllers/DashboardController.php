@@ -76,17 +76,13 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('posCurrencyID')
                 ->map(function (Collection $group) use ($lastCronJobTime) {
-                    // Get all but the last entry
-                    $allButLast = $group;
+                    // Exclude the last entry
+                    $allButLast = $group->slice(0, -1);
 
                     // Calculate metrics for all but the last entry
-                    $longQty = $allButLast->where('posType', 1)->sum('openAmount');
-                    $longQty1 = $allButLast->where('posType', 1)->sum('closeAmount');
-                    $longQty = $longQty - $longQty1;
-
-                    $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
-                    $shortQty1 = $allButLast->where('posType', 2)->sum('closeAmount');
-                    $shortQty = $shortQty + $shortQty1;
+                    $longQty = $allButLast->where('posType', 1)->sum('openAmount') - $allButLast->where('posType', 1)->sum('closeAmount');
+                    $shortQty = $allButLast->where('posType', 2)->sum('openAmount') + $allButLast->where('posType', 2)->sum('closeAmount');
+                    
                     $longDeals = $allButLast->where('posType', 1)->count();
                     $shortDeals = $allButLast->where('posType', 2)->count();
                     $netQty = round($longQty, 2) + round($shortQty, 2);
@@ -97,11 +93,10 @@ class DashboardController extends Controller
                         $changeQty = $allButLast
                             ->where('posDate', '>', $lastCronJobTime)
                             ->sum('openAmount');
-                        
                     }
 
                     $firstPosition = $group->first();
-                    $lastEntry1 = $group->last();
+                    $lastEntry = $group->last();
 
                     return [
                         'parent' => $firstPosition->baseCurrency->parent,
@@ -112,10 +107,14 @@ class DashboardController extends Controller
                         'shortDeals' => $shortDeals,
                         'shortQty' => abs($shortQty),
                         'netQty' => $netQty,
-                        'lastChange' => $lastEntry1->updated_at,
+                        'lastChange' => $lastEntry->updated_at,
                         'changeQty' => $changeQty,
                     ];
-                });
+                })
+                ->sortByDesc('netQty')
+                ->values()
+                ->all();
+
         }
         return view('dashboard.index', compact(
             'title',
