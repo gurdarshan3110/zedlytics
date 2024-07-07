@@ -66,7 +66,7 @@
                             <td>{{ $position['longQty'] }}</td>
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
-                            <td>{{ $position['netQty'] }}</td>
+                            <td class="{{(($position['netQty']>0)?'bg-success':(($position['netQty']<0)?'bg-danger':''))}}">{{ $position['netQty'] }}</td>
                             <td class="{{ (($position['changeQty'] > 0) ? 'bg-success text-light' : (($position['changeQty'] == 0) ? 'text-dark' : 'bg-danger text-light')) }}">
                                 {{ $position['changeQty'] }}
                             </td>
@@ -90,7 +90,7 @@
                     $(document).ready(function() {
                         var table = $('#positionsTable').DataTable({
                             dom: 'lrtip',
-                            pageLength: -1
+                            pageLength: 15
                         });
 
                         // Initialize Bootstrap Multiselect
