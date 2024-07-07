@@ -80,8 +80,10 @@ class DashboardController extends Controller
                     $allButLast = $group->slice(0, -1);
 
                     // Calculate metrics for all but the last entry
-                    $longQty = $allButLast->where('posType', 1)->sum('openAmount') - $allButLast->where('posType', 1)->sum('closeAmount');
-                    $shortQty = $allButLast->where('posType', 2)->sum('openAmount') + $allButLast->where('posType', 2)->sum('closeAmount');
+                    //$longQty = $allButLast->where('posType', 1)->sum('openAmount') - $allButLast->where('posType', 1)->sum('closeAmount');
+                    $longQty = $allButLast->where('posType', 1)->sum('openAmount');
+                    //$shortQty = $allButLast->where('posType', 2)->sum('openAmount') + $allButLast->where('posType', 2)->sum('closeAmount');
+                    $shortQty = $allButLast->where('posType', 2)->sum('openAmount');
                     
                     $longDeals = $allButLast->where('posType', 1)->count();
                     $shortDeals = $allButLast->where('posType', 2)->count();

@@ -151,6 +151,25 @@ class WithdrawRequestController extends Controller
                     'posComment' => $item['posComment'] ?? null,
                 ]
             );
+            if($item['closeAmount']!=0){
+                OpenPosition::updateOrCreate(
+                    ['ticketID' => $item['ticketID']],
+                    [
+                        'userID' => $item['userID'],
+                        'posCurrencyID' => $item['posCurrencyID'],
+                        'posDate' => $item['posDate'],
+                        'openAmount' => $item['posType'] == 1 ? -$item['closeAmount'] : $item['closeAmount'],
+                        'closeAmount' => 0,
+                        'posPrice' => $item['posPrice'],
+                        'posType' => $item['posType'] == 1 ? 2 : 1,
+                        'openCommission' => $item['openCommission'],
+                        'currentPrice' => $item['currentPrice'],
+                        'referenceCurrencyId' => $item['referenceCurrencyId'],
+                        'posComment' => $item['posComment'] ?? null,
+                        'status' => 1,
+                    ]
+                );
+            }
         }
 
         return response()->json(['message' => 'Open positions data fetched and updated successfully.']);
