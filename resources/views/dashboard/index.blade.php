@@ -66,7 +66,7 @@
                             <td>{{ $position['longQty'] }}</td>
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
-                            <td class="{{(($position['netQty']>0)?'bg-success':(($position['netQty']<0)?'bg-danger':''))}}">{{ $position['netQty'] }}</td>
+                            <td class="{{(($position['netQty']>0)?'bg-success text-light':(($position['netQty']<0)?'bg-danger text-light':''))}}">{{ $position['netQty'] }}</td>
                             <td class="{{ (($position['changeQty'] > 0) ? 'bg-success text-light' : (($position['changeQty'] == 0) ? 'text-dark' : 'bg-danger text-light')) }}">
                                 {{ $position['changeQty'] }}
                             </td>
