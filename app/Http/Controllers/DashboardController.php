@@ -77,7 +77,7 @@ class DashboardController extends Controller
                 ->groupBy('posCurrencyID')
                 ->map(function (Collection $group) use ($lastCronJobTime) {
                     // Exclude the last entry
-                    $allButLast = $group->slice(0, -1);
+                    $allButLast = $group;
 
                     // Calculate metrics for all but the last entry
                     //$longQty = $allButLast->where('posType', 1)->sum('openAmount') - $allButLast->where('posType', 1)->sum('closeAmount');
