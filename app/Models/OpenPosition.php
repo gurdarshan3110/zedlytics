@@ -27,12 +27,12 @@ class OpenPosition extends Model
     // Accessor for parent
     public function getParentAttribute()
     {
-        return $this->baseCurrency ? $this->baseCurrency->parent : null;
+        return $this->baseCurrency ? $this->baseCurrency->parent : 'N/A';
     }
 
     // Accessor for currency name
     public function getCurrencyNameAttribute()
     {
-        return $this->baseCurrency ? $this->baseCurrency->name : null;
+        return $this->baseCurrency ? $this->baseCurrency->name : 'N/A';
     }
 }

@@ -101,8 +101,8 @@ class DashboardController extends Controller
                     $lastEntry = $group->last();
 
                     return [
-                        'parent' => $firstPosition->baseCurrency->parent,
-                        'currency_name' => $firstPosition->baseCurrency->name,
+                        'parent' => $firstPosition->baseCurrency ? $firstPosition->baseCurrency->parent : 'N/A',
+                        'currency_name' => $firstPosition->baseCurrency ? $firstPosition->baseCurrency->name : 'N/A',
                         'currency_id' => $firstPosition->posCurrencyID,
                         'longDeals' => $longDeals,
                         'longQty' => $longQty,
