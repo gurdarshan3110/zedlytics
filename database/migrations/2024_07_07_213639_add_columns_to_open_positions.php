@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('open_positions', function (Blueprint $table) {
-            $table->integer('parent')->nullable();
             $table->boolean('status')->default(0);
         });
     }
@@ -23,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('open_positions', function (Blueprint $table) {
-            $table->dropColumn('parent');
             $table->dropColumn('status');
         });
     }
