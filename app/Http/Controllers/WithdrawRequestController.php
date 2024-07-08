@@ -149,11 +149,12 @@ class WithdrawRequestController extends Controller
                     'currentPrice' => $item['currentPrice'],
                     'referenceCurrencyId' => $item['referenceCurrencyId'],
                     'posComment' => $item['posComment'] ?? null,
+                    'status' => 0,
                 ]
             );
             if($item['closeAmount']!=0){
                 OpenPosition::updateOrCreate(
-                    ['ticketID' => $item['ticketID'].'-'.'close'],
+                    ['ticketID' => $item['ticketID'].'1'],
                     [
                         'userID' => $item['userID'],
                         'posCurrencyID' => $item['posCurrencyID'],
