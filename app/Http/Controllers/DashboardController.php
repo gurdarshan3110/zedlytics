@@ -87,7 +87,7 @@ class DashboardController extends Controller
                     
                     $longDeals = $allButLast->where('posType', 1)->count();
                     $shortDeals = $allButLast->where('posType', 2)->count();
-                    $netQty = round($longQty, 2) + round($shortQty, 2);
+                    $netQty = $longQty + $shortQty;
 
                     // Calculate changeQty if the second-to-last cron job time is available
                     $changeQty = 0;
@@ -108,7 +108,7 @@ class DashboardController extends Controller
                         'longQty' => $longQty,
                         'shortDeals' => $shortDeals,
                         'shortQty' => abs($shortQty),
-                        'netQty' => $netQty,
+                        'netQty' => round($netQty,2),
                         'lastChange' => $lastEntry->updated_at,
                         'changeQty' => $changeQty,
                     ];
