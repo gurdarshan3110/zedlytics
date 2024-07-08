@@ -12,7 +12,7 @@ class OpenPosition extends Model
     protected $fillable = [
         'ticketID', 'userID', 'posCurrencyID', 'posDate', 'openAmount', 
         'closeAmount', 'posPrice', 'posType', 'openCommission', 'currentPrice', 
-        'referenceCurrencyId', 'posComment', 'status', 'parent'
+        'referenceCurrencyId', 'posComment', 'status'
     ];
 
     protected $appends = [
