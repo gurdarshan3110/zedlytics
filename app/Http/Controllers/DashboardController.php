@@ -226,7 +226,7 @@ class DashboardController extends Controller
         $positionName = OpenPosition::with('baseCurrency')->where('posCurrencyID', $id)->first();
         $title = ' Segregate Values for '.$positionName->baseCurrency->name;
 
-        $positions = OpenPosition::where('posCurrencyID', $id)->get(); 
+        $positions = OpenPosition::where('posCurrencyID', $id)->where('status',0)->get(); 
         $posType1 = [];
         $posType2 = [];
 
