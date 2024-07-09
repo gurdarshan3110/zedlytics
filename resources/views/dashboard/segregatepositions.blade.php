@@ -26,9 +26,9 @@
                     @php $serial1 = 1; @endphp
                     @foreach($long as $position)
                     <tr class="bg-success text-light">
-                        <td>{{ $serial1 }}</td>
-                        <td>{{ (($position->client_name=='N/A')?$position->userID:$position->client_name) }}</td>
-                        <td class="text-right">{{ $position->openAmount - $position->closeAmount }}</td>
+                        <td class="text-light">{{ $serial1 }}</td>
+                        <td class="text-light">{{ (($position->client_name=='N/A')?$position->userID:$position->client_name) }}</td>
+                        <td class="text-right text-light">{{ $position->openAmount - $position->closeAmount }}</td>
                     </tr>
                     @php $serial1++; @endphp
                     @endforeach
@@ -51,9 +51,9 @@
                     @php $serial2 = 1; @endphp
                     @foreach($short as $position)
                     <tr class="bg-danger text-light">
-                        <td>{{ $serial2 }}</td>
-                        <td>{{ $position->userID }}</td>
-                        <td class="text-right">{{ abs($position->openAmount + $position->closeAmount) }}</td> 
+                        <td class="text-light">{{ $serial2 }}</td>
+                        <td class="text-light">{{ $position->userID }}</td>
+                        <td class="text-right text-light">{{ abs($position->openAmount + $position->closeAmount) }}</td> 
                     </tr>
                     @php $serial2++; @endphp
                     @endforeach
