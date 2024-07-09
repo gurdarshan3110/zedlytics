@@ -19,7 +19,7 @@ class OpenPosition extends Model
     ];
 
     protected $appends = [
-        'parent', 'currency_name', 'client_name'
+        'parent', 'currency_name', 'client_name', 'client_code'
     ];
 
     public function client()
@@ -46,7 +46,12 @@ class OpenPosition extends Model
 
     public function getClientNameAttribute()
     {
-        return $this->client ? $this->client->name.' ('.$this->client->client_code.')' : 'N/A';
+        return $this->client ? $this->client->name.' ('.$this->client->client_code.')' : $this->client_code;
+    }
+
+    public function getClientCodeAttribute()
+    {
+        return $this->client->client_code; 
     }
 
 }
