@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Jobs\CreateClientAndAccountJob;
+use App\Models\Client;
+
 
 class OpenPosition extends Model
 {
@@ -16,8 +20,20 @@ class OpenPosition extends Model
     ];
 
     protected $appends = [
-        'parent', 'currency_name'
+        'parent', 'currency_name', 'client_name'
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'userID', 'user_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (OpenPosition $position) {
+            CreateClientAndAccountJob::dispatch($position->userID);
+        });
+    }
 
     public function baseCurrency()
     {
@@ -35,4 +51,10 @@ class OpenPosition extends Model
     {
         return $this->baseCurrency ? $this->baseCurrency->name : 'N/A';
     }
+
+    public function getClientNameAttribute()
+    {
+        return $this->client ? $this->client->name.' ('.$this->client->client_code.')' : 'N/A';
+    }
+
 }

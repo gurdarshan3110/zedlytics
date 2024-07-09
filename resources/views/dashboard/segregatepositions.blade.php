@@ -26,7 +26,7 @@
                     @foreach($long as $position)
                     <tr class="bg-success text-light">
                         <td>{{ $serial1 }}</td>
-                        <td>{{ $position->userID }}</td>
+                        <td>{{ (($position->client_name=='N/A')?$position->userID:$position->client_name) }}</td>
                         <td class="text-right">{{ $position->openAmount - $position->closeAmount }}</td>
                     </tr>
                     @php $serial1++; @endphp
