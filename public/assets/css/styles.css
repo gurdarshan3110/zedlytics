@@ -11475,6 +11475,10 @@ flex.justify-between.flex-1.sm\:hidden {
   display: none;
 }
 
+.table-low-heights td, .table-low-heights th {
+  padding: 0.25rem !!important;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Jobs\CreateClientAndAccountJob;
 use App\Models\Client;
 
 
@@ -26,13 +25,6 @@ class OpenPosition extends Model
     public function client()
     {
         return $this->belongsTo(Client::class, 'userID', 'user_id');
-    }
-
-    protected static function booted(): void
-    {
-        static::created(function (OpenPosition $position) {
-            CreateClientAndAccountJob::dispatch($position->userID);
-        });
     }
 
     public function baseCurrency()

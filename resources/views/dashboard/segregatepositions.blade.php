@@ -3,6 +3,7 @@
 <head>
     <title>{{$title}}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="{{asset('/assets/css/styles.css')}}" rel="stylesheet" />
 </head>
 <body>
 <div class="container">
@@ -13,7 +14,7 @@
         </div>
         <div class="col-md-6">
             <h2>Long</h2>
-            <table class="table table-bordered table-striped">
+            <table class="table table-low-heights table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Sno</th>
@@ -38,7 +39,7 @@
         <!-- Table for posType2 -->
         <div class="col-md-6">
             <h2>Short</h2>
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-low-heights table-striped">
                 <thead>
                     <tr>
                         <th>Sno</th>
