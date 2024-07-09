@@ -46,7 +46,7 @@ class OpenPosition extends Model
 
     public function getClientNameAttribute()
     {
-        return $this->client ? $this->client->name.' ('.$this->client->client_code.')' : $this->client_code;
+        return $this->client ? $this->client->name.' ('.$this->client->client_code.')' : $this->user_id;
     }
 
     public function getClientCodeAttribute()
