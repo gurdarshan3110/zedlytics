@@ -18,7 +18,7 @@
                 <thead>
                     <tr>
                         <th>Sno</th>
-                        <th>User Id</th>
+                        <th>User Details</th>
                         <th>Deals</th>
                     </tr>
                 </thead>
@@ -43,7 +43,7 @@
                 <thead>
                     <tr>
                         <th>Sno</th>
-                        <th>User Id</th>
+                        <th>User Details</th>
                         <th>Deals</th>
                     </tr>
                 </thead>
