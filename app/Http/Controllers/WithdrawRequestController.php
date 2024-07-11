@@ -8,6 +8,9 @@ use App\Models\WithdrawRequest;
 use App\Models\BaseCurrency;
 use App\Models\OpenPosition;
 use App\Models\CronJob;
+use App\Models\Client;
+use App\Models\ClientAccount;
+use App\Models\Account;
 use App\Jobs\FetchOpenPositionsJob;
 use Carbon\Carbon;
 
@@ -64,5 +67,54 @@ class WithdrawRequestController extends Controller
         $this->login();
         FetchOpenPositionsJob::dispatch($this->token, $this->clientTreeUserIdNode);
         return response()->json(['message' => 'Open positions fetching job dispatched successfully.']);
+    }
+
+    public function fetchAndSaveClientRecords()
+    {
+        set_time_limit(900);
+        $this->login();
+
+        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/report/users/details/'. $this->clientTreeUserIdNode);
+        
+        if ($response->getStatusCode() == 200) {
+            $data = $response->json();
+
+            if (is_array($data['data'])) {
+                foreach ($data['data'] as $clientData) {
+                    //dd($clientData);
+                    $clientData['client_code'] = $clientData['accountID'];
+                    $clientData['phone_no'] = $clientData['accountID'].$clientData['userID'];
+                    $clientData['email'] = $clientData['userID'].'@zedlytics.com';
+                    $clientData['name'] = $clientData['firstName'];
+                    $clientData['status'] = (($clientData['locked'])?1:0);
+                    $client = Client::updateOrCreate(
+                        ['user_id' => $clientData['userID']],
+                        $clientData
+                    );
+                    $clientData['type'] = Account::CLIENT_ACCOUNT;
+                    $account = Account::updateOrCreate(
+                        ['account_code' => $clientData['client_code']],
+                        $clientData
+                    );
+
+                    $map = ClientAccount::updateOrCreate(
+                        ['account_id' => $account['id']],
+                        ['client_id'=>$client['id']]
+                    );
+
+
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Client records fetched and saved successfully'
+                ], 201);
+            }
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch client records'
+        ], 500);
     }
 }

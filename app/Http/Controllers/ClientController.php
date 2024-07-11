@@ -128,11 +128,10 @@ class ClientController extends Controller
     public function update(Request $request, Model $client)
     {
         $input = $request->all();
-        $account = Account::where('account_code', $client->account_code)->first();
+        $account = Account::where('account_code', $client->client_code)->first();
         $rules = [
             'name' => 'required|string|max:255',
             'account_code' => 'required|unique:accounts,id,'.$account->id,
-            'email' => 'required|email|unique:users,id,'.$user->id,
             'phone_no' => [
                 'required',
                 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
@@ -177,7 +176,7 @@ class ClientController extends Controller
     public function list(Request $request)
     {
         $input = $request->all();
-        $data = Model::where('status',$input['status'])->latest()->get();
+        $data = Model::where('status',$input['status'])->latest()->limit(200)->get();
 
         return DataTables::of($data)
 

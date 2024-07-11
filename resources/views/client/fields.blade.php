@@ -1,6 +1,10 @@
 <div class="form-group col-sm-6">
     {{ html()->label('Client Code') }}
-    {{ html()->text('account_code')->class('form-control') }}
+    @if(isset($client) && !empty($client))
+        {{ html()->text('account_code')->class('form-control')->attribute('readonly', 'readonly')->value($client->client_code) }}
+    @else
+        {{ html()->text('account_code')->class('form-control') }}
+    @endif
 </div>
 
 <div class="form-group col-sm-6">
