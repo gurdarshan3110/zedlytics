@@ -128,14 +128,14 @@ class ClientController extends Controller
     public function update(Request $request, Model $client)
     {
         $input = $request->all();
-        $account = Account::where('account_code', $client->client_code)->first();
+        $account = Account::where('account_code', $client->client_code)->where('type',Account::CLIENT_ACCOUNT)->first();
         $rules = [
             'name' => 'required|string|max:255',
-            'account_code' => 'required|unique:accounts,id,'.$account->id,
+            'account_code' => 'required|unique:accounts,account_code,'.$account->id.',id', // Corrected to use the correct column name
             'phone_no' => [
                 'required',
                 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
-                'unique:'.self::URL.',phone_no,'.$client->id.',id'
+                'unique:clients,phone_no,'.$client->id.',id' // Ensure this uses the correct table and column
             ],
             'status' => 'required',
         ];
@@ -153,7 +153,7 @@ class ClientController extends Controller
         }
 
         $client->update($input);
-        $account->update(['name' => $request->name]);
+        $account->update($input);
 
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');
@@ -173,36 +173,124 @@ class ClientController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
+    // public function list(Request $request)
+    // {
+    //     $input = $request->all();
+
+    //     $length = $request->input('length');
+    //     $start = $request->input('start');
+
+    //     // Calculate the current page number
+    //     $page = ($start / $length) + 1;
+
+    //     $data = Model::where('status',$input['status'])->paginate($length, ['*'], 'page', $page);
+
+
+
+    //     return DataTables::of($data)
+
+
+    //         ->addColumn('name', function ($row) {
+    //             $name = $row->name;
+
+    //             return $name;
+    //         })
+
+    //         ->addColumn('email', function ($row) {
+    //             $email = $row->email;
+
+    //             return $email;
+    //         })
+
+    //         ->addColumn('phone_no', function ($row) {
+    //             $phone_no = $row->phone_no;
+
+    //             return $phone_no;
+    //         })
+
+    //         ->addColumn('status', function ($row) {
+    //             $status = (($row->status == 1) ? 'Active' : 'Inactive');
+
+    //             return $status;
+    //         })
+    //         ->addColumn('action', function ($row) {
+    //             $msg = 'Are you sure?';
+    //             $action = '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">
+    //                 '.csrf_field().'
+    //                 '.method_field('DELETE').'
+    //                 <div class="btn-group">
+    //                 '.((in_array('edit '.self::DIRECTORY, permissions()))?'
+    //                 <a href="'.route(self::URL.'.edit', [$row]).'"
+    //                    class="btn btn-warning btn-xs">
+    //                     <i class="far fa-edit"></i>
+    //                 </a>':'').((in_array('delete '.self::DIRECTORY, permissions()))?'
+    //                 <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>':'').'
+                    
+    //             </div>
+    //             </form>';
+
+    //             return $action;
+    //         })
+    //     ->rawColumns(['action'])
+    //     ->setTotalRecords($query->total())
+    //     ->setFilteredRecords($query->total())
+    //     ->make(true);
+    // }
+
     public function list(Request $request)
     {
-        $input = $request->all();
-        $data = Model::where('status',$input['status'])->latest()->limit(200)->get();
+        $length = $request->input('length');
+        $start = $request->input('start');
+        $search = $request->input('search.value'); // Getting search input
+        $order = $request->input('order.0'); // Getting ordering input
+        $columns = $request->input('columns'); // Getting column data
+        $status = $request->input('status');
+        
+        // Fetch the query with filtering and ordering
+        $query = Model::where('status', $status)
+            ->when($search, function ($query, $search) {
+                // Add your searchable columns here
+                return $query->where(function ($q) use ($search) {
+                    $q->where('client_code', 'like', "{$search}%")
+                      ->orWhere('name', 'like', "%{$search}%")
+                      ->orWhere('user_id', 'like', "{$search}%")
+                      ->orWhere('username', 'like', "{$search}%")
+                      ->orWhere('phone_no', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy($columns[$order['column']]['data'], $order['dir']);
 
+        // Get the total number of records after filtering
+        $filteredRecords = $query->count();
+
+        // Paginate the results
+        $query = $query->skip($start)->take($length);
+
+        // Get the results
+        $data = $query;
+
+        // Prepare DataTables response
         return DataTables::of($data)
-
-
+            ->addColumn('client_code', function ($row) {
+                return $row->client_code;
+            })
+            ->addColumn('user_id', function ($row) {
+                return $row->user_id;
+            })
+            ->addColumn('username', function ($row) {
+                return $row->username;
+            })
             ->addColumn('name', function ($row) {
-                $name = $row->name;
-
-                return $name;
+                return ucwords($row->name);
             })
-
             ->addColumn('email', function ($row) {
-                $email = $row->email;
-
-                return $email;
+                return $row->email;
             })
-
             ->addColumn('phone_no', function ($row) {
-                $phone_no = $row->phone_no;
-
-                return $phone_no;
+                return $row->phone_no;
             })
-
             ->addColumn('status', function ($row) {
-                $status = (($row->status == 1) ? 'Active' : 'Inactive');
-
-                return $status;
+                return $row->status == 0 ? 'Active' : 'Inactive';
             })
             ->addColumn('action', function ($row) {
                 $msg = 'Are you sure?';
@@ -210,21 +298,26 @@ class ClientController extends Controller
                     '.csrf_field().'
                     '.method_field('DELETE').'
                     <div class="btn-group">
-                    '.((in_array('edit '.self::DIRECTORY, permissions()))?'
+                    '.(in_array('edit '.self::DIRECTORY, permissions()) ? '
                     <a href="'.route(self::URL.'.edit', [$row]).'"
                        class="btn btn-warning btn-xs">
                         <i class="far fa-edit"></i>
-                    </a>':'').((in_array('delete '.self::DIRECTORY, permissions()))?'
-                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>':'').'
-                    
+                    </a>' : '').(in_array('delete '.self::DIRECTORY, permissions()) ? '
+                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>' : '').'
                 </div>
                 </form>';
 
                 return $action;
             })
-        ->rawColumns(['action'])
-        ->make(true);
+            ->rawColumns(['action'])
+            ->with([
+                'draw' => $request->input('draw'),
+                'recordsTotal' => Model::where('status', $status)->count(),
+                'recordsFiltered' => $filteredRecords,
+            ])
+            ->make(true);
     }
+
 
     function generateRandomString($name) {
         // Convert name to uppercase

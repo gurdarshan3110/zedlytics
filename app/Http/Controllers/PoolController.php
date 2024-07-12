@@ -232,17 +232,37 @@ class PoolController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $data = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
+        $length = $request->input('length');
+        $start = $request->input('start');
+        $search = $request->input('search.value'); // Getting search input
+        $order = $request->input('order.0'); // Getting ordering input
+        $columns = $request->input('columns');
+        // $data = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
+        //               ->whereHas('party', function ($query) {
+        //                   $query->where('type', Party::POOL_TYPE_ZERO);
+        //               })
+        //               ->withTrashed()
+        //               ->latest();
+        $query = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
                       ->whereHas('party', function ($query) {
                           $query->where('type', Party::POOL_TYPE_ZERO);
-                      })
-                      ->withTrashed()
-                      ->latest()
-                      ->limit(200)
-                      ->get();
+                      })->when($search, function ($query, $search) {
+                // Add your searchable columns here
+                return $query->where(function ($q) use ($search) {
+                    $q->where('account_code', 'like', "{$search}%")
+                      ->orWhere('utr_no', 'like', "%{$search}%");
+                });
+            })->withTrashed()->latest();
+        //$data = Model::withTrashed()->latest()->limit(500)->get();
+        $filteredRecords = $query->count();
 
+        // Paginate the results
+        $query = $query->skip($start)->take($length);
+
+        // Get the results
+        $data = $query;
         return DataTables::of($data)
 
             ->addColumn('id', function ($row) {
@@ -333,6 +353,11 @@ class PoolController extends Controller
 
 
         ->rawColumns(['action'])
+        ->with([
+                'draw' => $request->input('draw'),
+                'recordsTotal' => Model::count(),
+                'recordsFiltered' => $filteredRecords,
+            ])
         ->make(true);
     }
 
