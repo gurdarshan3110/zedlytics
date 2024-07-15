@@ -21,10 +21,10 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    const TITLE = 'Clients';
+    const TITLE = 'Users';
     const URL = 'clients';
     const DIRECTORY = 'client';
-    const FNAME = 'Client';
+    const FNAME = 'User';
 
     public function index()
     {
