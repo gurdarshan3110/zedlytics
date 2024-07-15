@@ -20,9 +20,14 @@ class UpdateCleintsBrandCsv extends Command
     {
         $filePath = $this->argument('file');
 
-        if (!file_exists($filePath) || !is_readable($filePath)) {
-            $this->error('File not found or not readable.');
-            return;
+        if (!File::exists($filePath)) {
+            $this->error("File not found: $filePath");
+            return 1;
+        }
+
+        if (!File::isReadable($filePath)) {
+            $this->error("File is not readable: $filePath");
+            return 1;
         }
 
         $header = null;
