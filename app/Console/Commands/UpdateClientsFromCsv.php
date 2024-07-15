@@ -18,7 +18,7 @@ class UpdateClientsFromCsv extends Command
 
     public function handle()
     {
-        $filePath = $this->argument('filePath');
+        $filePath = $this->argument('file');
 
         if (filter_var($filePath, FILTER_VALIDATE_URL)) {
             $this->info("Downloading file from URL: $filePath");
