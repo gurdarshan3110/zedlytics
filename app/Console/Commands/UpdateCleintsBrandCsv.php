@@ -71,7 +71,7 @@ class UpdateCleintsBrandCsv extends Command
                 if ($client) {
                     $updateData = [];
                     if (!empty($row['brand'])) {
-                        $updateData['brand_id'] = (($row['brand']=='SKY')?1:'');
+                        $updateData['brand_id'] = (($row['brand']=='SKY')?1:2);
                     }
 
                     if (!empty($updateData)) {
