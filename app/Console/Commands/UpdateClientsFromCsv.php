@@ -18,11 +18,31 @@ class UpdateClientsFromCsv extends Command
 
     public function handle()
     {
-        $filePath = $this->argument('file');
+        $filePath = $this->argument('filePath');
 
-        if (!file_exists($filePath) || !is_readable($filePath)) {
-            $this->error('File not found or not readable.');
-            return;
+        if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+            $this->info("Downloading file from URL: $filePath");
+            $response = Http::get($filePath);
+
+            if ($response->failed()) {
+                $this->error("Failed to download file from URL: $filePath");
+                return 1;
+            }
+
+            $filePath = sys_get_temp_dir() . '/' . basename($filePath);
+            File::put($filePath, $response->body());
+        }
+
+        //$filePath = $this->argument('file');
+
+        if (!File::exists($filePath)) {
+            $this->error("File not found: $filePath");
+            return 1;
+        }
+
+        if (!File::isReadable($filePath)) {
+            $this->error("File is not readable: $filePath");
+            return 1;
         }
 
         $header = null;
