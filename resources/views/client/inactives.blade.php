@@ -2,13 +2,13 @@
     <table class="table table-bordered table-striped w-100 align-middle" id="record-table-inactives">
         <thead>
         <tr>
+            <th>Brand</th>
             <th>Account Id</th>
-            <th>User Id</th>
             <th>Username</th>
             <th>Name</th>
             <th>Email</th>
             <th>Phone No</th>
-            <th>Status</th>
+            <th>RM</th>
             <th  style="width:15%;">Action</th>
         </tr>
         </thead>
@@ -37,14 +37,14 @@
                 }
             },
             columns: [
+                { data: 'brand', name: 'brand' },
                 { data: 'client_code', name: 'client_code' },
-                { data: 'user_id', name: 'user_id' },
                 { data: 'username', name: 'username' },
                 { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
                 { data: 'phone_no', name: 'phone_no' },
-                { data: 'status', name: 'status' },
-                { data: 'action', name: 'action', className: 'action' },
+                { data: 'rm', name: 'rm' },
+                { data: 'action', name: 'action', className: 'action', orderable: false, searchable: false },
             ],
             pageLength: 10,
             dom: 'Blfrtip',

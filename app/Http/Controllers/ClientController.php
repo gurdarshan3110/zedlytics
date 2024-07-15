@@ -48,7 +48,9 @@ class ClientController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.create', compact('title','url','directory'));
+        $rms = User::where('status',1)->where('role','Relationship Manager')->pluck('name','id')
+            ->prepend('Select Relationship Manager', '');
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','rms'));
     }
 
     /**
@@ -114,7 +116,9 @@ class ClientController extends Controller
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url'));
+        $rms = User::where('status',1)->where('role','Relationship Manager')->pluck('name','id')
+            ->prepend('Select Relationship Manager', '');
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','rms'));
     }
 
     /**
@@ -242,7 +246,7 @@ class ClientController extends Controller
         $length = $request->input('length');
         $start = $request->input('start');
         $search = $request->input('search.value'); // Getting search input
-        $order = $request->input('order.0'); // Getting ordering input
+        $order = $request->input('order.1'); // Getting ordering input
         $columns = $request->input('columns'); // Getting column data
         $status = $request->input('status');
         
@@ -253,12 +257,11 @@ class ClientController extends Controller
                 return $query->where(function ($q) use ($search) {
                     $q->where('client_code', 'like', "{$search}%")
                       ->orWhere('name', 'like', "%{$search}%")
-                      ->orWhere('user_id', 'like', "{$search}%")
                       ->orWhere('username', 'like', "{$search}%")
                       ->orWhere('phone_no', 'like', "%{$search}%");
                 });
-            })
-            ->orderBy($columns[$order['column']]['data'], $order['dir']);
+            });
+            //->orderBy($columns[$order['column']]['data'], $order['dir']);
 
         // Get the total number of records after filtering
         $filteredRecords = $query->count();
@@ -271,11 +274,11 @@ class ClientController extends Controller
 
         // Prepare DataTables response
         return DataTables::of($data)
+            ->addColumn('brand', function ($row) {
+                return (($row->brand_id!=null)?$row->brand->name:'');
+            })
             ->addColumn('client_code', function ($row) {
                 return $row->client_code;
-            })
-            ->addColumn('user_id', function ($row) {
-                return $row->user_id;
             })
             ->addColumn('username', function ($row) {
                 return $row->username;
@@ -289,8 +292,8 @@ class ClientController extends Controller
             ->addColumn('phone_no', function ($row) {
                 return $row->phone_no;
             })
-            ->addColumn('status', function ($row) {
-                return $row->status == 0 ? 'Active' : 'Inactive';
+            ->addColumn('rm', function ($row) {
+                return (($row->rm!=null)?$row->rmanager->name:'');
             })
             ->addColumn('action', function ($row) {
                 $msg = 'Are you sure?';

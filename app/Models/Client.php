@@ -19,6 +19,7 @@ class Client extends Model
         'phone_no',
         'mobile',
         'email',
+        'rm',
         'status',
         'currenciesPoliciesID',
         'genericPoliciesID',
@@ -62,9 +63,14 @@ class Client extends Model
         return $this->hasMany(ClientAccount::class);
     }
 
+    public function rmanager()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);
     }
-    
+
 }

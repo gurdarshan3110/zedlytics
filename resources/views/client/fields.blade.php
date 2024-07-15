@@ -23,6 +23,25 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('Mobile No') }}
+    {{ html()->text('mobile')->class('form-control')->autocomplete(false) }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('RM') }}
+    <?php 
+    $brand = '';
+    if(!empty($client) && $client['rm'] != '' ){ $rm = $client['rm'];} else{ $rm = ''; } 
+    ?>
+    
+    @if ($rm != '')
+        {{ html()->select('rm', $rms)->class('form-control')->attributes(['disabled' => 'disabled']) }}
+    @else
+        {{ html()->select('rm', $rms)->class('form-control') }}
+    @endif
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Status') }}
     <?php 
     $status = '';
