@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateCleintsBrandCsv extends Command
 {
-    protected $signature = 'update:clients-brand-csv {file}';
-    protected $description = 'Update clients brand from a CSV file';
+    protected $signature = 'update:clients-brand-csv {filePath}';
+    protected $description = 'Update clients brand from CSV file';
 
     public function __construct()
     {
@@ -19,7 +19,22 @@ class UpdateCleintsBrandCsv extends Command
 
     public function handle()
     {
-        $filePath = $this->argument('file');
+        $filePath = $this->argument('filePath');
+
+        if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+            $this->info("Downloading file from URL: $filePath");
+            $response = Http::get($filePath);
+
+            if ($response->failed()) {
+                $this->error("Failed to download file from URL: $filePath");
+                return 1;
+            }
+
+            $filePath = sys_get_temp_dir() . '/' . basename($filePath);
+            File::put($filePath, $response->body());
+        }
+
+        //$filePath = $this->argument('file');
 
         if (!File::exists($filePath)) {
             $this->error("File not found: $filePath");
