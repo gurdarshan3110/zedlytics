@@ -18,16 +18,20 @@
 
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-secondary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}">
                 <img src="{{asset('/assets/images/watermark.png')}}" class="logo"/>
             </a>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}"><i class="fas fa-home" aria-hidden="true"></i></a>
+            
             <!-- Sidebar Toggle-->
             <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" action="{{route('logout')}}">
                         @csrf
+            <span class="text-light text-end">
+                {{Auth::user()->name}} - ({{((Auth::user()->user_type!='Super Admin')?Auth::user()->employee_code:'')}})
+            </span>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" onclick = "return confirm('Are you sure?')" type="submit">
                 <i class="fa fa-power-off fs-3 text-danger"></i>
                     </button>

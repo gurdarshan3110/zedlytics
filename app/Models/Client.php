@@ -13,9 +13,11 @@ class Client extends Model
     protected $fillable = [
         'client_code',
         'user_id',
+        'brand_id',
         'username',
         'name',
         'phone_no',
+        'mobile',
         'email',
         'status',
         'currenciesPoliciesID',
@@ -59,4 +61,10 @@ class Client extends Model
     {
         return $this->hasMany(ClientAccount::class);
     }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+    
 }

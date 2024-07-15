@@ -26,8 +26,44 @@ class CreateClientAndAccountJob implements ShouldQueue
     public function handle()
     {
         try {
+            $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
+                'companyName' => 'Best Bull',
+                'password' => env('BESTBULL_PASSWORD'),
+                'userName' => env('BESTBULL_USERNAME'),
+            ]);
+
+            $data = $response->json();
+            $this->token = $data['data']['token'];
+            $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
             // Login to the API once
             CronJob::create(['cron_job_name' => 'Create Client']);
+
+            $clients = Client::where('client_code', 2)->where('status', 0)->get();
+
+            foreach ($clients as $client) {
+                $response = Http::withToken($this->token)->post("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
+
+                // Handle the response as needed
+                if ($response->successful()) {
+
+                    $apiData = $response->json()['data'];
+
+                    // Update client information
+                    $client->update([
+                        'name' => $apiData['firstName'],
+                        'phone_no' => $apiData['mobile'],
+                        'username' => $apiData['username'],
+                        'email' => $apiData['username'] . '@zedlytics.com',
+                        'client_code' => $apiData['accountId'],
+                        'status' => 1 
+                    ]);
+
+                } else {
+                    // Handle API call failure
+                    // Log the error or take appropriate actions
+                    \Log::error("Failed to update client with user_id {$client->user_id}: " . $response->body());
+                }
+            }
             
         } catch (\Exception $e) {
             // Handle any exceptions

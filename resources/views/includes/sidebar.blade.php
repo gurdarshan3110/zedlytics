@@ -30,10 +30,6 @@
                     </a>
                 </div>
             </div>
-            <div class="sb-sidenav-footer px-3 text-light">
-                <div class="small">Logged in as:</div>
-                {{Auth::user()->name}} - ({{Auth::user()->employee_code}})
-            </div>
         </nav>
     </div>
     <div id="layoutSidenav_content">
