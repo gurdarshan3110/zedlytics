@@ -46,17 +46,28 @@ class CreateClientAndAccountJob implements ShouldQueue
                 // Handle the response as needed
                 if ($response->successful()) {
 
-                    $apiData = $response->json()['data'];
+                    $clientData = $response->json()['data'];
 
                     // Update client information
-                    $client->update([
-                        'name' => $apiData['firstName'],
-                        'phone_no' => $apiData['mobile'],
-                        'username' => $apiData['username'],
-                        'email' => $apiData['username'] . '@zedlytics.com',
-                        'client_code' => $apiData['accountId'],
-                        'status' => 1 
-                    ]);
+                    $clientData['client_code'] = $clientData['accountID'];
+                    $clientData['phone_no'] = $clientData['accountID'].$clientData['userID'];
+                    $clientData['email'] = $clientData['userID'].'@zedlytics.com';
+                    $clientData['name'] = $clientData['firstName'];
+                    $clientData['status'] = 0;
+                    $client = Client::updateOrCreate(
+                        ['user_id' => $clientData['userID']],
+                        $clientData
+                    );
+                    $clientData['type'] = Account::CLIENT_ACCOUNT;
+                    $account = Account::updateOrCreate(
+                        ['account_code' => $clientData['client_code']],
+                        $clientData
+                    );
+
+                    $map = ClientAccount::updateOrCreate(
+                        ['account_id' => $account['id']],
+                        ['client_id'=>$client['id']]
+                    );
 
                 } else {
                     // Handle API call failure
