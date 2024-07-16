@@ -49,14 +49,14 @@ class CreateClientAndAccountJob implements ShouldQueue
                     $clientData = $response->json()['data'];
 
                     // Update client information
-                    $clientData['client_code'] = $clientData['accountID'];
-                    $clientData['phone_no'] = $clientData['accountID'].$clientData['userID'];
-                    $clientData['email'] = $clientData['userID'].'@zedlytics.com';
+                    $clientData['client_code'] = $clientData['accountId'];
+                    $clientData['phone_no'] = $clientData['accountId'].$clientData['id'];
+                    $clientData['email'] = $clientData['id'].'@zedlytics.com';
                     $clientData['name'] = $clientData['firstName'];
                     $clientData['country'] = $clientData['country'];
                     $clientData['status'] = 0;
                     $client = Client::updateOrCreate(
-                        ['user_id' => $clientData['userID']],
+                        ['user_id' => $clientData['id']],
                         $clientData
                     );
                     $clientData['type'] = Account::CLIENT_ACCOUNT;
