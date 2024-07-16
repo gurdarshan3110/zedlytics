@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $totalBalance = CashbookLedger::getTotalBalance();
         $todaysDeposits = CashbookLedger::getTodaysDeposits();
         $todaysWithdrawals = CashbookLedger::getTodaysWithdrawals();
-        $todaysParkings = CashbookLedger::getParkings(now()->startOfDay()->toDateString());
+        $todaysParkings = CashbookLedger::getParkings(now()->startOfDay()->toDateString(),now()->endOfDay()->toDateString());
         $todaysEquity = CashbookLedger::getEquityRecords(now()->startOfDay()->toDateString(),now()->endOfDay()->toDateString());
 
         $todayData = CashbookLedger::getDataForPeriod(now()->startOfDay(), now()->endOfDay());
@@ -40,7 +40,7 @@ class DashboardController extends Controller
         
         $yesterdayDeposits = CashbookLedger::getDepositsBetween($yesterdayStartDate, $yesterdayEndDate);
         $yesterdayWithdrawals = CashbookLedger::getWithdrawalsBetween($yesterdayStartDate, $yesterdayEndDate);
-        $yesterdaysParkings = CashbookLedger::getParkings($yesterdayEndDate->toDateString());
+        $yesterdaysParkings = CashbookLedger::getParkings($yesterdayStartDate->toDateString(),$yesterdayEndDate->toDateString());
         $yesterdaysEquity = CashbookLedger::getEquityRecords($yesterdayEndDate->toDateString(),$yesterdayEndDate->toDateString());
 
 
@@ -49,7 +49,7 @@ class DashboardController extends Controller
 
         $monthlyDeposits = CashbookLedger::getDepositsBetween($monthStartDate, $monthEndDate);
         $monthlyWithdrawals = CashbookLedger::getWithdrawalsBetween($monthStartDate, $monthEndDate);
-        $monthlyParkings = CashbookLedger::getParkings($monthEndDate->toDateString());
+        $monthlyParkings = CashbookLedger::getParkings($monthStartDate->toDateString(),$monthEndDate->toDateString());
         $monthlyEquity = CashbookLedger::getEquityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
 
         $startDate = Carbon::today()->endOfDay();
