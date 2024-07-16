@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('market');
             $table->string('script');
-            $table->integer('minimum_deal');
-            $table->integer('maximum_deal_in_single_order');
-            $table->integer('maximum_quantity_in_script');
-            $table->decimal('intraday_margin', 8, 2);
-            $table->decimal('holding_maintainence_margin', 8, 2);
-            $table->decimal('inventory_day_margin', 8, 2);
-            $table->decimal('total_group_limit', 8, 2);
-            $table->time('margin_calculation_time');
+            $table->string('minimum_deal');
+            $table->string('maximum_deal_in_single_order');
+            $table->string('maximum_quantity_in_script');
+            $table->string('intraday_margin');
+            $table->string('holding_maintainence_margin');
+            $table->string('inventory_day_margin');
+            $table->string('total_group_limit');
+            $table->string('margin_calculation_time');
 
             $table->boolean('status')->default(0);
             $table->softDeletes();

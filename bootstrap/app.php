@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withCommands([
         UpdateClientsFromCsv::class,
         UpdateClientsBrandCsv::class,
+        UpdateMarginFromCsv::class,
     ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
