@@ -164,7 +164,7 @@ class MarginLimitMarketController extends Controller
         $length = $request->input('length');
         $start = $request->input('start');
         $search = $request->input('search.value'); // Getting search input
-        $order = $request->input('order.1'); // Getting ordering input
+        $order = $request->input('order.0'); // Getting ordering input
         $columns = $request->input('columns'); // Getting column data
         $status = $request->input('status');
         
@@ -179,8 +179,8 @@ class MarginLimitMarketController extends Controller
                       ->orWhere('maximum_deal_in_single_order', 'like', "%{$search}%")
                       ->orWhere('maximum_quantity_in_script', 'like', "%{$search}%");
                 });
-            });
-            //->orderBy($columns[$order['column']]['data'], $order['dir']);
+            })
+            ->orderBy($columns[$order['column']]['data'], $order['dir']);
 
         // Get the total number of records after filtering
         $filteredRecords = $query->count();
@@ -193,6 +193,9 @@ class MarginLimitMarketController extends Controller
 
         // Prepare DataTables response
         return DataTables::of($data)
+            ->addColumn('id', function ($row) {
+                return $row->id;
+            })
             ->addColumn('market', function ($row) {
                 return $row->market;
             })

@@ -34,8 +34,10 @@
         var table=$('#record-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list?status=1",
+                ajax: "/{{$url}}/list?status=0",
                 columns: [
+
+                    {data: 'id', name: 'id'},
                     {data: 'market', name: 'market'},
                     {data: 'script', name: 'script'},
                     {data: 'minimum_deal', name: 'minimum_deal'},

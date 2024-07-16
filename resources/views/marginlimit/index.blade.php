@@ -32,14 +32,6 @@
                 @include($directory.'.table')
             </div>
         </div>
-        <div class="card mb-4">
-            <div class="card-title ps-3 pt-3 text-bold">
-                In-Active Records
-            </div>
-            <div class="card-body">
-                @include($directory.'.inactives')
-            </div>
-        </div>
     </div>
 </main>
  @endsection               
