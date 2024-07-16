@@ -48,7 +48,10 @@ class RoleController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $permissions = Permission::all();
-        return view(self::DIRECTORY.'.create', compact('title','url','directory','permissions'));
+        $roles = Model::all();
+        $roleOptions = buildRoleDropdown($roles);
+        //dd($roleOptions);
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','permissions','roleOptions'));
     }
 
     /**
@@ -85,6 +88,7 @@ class RoleController extends Controller
         // Create the role
         $role = Model::create([
             'name' => $input['name'],
+            'parent_id' => $input['parent_id'],
             'guard_name' => 'web',
         ]);
 
@@ -120,8 +124,10 @@ class RoleController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $permissions = Permission::all();
+        $roles = Model::all();
+        $roleOptions = buildRoleDropdown($roles);
 
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','permissions'));
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','permissions','roleOptions'));
     }
 
     /**
@@ -159,6 +165,7 @@ class RoleController extends Controller
         // Update the role name
         $role->update([
             'name' => $request->input('name'),
+            'parent_id' => $request->input('parent_id'),
         ]);
 
         $permissions = Permission::whereIn('id', $input['permissions'])->get();

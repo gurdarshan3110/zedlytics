@@ -2,11 +2,24 @@
 use App\Models\ModuleMaster;
 use App\Models\Bank;
 use App\Models\CashbookLedger;
+use App\Models\Role;
 function softModules()
 {
     return ModuleMaster::where('status',1)->get();
 }
 
+function buildRoleDropdown($roles, $parent_id = null, $prefix = ''){
+    $output = [];
+
+    foreach ($roles as $role) {
+        if ($role->parent_id == $parent_id) {
+            $output[$role->id] = $prefix . $role->name;
+            $output += buildRoleDropdown($roles, $role->id, $prefix . '--');
+        }
+    }
+
+    return $output;
+}
 
 function dateFormatdMY($date){
     if($date=='' || $date==null){

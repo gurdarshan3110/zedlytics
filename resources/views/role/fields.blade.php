@@ -3,36 +3,65 @@
     {{ html()->text('name')->class('form-control') }}
 </div>
 
-<div class="form-group col-sm-12">
-    {{ html()->label('Permissions') }}
+<div class="form-group col-sm-6">
+    {{ html()->label('Parent Role')->for('parent_id') }}
+    {{ html()->select('parent_id',$roleOptions)->class('form-control')->placeholder('Select Parent Role') }}
+</div>
 
-    <div id="permissions-container">
-        <div class="form-check mb-3">
-            <input type="checkbox" id="select-all-permissions" class="form-check-input">
-            <label for="select-all-permissions" class="form-check-label">Select All</label>
-        </div>
+<div id="permissions-container">
+    <div class="form-check mb-3">
+        <input type="checkbox" id="select-all-permissions" class="form-check-input">
+        <label for="select-all-permissions" class="form-check-label">Select All</label>
+    </div>
+    
+    @php
+        $permissionsByParent = $permissions->groupBy('parent');
+        $lastParentName = null;
+    @endphp
+    
+    @foreach ($permissionsByParent as $parentId => $permissionsGroup)
         @php
-            $permissionsByParent = $permissions->groupBy('parent');
+            // Assuming the parent name is stored in the first permission's parent attribute
+            $parentName = $permissionsGroup->first()->parent;
         @endphp
-
-        @foreach ($permissionsByParent as $parentId => $permissionsGroup)
-            <div class="permission-group">
+        
+        @if ($parentName !== $lastParentName)
+            <div class="permission-group mb-4">
+                <h5>{{ ucwords($parentName) }}</h5>
                 <div class="row">
+        @else
+                <div class="row mt-3">
+        @endif
+        
                 @foreach ($permissionsGroup as $permission)
                     <div class="col-sm-3">
                         <div class="form-check">
-                            {{ html()->checkbox('permissions[]', $permission->name, $permission->id)
-                                ->id('permission_' . $permission->id)
-                                ->class('form-check-input permission-checkbox')
-                                ->checked(isset($role) ? $role->permissions->contains('id', $permission->id) : false) }}
-                            {{ html()->label(ucwords($permission->name))->for('permission_' . $permission->id)->class('form-check-label') }}
+                            <input 
+                                type="checkbox" 
+                                name="permissions[]" 
+                                value="{{ $permission->id }}" 
+                                id="permission_{{ $permission->id }}" 
+                                class="form-check-input permission-checkbox"
+                                @if(isset($role) && $role->permissions->contains('id', $permission->id)) checked @endif
+                            >
+                            <label 
+                                for="permission_{{ $permission->id }}" 
+                                class="form-check-label">
+                                {{ ucwords($permission->name) }}
+                            </label>
                         </div>
                     </div>
                 @endforeach
+                
                 </div>
             </div>
-        @endforeach
-    </div>
+
+        @php
+            $lastParentName = $parentName;
+        @endphp
+    @endforeach
+</div>
+
 
     <script>
         (function() {

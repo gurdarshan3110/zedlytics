@@ -48,8 +48,11 @@ class ClientController extends Controller
         $title = 'Add New '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        $rms = User::where('status',1)->where('role','Relationship Manager')->pluck('name','id')
-            ->prepend('Select Relationship Manager', '');
+        $role = 'relationship manager';
+        $rms = User::where('status', 0)
+           ->whereRaw('LOWER(role) = ?', [strtolower($role)])
+           ->pluck('name', 'id')
+           ->prepend('Select Relationship Manager', '');
         return view(self::DIRECTORY.'.create', compact('title','url','directory','rms'));
     }
 
@@ -116,8 +119,11 @@ class ClientController extends Controller
         $title = 'Edit '.self::FNAME;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        $rms = User::where('status',1)->where('role','Relationship Manager')->pluck('name','id')
-            ->prepend('Select Relationship Manager', '');
+        $role = 'relationship manager';
+        $rms = User::where('status', 0)
+           ->whereRaw('LOWER(role) = ?', [strtolower($role)])
+           ->pluck('name', 'id')
+           ->prepend('Select Relationship Manager', '');
         return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','rms'));
     }
 

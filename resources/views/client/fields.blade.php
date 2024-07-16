@@ -34,11 +34,7 @@
     if(!empty($client) && $client['rm'] != '' ){ $rm = $client['rm'];} else{ $rm = ''; } 
     ?>
     
-    @if ($rm != '')
-        {{ html()->select('rm', $rms)->class('form-control')->attributes(['disabled' => 'disabled']) }}
-    @else
-        {{ html()->select('rm', $rms)->class('form-control') }}
-    @endif
+    {{ html()->select('rm', $rms)->class('form-control') }}
 </div>
 
 <div class="form-group col-sm-6">
