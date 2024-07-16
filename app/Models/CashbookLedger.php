@@ -233,7 +233,7 @@ class CashbookLedger extends Model
     public static function getParkings($startDate,$endDate)
     {
         $amount = self::where('account_type', self::ACCOUNT_TYPE_PARTY_VAL)
-                    ->whereBetween('ledger_date', [$startDate, $endDate]);
+                    ->whereBetween('ledger_date', [$startDate, $endDate])
                     ->where('account_code', 'like', '%PARKING%')
                     ->sum('amount');
         return (($amount>0)?number_format((-1*$amount), 2, '.', ''):number_format(abs($amount), 2, '.', ''));
