@@ -36,7 +36,7 @@ class CreateClientAndAccountJob implements ShouldQueue
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
             // Login to the API once
-            CronJob::create(['cron_job_name' => 'Create Client']);
+            CronJob::create(['cron_job_name' => 'Update Client Info Job']);
 
             $clients = Client::where('client_code', 2)->where('status', 0)->get();
 
