@@ -14,6 +14,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AggregateController;
 use App\Http\Controllers\PoolController;
+use App\Http\Controllers\MarginLimitMarketController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\TwoFactorController;
@@ -105,6 +106,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::get('/aggregate/list', [AggregateController::class, 'list'])->name('aggregate.list');
     Route::resource('aggregate', AggregateController::class);
+
+    Route::get('/margin-limit-menu/list', [MarginLimitMarketController::class, 'list'])->name('margin-limit-menu.list');
+    Route::resource('margin-limit-menu', MarginLimitMarketController::class);
 
     
     Route::resource('two-factor',TwoFactorController::class);
