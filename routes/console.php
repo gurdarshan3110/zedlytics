@@ -10,5 +10,5 @@ use App\Jobs\CreateClientAndAccountJob;
 // })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::job(new FetchOpenPositionsJob, 'default')->everyFourMinutes();
-Schedule::job(new CreateClientAndAccountJob, 'default')->everyThirtyMinutes();
+Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
