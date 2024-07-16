@@ -27,7 +27,7 @@
             <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}"><i class="fas fa-home" aria-hidden="true"></i></a>
             
             <!-- Sidebar Toggle-->
-            <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" action="{{route('logout')}}">
+            <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" id="logoutForm" action="{{route('logout')}}">
                         @csrf
             <span class="text-light text-end">
                 {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}

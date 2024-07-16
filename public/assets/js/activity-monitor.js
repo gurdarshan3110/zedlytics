@@ -3,9 +3,8 @@ let logoutTimer;
 function resetLogoutTimer() {
     clearTimeout(logoutTimer);
     logoutTimer = setTimeout(function() {
-        // Perform logout or redirect to logout route
-        window.location.href = '/logout'; // Replace with your logout route
-    }, 900000); // 15 minutes in milliseconds
+        document.getElementById('logoutForm').submit();
+    }, 900000);
 }
 
 // Initialize the timer when the page is loaded or user interacts with the page
