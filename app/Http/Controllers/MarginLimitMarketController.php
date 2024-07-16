@@ -197,7 +197,7 @@ class MarginLimitMarketController extends Controller
                 return $row->id;
             })
             ->addColumn('market', function ($row) {
-                return $row->market;
+                return (($row->market=='CRTPTOCURRENCIES')?'CRYPTO':$row->market);
             })
             ->addColumn('script', function ($row) {
                 return $row->script;
@@ -212,22 +212,21 @@ class MarginLimitMarketController extends Controller
                 return $row->maximum_quantity_in_script;
             })
             ->addColumn('intraday_margin', function ($row) {
-                return $row->intraday_margin;
+                $intraday_margin = str_replace('TIMES', 'x', $row->intraday_margin);
+                return $intraday_margin;
             })
             ->addColumn('holding_maintainence_margin', function ($row) {
-                return $row->holding_maintainence_margin;
+                $holding_maintainence_margin = str_replace('TIMES', 'x', $row->holding_maintainence_margin);
+                return $holding_maintainence_margin;
             })
             ->addColumn('inventory_day_margin', function ($row) {
-                return $row->inventory_day_margin;
+                return (($row->inventory_day_margin=='NOT APPLICABLE')?'NA':$row->inventory_day_margin);
             })
             ->addColumn('total_group_limit', function ($row) {
-                return $row->total_group_limit;
+                return (($row->total_group_limit=='NOT APPLICABLE')?'NA':$row->total_group_limit);
             })
             ->addColumn('margin_calculation_time', function ($row) {
-                return $row->margin_calculation_time;
-            })
-            ->addColumn('total_group_limit', function ($row) {
-                return $row->total_group_limit;
+                return (($row->margin_calculation_time=='NOT APPLICABLE')?'NA':$row->margin_calculation_time);
             })
             ->addColumn('status', function ($row) {
                 $status = (($row->status == 1) ? 'Active' : 'Inactive');

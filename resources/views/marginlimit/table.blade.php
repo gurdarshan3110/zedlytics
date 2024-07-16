@@ -1,22 +1,22 @@
 <div class="table-responsive">
     <table class="table table-bordered table-striped align-middle" id="record-table">
         <thead>
-        <tr class="fs-9">
+        <tr class="fs-7">
             <th>SNO</th>
             <th>MARKET</th>
-            <th>SCRIPT</th>
-            <th>MINIMUM DEAL</th>
-            <th>MAXIMUM DEAL IN SINGLE ORDER</th>
-            <th>MAXIMUM QUANTITY IN SCRIPT</th>
+            <th style="width:18%">SCRIPT</th>
+            <th>MIN DEAL</th>
+            <th title="MAX DEAL IN SINGLE ORDER">MAX DEAL</th>
+            <th>MAX QTY IN SCRIPT</th>
             <th>INTRADAY MARGIN</th>
-            <th>HOLDING/MAINTAINENCE MARGIN</th>
-            <th>INVENTORY DAY MARGIN</th>
-            <th>TOTAL GROUP LIMIT</th>
-            <th>MARGIN CALCULATION TIME</th>
+            <th>HOLDING MARGIN</th>
+            <th>INVTRY MARGIN</th>
+            <th>TOT GRP LIMIT</th>
+            <th>MARGIN TIME</th>
             <th style="width:5%;">Action</th>
         </tr>
         </thead>
-        <tbody class="fs-7">
+        <tbody class="fs-6">
         
         </tbody>
     </table>
@@ -51,10 +51,10 @@
                     {data: 'action', name: 'action',className:'action'},
                     
                 ],
-                pageLength:10,
+                pageLength:1000,
                 dom: 'Blfrtip',
                 responsive: true,
-                "lengthMenu": [[10, 25, 50, 500,1000], [10, 25, 50, 500,1000]],
+                //"lengthMenu": [[1000, 2500], [1000, 2500]],
                 "scrollX": true,  // enables horizontal scrolling
                 buttons: [
                     'copyHtml5',

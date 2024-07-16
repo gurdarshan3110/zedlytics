@@ -4,7 +4,7 @@
 
 <main>
     <div class="container-fluid px-4">
-        <div class="d-flex">
+        <!-- <div class="d-flex">
             <h3 class="mt-4 w-95">
                 {{$title}}
             </h3>
@@ -21,12 +21,11 @@
         </ol>
         <div class="d-flex flex-shrink-0">
             
-            <!--end::Create app-->
-        </div>
-        <div class="card mb-4">
+        </div> -->
+        <div class="card mb-4 mt-1">
             @include('errors.flash.message')
             <div class="card-title ps-3 pt-3 text-bold">
-                Active Records
+                {{$title}}
             </div>
             <div class="card-body">
                 @include($directory.'.table')
