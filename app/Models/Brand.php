@@ -131,7 +131,7 @@ class Brand extends Model
     {
         $amount = $this->hasManyThrough(CashbookLedger::class, Bank::class)
                     ->where('cashbook_ledger.account_type', CashbookLedger::ACCOUNT_TYPE_PARTY_VAL)
-                    ->whereBetween('ledger_date', [$startDate, $endDate]);
+                    ->whereBetween('ledger_date', [$startDate, $endDate])
                     ->where('cashbook_ledger.account_code', 'like', '%PARKING%')
                     ->sum('cashbook_ledger.amount');
         return (($amount>0)?number_format((-1*$amount), 2, '.', ''):number_format(abs($amount), 2, '.', ''));
