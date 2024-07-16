@@ -18,11 +18,15 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $title = self::TITLE;
         $permissions = permissions();
+        if(Auth::user()->role=='Margin And Limits Menu'){
+            return view('dashboard.margin-limit-menu',compact('title'));
+        }
         if(in_array('employee dashboard',$permissions)){
             return redirect()->intended('/employee-dashboard');
         }
-        $title = self::TITLE;
+        
         $totalBalance = CashbookLedger::getTotalBalance();
         $todaysDeposits = CashbookLedger::getTodaysDeposits();
         $todaysWithdrawals = CashbookLedger::getTodaysWithdrawals();
