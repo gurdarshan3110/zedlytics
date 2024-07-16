@@ -126,7 +126,7 @@ class WithdrawRequestController extends Controller
         $clients = Client::where('client_code', 2)->where('status', 0)->get();
 
         foreach ($clients as $client) {
-            $response = Http::withToken($this->token)->post("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
+            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
 
             // Handle the response as needed
             if ($response->successful()) {
