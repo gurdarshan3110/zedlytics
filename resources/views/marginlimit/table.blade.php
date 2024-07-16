@@ -54,7 +54,7 @@
                 pageLength:10,
                 dom: 'Blfrtip',
                 responsive: true,
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "lengthMenu": [[10, 25, 50, 500,1000], [10, 25, 50, 500,1000]],
                 "scrollX": true,  // enables horizontal scrolling
                 buttons: [
                     'copyHtml5',
