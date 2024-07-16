@@ -1,7 +1,7 @@
 <div class="table-responsive">
-    <table class="table table-bordered table-striped w-100 align-middle" id="record-table">
+    <table class="table table-bordered table-striped align-middle" id="record-table">
         <thead>
-        <tr>
+        <tr class="fs-9">
             <th>SNO</th>
             <th>MARKET</th>
             <th>SCRIPT</th>
@@ -16,7 +16,7 @@
             <th style="width:5%;">Action</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="fs-7">
         
         </tbody>
     </table>

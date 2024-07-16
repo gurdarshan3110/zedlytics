@@ -20,7 +20,7 @@ class MarginLimitMarketController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    const TITLE = 'Margin And Limits Menu';
+    const TITLE = 'Margin And Limits';
     const URL = 'margin-limit-menu';
     const DIRECTORY = 'marginlimit';
     const FNAME = 'Margin And Limits Menu';
