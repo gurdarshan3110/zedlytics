@@ -39,6 +39,8 @@ Route::get('/fetch-open-positions', [WithdrawRequestController::class, 'fetchOpe
 
 Route::get('/fetch-save-clients', [WithdrawRequestController::class, 'fetchAndSaveClientRecords']);
 
+Route::get('/fetch-insert-clients', [WithdrawRequestController::class, 'fetchAndInsertClientRecords']);
+
 
 
 Route::get('/ledger-logs/list', [LedgerLogController::class, 'list'])->name('ledger-logs.list');

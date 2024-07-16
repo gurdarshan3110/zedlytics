@@ -30,6 +30,9 @@
                     </a>
                 </div>
             </div>
+            <div class="sb-sidenav-footer bg-secondary px-3 text-muted">
+             &copy; ZedLytics {{date('Y')}}
+            </div>
         </nav>
     </div>
     <div id="layoutSidenav_content">

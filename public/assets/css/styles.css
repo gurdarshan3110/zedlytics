@@ -3693,9 +3693,9 @@ textarea.form-control-lg {
 }
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  color: var(--bs-nav-tabs-link-active-color);
-  background-color: var(--bs-nav-tabs-link-active-bg);
-  border-color: var(--bs-nav-tabs-link-active-border-color);
+  color: #fff;/*var(--bs-nav-tabs-link-active-color);*/
+  background-color: #069a8e;/*var(--bs-nav-tabs-link-active-bg);*/
+  border-color: #069a8e;/*var(--bs-nav-tabs-link-active-border-color);*/
 }
 .nav-tabs .dropdown-menu {
   margin-top: calc(-1 * var(--bs-nav-tabs-border-width));
@@ -11475,8 +11475,16 @@ flex.justify-between.flex-1.sm\:hidden {
   display: none;
 }
 
-.table-low-heights td, .table-low-heights th {
+.table td, .table th, .table-low-heights td, .table-low-heights th {
   padding: 0.25rem !!important;
+}
+
+.table td .btn {
+    --bs-btn-padding-x: 0.3rem !important;
+    --bs-btn-padding-y: 0.150rem !important;
+}
+.tab-pane.card{
+  border-radius: 0px !important;
 }
 
 @media (max-width: 576px) {

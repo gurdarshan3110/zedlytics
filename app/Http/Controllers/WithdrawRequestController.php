@@ -117,4 +117,49 @@ class WithdrawRequestController extends Controller
             'message' => 'Failed to fetch client records'
         ], 500);
     }
+
+    public function fetchAndInsertClientRecords()
+    {
+        $this->login();
+        CronJob::create(['cron_job_name' => 'Update Client Info Job']);
+
+        $clients = Client::where('client_code', 2)->where('status', 0)->get();
+
+        foreach ($clients as $client) {
+            $response = Http::withToken($this->token)->post("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
+
+            // Handle the response as needed
+            if ($response->successful()) {
+
+                $clientData = $response->json()['data'];
+
+                // Update client information
+                $clientData['client_code'] = $clientData['accountID'];
+                $clientData['phone_no'] = $clientData['accountID'].$clientData['userID'];
+                $clientData['email'] = $clientData['userID'].'@zedlytics.com';
+                $clientData['name'] = $clientData['firstName'];
+                $clientData['country'] = $clientData['country'];
+                $clientData['status'] = 0;
+                $client = Client::updateOrCreate(
+                    ['user_id' => $clientData['userID']],
+                    $clientData
+                );
+                $clientData['type'] = Account::CLIENT_ACCOUNT;
+                $account = Account::updateOrCreate(
+                    ['account_code' => $clientData['client_code']],
+                    $clientData
+                );
+
+                $map = ClientAccount::updateOrCreate(
+                    ['account_id' => $account['id']],
+                    ['client_id'=>$client['id']]
+                );
+
+            } else {
+                // Handle API call failure
+                // Log the error or take appropriate actions
+                \Log::error("Failed to update client with user_id {$client->user_id}: " . $response->body());
+            }
+        }
+    }
 }
