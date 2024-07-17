@@ -14,7 +14,7 @@ class ClientObserver
         $original = $client->getOriginal();
 
         foreach ($changes as $field => $newValue) {
-            if (in_array($field, $client->getFillable())) {
+            if (in_array($field, $client->getFillable()) && $newValue!='') {
                 ClientLog::create([
                     'client_id' => $client->id,
                     'user_id' => Auth::id(),
