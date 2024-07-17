@@ -41,8 +41,8 @@
     {{ html()->label('Status') }}
     <?php 
     $status = '';
-    if(!empty($client) && $client['status'] != '' ){ $status = $client['status'];} else{ $status = 1; } 
+    if(!empty($client) && $client['status'] != '' ){ $status = $client['status'];} else{ $status = 0; } 
     ?>
     
-    {{ html()->select('status')->class('form-control')->options(['1'=>'Active','0'=>'Deactive']) }}
+    {{ html()->select('status')->class('form-control')->options(['0'=>'Active','1'=>'Deactive']) }}
 </div>
