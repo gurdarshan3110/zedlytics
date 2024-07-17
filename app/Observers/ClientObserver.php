@@ -21,7 +21,7 @@ class ClientObserver
                     'field_name' => $field,
                     'old_value' => $original[$field],
                     'new_value' => $newValue,
-                    'note' => $field.' '.$original[$field].' changed to '.$newValue,
+                    'note' => $field.' changed from '.$original[$field].' to '.$newValue,
                     'log_type' => 'update',
                 ]);
             }
