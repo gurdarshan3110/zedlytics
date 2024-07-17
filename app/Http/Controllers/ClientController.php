@@ -103,9 +103,10 @@ class ClientController extends Controller
     public function show($id)
     {
         $title = 'View '.self::FNAME.' Details';
-        $employee = UserClient::find($id);
-
-        //return view(self::DIRECTORY.'.show', compact(self::DIRECTORY, 'title'));
+        $client = Model::find($id);
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        return view(self::DIRECTORY.'.show', compact(self::DIRECTORY, 'title','directory','url'));
     }
 
     /**
@@ -183,70 +184,6 @@ class ClientController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
-    // public function list(Request $request)
-    // {
-    //     $input = $request->all();
-
-    //     $length = $request->input('length');
-    //     $start = $request->input('start');
-
-    //     // Calculate the current page number
-    //     $page = ($start / $length) + 1;
-
-    //     $data = Model::where('status',$input['status'])->paginate($length, ['*'], 'page', $page);
-
-
-
-    //     return DataTables::of($data)
-
-
-    //         ->addColumn('name', function ($row) {
-    //             $name = $row->name;
-
-    //             return $name;
-    //         })
-
-    //         ->addColumn('email', function ($row) {
-    //             $email = $row->email;
-
-    //             return $email;
-    //         })
-
-    //         ->addColumn('phone_no', function ($row) {
-    //             $phone_no = $row->phone_no;
-
-    //             return $phone_no;
-    //         })
-
-    //         ->addColumn('status', function ($row) {
-    //             $status = (($row->status == 1) ? 'Active' : 'Inactive');
-
-    //             return $status;
-    //         })
-    //         ->addColumn('action', function ($row) {
-    //             $msg = 'Are you sure?';
-    //             $action = '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">
-    //                 '.csrf_field().'
-    //                 '.method_field('DELETE').'
-    //                 <div class="btn-group">
-    //                 '.((in_array('edit '.self::DIRECTORY, permissions()))?'
-    //                 <a href="'.route(self::URL.'.edit', [$row]).'"
-    //                    class="btn btn-warning btn-xs">
-    //                     <i class="far fa-edit"></i>
-    //                 </a>':'').((in_array('delete '.self::DIRECTORY, permissions()))?'
-    //                 <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>':'').'
-                    
-    //             </div>
-    //             </form>';
-
-    //             return $action;
-    //         })
-    //     ->rawColumns(['action'])
-    //     ->setTotalRecords($query->total())
-    //     ->setFilteredRecords($query->total())
-    //     ->make(true);
-    // }
-
     public function list(Request $request)
     {
         $length = $request->input('length');
@@ -307,6 +244,10 @@ class ClientController extends Controller
                     '.csrf_field().'
                     '.method_field('DELETE').'
                     <div class="btn-group">
+                    <a href="'.route(self::URL.'.show', [$row]).'"
+                           class="btn btn-success btn-xs">
+                            <i class="far fa-eye"></i>
+                        </a>
                     '.(in_array('edit '.self::DIRECTORY, permissions()) ? '
                     <a href="'.route(self::URL.'.edit', [$row]).'"
                        class="btn btn-warning btn-xs">
