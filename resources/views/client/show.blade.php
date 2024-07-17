@@ -20,15 +20,15 @@
         </ul>
         <!-- Tab panes -->
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane card fade show active" id="user-details" role="tabpanel" aria-labelledby="user-details-tab">
+            <div class="tab-pane fade show active" id="user-details" role="tabpanel" aria-labelledby="user-details-tab">
                 <div class="card-body">
                     @include($directory.'.show-details')
                 </div>
             </div>
-            <div class="tab-pane card fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+            <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
                 
                 <div class="card-body">
-                    TimeLine
+                    @include($directory.'.timeline')
                 </div>
             </div>
         </div>
