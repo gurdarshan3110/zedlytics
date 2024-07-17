@@ -75,7 +75,9 @@ class Client extends Model
         return $this->belongsTo(Brand::class);
     }
 
-
-
+    public function logs()
+    {
+        return $this->hasMany(ClientLog::class)->orderBy('id', 'desc');
+    }
 
 }

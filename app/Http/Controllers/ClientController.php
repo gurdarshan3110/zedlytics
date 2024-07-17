@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Client as Model;
+use App\Models\ClientLog;
 use App\Models\Account;
 use App\Models\User;
 use DataTables;
@@ -69,7 +70,7 @@ class ClientController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:clients',
             'account_code' => 'required|unique:accounts',
-            'phone_no' => ['required', 'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/', 'unique:'.self::URL],
+            'phone_no' => 'required',
             'status' => 'required'
         ];
 
@@ -106,7 +107,7 @@ class ClientController extends Controller
         $client = Model::find($id);
         $url = self::URL;
         $directory = self::DIRECTORY;
-        return view(self::DIRECTORY.'.show', compact(self::DIRECTORY, 'title','directory','url'));
+        return view(self::DIRECTORY.'.show', compact(self::DIRECTORY, 'title','directory','url','client'));
     }
 
     /**
@@ -143,11 +144,7 @@ class ClientController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'account_code' => 'required|unique:accounts,account_code,'.$account->id.',id', // Corrected to use the correct column name
-            'phone_no' => [
-                'required',
-                'regex:/^(\+\d{1,3}[- ]?)?\d{10,}$/',
-                'unique:clients,phone_no,'.$client->id.',id' // Ensure this uses the correct table and column
-            ],
+            'phone_no' => 'required',
             'status' => 'required',
         ];
 
@@ -268,6 +265,22 @@ class ClientController extends Controller
             ->make(true);
     }
 
+    public function addNotes(Request $request, Model $client)
+    {
+        //dd($request);
+        $request->validate([
+            'note' => 'required|string',
+        ]);
+
+        ClientLog::create([
+            'client_id' => $request->client_id,
+            'user_id' => Auth::id(),
+            'note' => $request->note,
+            'log_type' => 'note',
+        ]);
+
+        return redirect()->back()->with('success', 'Note added successfully.');
+    }
 
     function generateRandomString($name) {
         // Convert name to uppercase

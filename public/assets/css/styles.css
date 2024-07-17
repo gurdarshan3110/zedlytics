@@ -11488,8 +11488,10 @@ flex.justify-between.flex-1.sm\:hidden {
 }
 
 .card-fixed-height {
-    height: 550px; /* Adjust the height as needed */
+    height: 525px; /* Adjust the height as needed */
     overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .card-value {
@@ -11513,6 +11515,31 @@ flex.justify-between.flex-1.sm\:hidden {
 .font-italic {
   font-style: italic;
 }
+
+.h-5{
+  height: 5% !important;
+}
+
+.input-chat-box, .input-group .input-chat-box.form-control:hover, .input-group .input-chat-box.form-control:focus {
+    border: none !important;
+    outline: none !important;
+    background-color: transparent;
+    box-shadow: none !important;
+    resize: none;
+    height: 100%;
+
+}
+
+.w-85{
+  width:85%;
+}
+
+.chat-input-area{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+}
+
 
 @media (max-width: 576px) {
   .dataTables_length{

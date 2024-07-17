@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::resource('roles', RoleController::class);
 
     Route::get('/clients/list', [ClientController::class, 'list'])->name('clients.list');
+    Route::post('/clients/notes', [ClientController::class, 'addNotes'])->name('clients.notes');
     Route::resource('clients', ClientController::class);
 
     Route::get('/banks/list', [BankController::class, 'list'])->name('banks.list');
