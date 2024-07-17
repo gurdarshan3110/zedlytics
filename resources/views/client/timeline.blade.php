@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <div class="chat-box border rounded p-3 card-fixed-height">
+    <div class="chat-box border rounded p-3 chatarea-fixed-height">
         <!-- Display existing notes -->
         @foreach($client->logs as $log)
             <div class="message mb-3 {{ $log->user_id == Auth::id() ? 'text-end' : '' }}">

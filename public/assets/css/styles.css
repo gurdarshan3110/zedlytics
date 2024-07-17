@@ -11488,7 +11488,13 @@ flex.justify-between.flex-1.sm\:hidden {
 }
 
 .card-fixed-height {
-    height: 525px; /* Adjust the height as needed */
+    height: 500px; /* Adjust the height as needed */
+    overflow-y: auto;
+    display: flex;
+}
+
+.chatarea-fixed-height {
+    height: 500px; /* Adjust the height as needed */
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
