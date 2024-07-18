@@ -38,7 +38,7 @@ class TransactionLogJob implements ShouldQueue
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
 
             $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            $response = Http::timeout(180)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2022-07-01 00:00:00&toDate=2022-07-31 23:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2024-07-17 00:00:00&toDate=2024-07-17 12:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
             // Handle the response as needed
             if ($response->successful()) {

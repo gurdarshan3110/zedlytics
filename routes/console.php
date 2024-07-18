@@ -12,7 +12,8 @@ use App\Jobs\CreateNewClientsJob;
 // })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::job(new FetchOpenPositionsJob, 'default')->everyFourMinutes();
-Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
-Schedule::job(new TransactionLogJob, 'default')->everyTwoMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
+Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
+Schedule::job(new TransactionLogJob, 'default')->everyTenMinutes();
+
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
