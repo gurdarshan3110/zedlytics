@@ -71,9 +71,7 @@ class Client extends Model
 
     public function rmanager()
     {
-        return $this->belongsTo(User::class)->withDefault([
-            'name' => 'NA',
-        ]);
+        return $this->belongsTo(User::class,'rm');
     }
 
     public function brand()
