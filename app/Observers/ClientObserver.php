@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Client;
 use App\Models\ClientLog;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Auth;
 
 class ClientObserver
@@ -15,17 +16,19 @@ class ClientObserver
 
         foreach ($changes as $field => $newValue) {
             if (in_array($field, $client->getFillable()) && $newValue!='') {
+                $fieldName = $field;
+                $new_Value = $newValue;
                 if($field=='brand_id'){
-                    $field= 'Brand';
-                    $newValue = Brand::find($newValue)->first()->name;
+                    $fieldName= 'Brand';
+                    $new_Value = Brand::where('id',$newValue)->first()->name;
                 }
                 ClientLog::create([
                     'client_id' => $client->id,
                     'user_id' => Auth::id(),
-                    'field_name' => $field,
+                    'field_name' => $fieldName,
                     'old_value' => $original[$field],
                     'new_value' => $newValue,
-                    'note' => $field.' changed from '.(($original[$field]=='')?'-(blank)':$original[$field]).' to '.$newValue->brand->name,
+                    'note' => $fieldName.' changed from '.(($original[$field]=='')?'-(blank)':$original[$field]).' to '.$new_Value,
                     'log_type' => 'update',
                 ]);
             }
