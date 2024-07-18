@@ -15,6 +15,10 @@ class ClientObserver
 
         foreach ($changes as $field => $newValue) {
             if (in_array($field, $client->getFillable()) && $newValue!='') {
+                if($field=='brand_id'){
+                    $field= 'Brand';
+                    $newValue = Brand::find($newValue)->first()->name;
+                }
                 ClientLog::create([
                     'client_id' => $client->id,
                     'user_id' => Auth::id(),
