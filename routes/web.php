@@ -42,6 +42,8 @@ Route::get('/fetch-save-clients', [WithdrawRequestController::class, 'fetchAndSa
 
 Route::get('/fetch-insert-clients', [WithdrawRequestController::class, 'fetchAndInsertClientRecords']);
 
+Route::get('/run-job', [WithdrawRequestController::class, 'fetchNewClients']);
+
 
 
 Route::get('/ledger-logs/list', [LedgerLogController::class, 'list'])->name('ledger-logs.list');

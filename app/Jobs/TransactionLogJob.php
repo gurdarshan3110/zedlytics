@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use App\Models\TxnLog;
+use App\Models\TrxLog;
 use App\Models\CronJob;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -25,6 +25,7 @@ class TransactionLogJob implements ShouldQueue
     public function handle()
     {
         try {
+            set_time_limit(15000);
             $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
                 'password' => env('BESTBULL_PASSWORD'),
@@ -37,7 +38,7 @@ class TransactionLogJob implements ShouldQueue
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
 
             $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2022-07-01 00:00:00&toDate=2021-07-18 23:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
             // Handle the response as needed
             if ($response->successful()) {

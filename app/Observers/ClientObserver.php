@@ -36,7 +36,7 @@ class ClientObserver
                 }
                 ClientLog::create([
                     'client_id' => $client->id,
-                    'user_id' => Auth::id(),
+                    'user_id' => Auth::id() ?: 1,
                     'field_name' => $fieldName,
                     'old_value' => $original[$field],
                     'new_value' => $newValue,

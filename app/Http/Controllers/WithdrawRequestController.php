@@ -12,6 +12,7 @@ use App\Models\Client;
 use App\Models\ClientAccount;
 use App\Models\Account;
 use App\Jobs\FetchOpenPositionsJob;
+use App\Jobs\TransactionLogJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -67,6 +68,13 @@ class WithdrawRequestController extends Controller
         $this->login();
         FetchOpenPositionsJob::dispatch($this->token, $this->clientTreeUserIdNode);
         return response()->json(['message' => 'Open positions fetching job dispatched successfully.']);
+    }
+
+    public function fetchNewClients()
+    {
+        $this->login();
+        TransactionLogJob::dispatch();
+        return response()->json(['message' => 'New Clients job dispatched successfully.']);
     }
 
     public function fetchAndSaveClientRecords()
