@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label>Relationship Manager:</label>
-                    <div class="card-value">{{ $client->rmanager->name }}</div>
+                    <div class="card-value">{{ (($client->rm==0 || $client->rm==null || $client->rm=='')?'NA':$client->rmanager->name) }}</div>
                 </div>
                 <div class="form-group">
                     <label>Status:</label>
