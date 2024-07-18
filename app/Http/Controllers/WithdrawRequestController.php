@@ -12,7 +12,7 @@ use App\Models\Client;
 use App\Models\ClientAccount;
 use App\Models\Account;
 use App\Jobs\FetchOpenPositionsJob;
-use App\Jobs\TransactionLogJob;
+use App\Jobs\CreateNewClientsJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -73,7 +73,7 @@ class WithdrawRequestController extends Controller
     public function fetchNewClients()
     {
         $this->login();
-        TransactionLogJob::dispatch();
+        CreateNewClientsJob::dispatch();
         return response()->json(['message' => 'New Clients job dispatched successfully.']);
     }
 
