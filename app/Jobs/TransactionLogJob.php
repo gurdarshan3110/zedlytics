@@ -25,7 +25,7 @@ class TransactionLogJob implements ShouldQueue
     public function handle()
     {
         try {
-            set_time_limit(15000);
+            set_time_limit(900);
             $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
                 'password' => env('BESTBULL_PASSWORD'),
@@ -45,7 +45,7 @@ class TransactionLogJob implements ShouldQueue
 
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
-                    //Log::info($clientData);
+                    Log::info($clientData);
                     $trxLog = TrxLog::updateOrCreate(
                         ['ark_id' => $clientData['id']],
                         $clientData
