@@ -36,7 +36,7 @@ class TransactionLogJob implements ShouldQueue
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
 
             $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            CronJob::create(['cron_job_name' => "https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById="]);
+            CronJob::create(['cron_job_name' => $currentDate]);
             $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
             // Handle the response as needed
