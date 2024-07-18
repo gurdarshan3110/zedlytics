@@ -35,7 +35,7 @@ class CreateNewClientsJob implements ShouldQueue
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
             // Login to the API once
-            CronJob::create(['cron_job_name' => 'Update Transaction Log']);
+            
 
             $startDate = Carbon::now()->subMinutes(15);
             $endDate = Carbon::now()->endOfDay()->toDateTimeString();
@@ -61,7 +61,7 @@ class CreateNewClientsJob implements ShouldQueue
                     ['account_id' => $account['id']],
                     ['client_id'=>$client['id']]
                 );
-
+                CronJob::create(['cron_job_name' => 'New Clients API']);
             } else {
                 // Handle API call failure
                 // Log the error or take appropriate actions

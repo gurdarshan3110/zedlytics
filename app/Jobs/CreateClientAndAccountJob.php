@@ -36,8 +36,6 @@ class CreateClientAndAccountJob implements ShouldQueue
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
             // Login to the API once
-            CronJob::create(['cron_job_name' => 'Update Client Info Job']);
-
             $clients = Client::where('client_code', 2)->where('status', 0)->get();
 
             foreach ($clients as $client) {
@@ -69,7 +67,7 @@ class CreateClientAndAccountJob implements ShouldQueue
                         ['account_id' => $account['id']],
                         ['client_id'=>$client['id']]
                     );
-
+                    CronJob::create(['cron_job_name' => 'Update Clients API']);
                 } else {
                     // Handle API call failure
                     // Log the error or take appropriate actions

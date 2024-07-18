@@ -34,11 +34,10 @@ class TransactionLogJob implements ShouldQueue
             $data = $response->json();
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
-            // Login to the API once
-            CronJob::create(['cron_job_name' => 'Update Transaction Log']);
 
             $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/20597/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            CronJob::create(['cron_job_name' => "https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById="]);
+            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
             // Handle the response as needed
             if ($response->successful()) {
@@ -48,6 +47,8 @@ class TransactionLogJob implements ShouldQueue
                     ['id' => $clientData['id']],
                     $clientData
                 );
+
+                CronJob::create(['cron_job_name' => 'Transaction Log API']);
 
             } else {
                 // Handle API call failure
