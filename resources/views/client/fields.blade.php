@@ -52,6 +52,36 @@
 </div>
 
 <div class="form-group col-sm-6">
+    {{ html()->label('City') }}
+    {{ html()->text('city')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('District') }}
+    {{ html()->text('district')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('State') }}
+    {{ html()->text('state')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Prefered Lanaguage 1') }}
+    {{ html()->text('first_language')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Prefered Lanaguage 2') }}
+    {{ html()->text('second_language')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
+    {{ html()->label('Prefered Lanaguage 3') }}
+    {{ html()->text('third_language')->class('form-control') }}
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Status') }}
     <?php 
     $status = '';

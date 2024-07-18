@@ -50,6 +50,12 @@ class Client extends Model
         'isDemo',
         'allowMultiSession',
         'termsAccepted',
+        'city',
+        'district',
+        'state',
+        'first_language',
+        'second_language',
+        'third_language',
         'liquidated',
         'status',
     ];

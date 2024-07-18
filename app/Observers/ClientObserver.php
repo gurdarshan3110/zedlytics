@@ -21,6 +21,18 @@ class ClientObserver
                 if($field=='brand_id'){
                     $fieldName= 'Brand';
                     $new_Value = Brand::where('id',$newValue)->first()->name;
+                }else if($field=='city'){
+                    $fieldName= 'City';
+                }else if($field=='district'){
+                    $fieldName= 'District';
+                }else if($field=='state'){
+                    $fieldName= 'State';
+                }else if($field=='first_language'){
+                    $fieldName= 'Prefered Language 1';
+                }else if($field=='second_language'){
+                    $fieldName= 'Prefered Language 2';
+                }else if($field=='third_language'){
+                    $fieldName= 'Prefered Language 3';
                 }
                 ClientLog::create([
                     'client_id' => $client->id,
