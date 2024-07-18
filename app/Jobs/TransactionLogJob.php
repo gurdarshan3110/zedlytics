@@ -38,18 +38,19 @@ class TransactionLogJob implements ShouldQueue
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
 
             $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2022-07-01 00:00:00&toDate=2021-07-18 23:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $response = Http::timeout(180)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2022-07-01 00:00:00&toDate=2022-12-31 23:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
             // Handle the response as needed
             if ($response->successful()) {
 
-                $clientData = $response->json()['data'];
-                $trxLog = TrxLog::updateOrCreate(
-                    ['id' => $clientData['id']],
-                    $clientData
-                );
-
-                
+                $clientDatas = $response->json()['data'];
+                foreach ($clientDatas as $key => $clientData) {
+                    //Log::info($clientData);
+                    $trxLog = TrxLog::updateOrCreate(
+                        ['ark_id' => $clientData['id']],
+                        $clientData
+                    );
+                } 
 
             } else {
                 // Handle API call failure
