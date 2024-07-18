@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->string('city');
-            $table->string('district');
-            $table->string('state');
-            $table->string('first_language');
-            $table->string('second_language');
-            $table->string('third_language');
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->string('state')->nullable();
+            $table->string('first_language')->nullable();
+            $table->string('second_language')->nullable();
+            $table->string('third_language')->nullable();
         });
     }
 
