@@ -37,25 +37,22 @@ class TransactionLogJob implements ShouldQueue
             // Login to the API once
             CronJob::create(['cron_job_name' => 'Update Transaction Log']);
 
-            $clients = Client::where('client_code', 2)->where('status', 0)->get();
             $currentDate = now()->endOfDay()->toDateString();
-            foreach ($clients as $client) {
-                $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/20597/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/20597/transactionLogs?fromDate=2020-01-01 00:00:00&toDate=".$currentDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
 
-                // Handle the response as needed
-                if ($response->successful()) {
+            // Handle the response as needed
+            if ($response->successful()) {
 
-                    $clientData = $response->json()['data'];
-                    $trxLog = TrxLog::updateOrCreate(
-                        ['id' => $clientData['id']],
-                        $clientData
-                    );
+                $clientData = $response->json()['data'];
+                $trxLog = TrxLog::updateOrCreate(
+                    ['id' => $clientData['id']],
+                    $clientData
+                );
 
-                } else {
-                    // Handle API call failure
-                    // Log the error or take appropriate actions
-                    \Log::error("Failed to update client with user_id {$client->user_id}: " . $response->body());
-                }
+            } else {
+                // Handle API call failure
+                // Log the error or take appropriate actions
+                \Log::error("Failed to update client with user_id {$client->user_id}: " . $response->body());
             }
             
         } catch (\Exception $e) {
