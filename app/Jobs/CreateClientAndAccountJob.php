@@ -61,7 +61,7 @@ class CreateClientAndAccountJob implements ShouldQueue
                     );
                     $clientData['type'] = Account::CLIENT_ACCOUNT;
                     $account = Account::updateOrCreate(
-                        ['account_code' => $clientData['client_code']],
+                        ['account_code' => $client['client_code']],
                         $clientData
                     );
 

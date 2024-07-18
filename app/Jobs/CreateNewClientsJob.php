@@ -45,9 +45,21 @@ class CreateNewClientsJob implements ShouldQueue
             if ($response->successful()) {
 
                 $clientData = $response->json()['data'];
-                $trxLog = Client::updateOrCreate(
+                $client = Client::updateOrCreate(
                     ['user_id' => $clientData['userID']],
                     $clientData
+                );
+
+                $clientData['status'] = 0;
+                $clientData['type'] = Account::CLIENT_ACCOUNT;
+                $account = Account::updateOrCreate(
+                    ['account_code' => $client['client_code']],
+                    $clientData
+                );
+
+                $map = ClientAccount::updateOrCreate(
+                    ['account_id' => $account['id']],
+                    ['client_id'=>$client['id']]
                 );
 
             } else {

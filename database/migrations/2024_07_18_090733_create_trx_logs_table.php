@@ -34,7 +34,7 @@ class CreateTrxLogsTable extends Migration
             $table->decimal('closeRefCurrencyPrice', 15, 2);
             $table->string('ipAddress', 255);
             $table->timestamp('openPositionCreatedDate');
-            $table->text('comment')->nullable();
+            $table->longText('comment')->nullable();
             $table->unsignedBigInteger('createdById');
             $table->timestamp('createdDate');
             $table->decimal('openPolicyCommissionValue', 15, 2);
