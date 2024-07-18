@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Client as Model;
+use App\Models\Brand;
 use App\Models\ClientLog;
 use App\Models\Account;
 use App\Models\User;
@@ -50,11 +51,13 @@ class ClientController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $role = 'relationship manager';
+        $brands = Brand::where('status',1)->pluck('name','id')
+            ->prepend('Select Brand', '');
         $rms = User::where('status', 0)
            ->whereRaw('LOWER(role) = ?', [strtolower($role)])
            ->pluck('name', 'id')
            ->prepend('Select Relationship Manager', '');
-        return view(self::DIRECTORY.'.create', compact('title','url','directory','rms'));
+        return view(self::DIRECTORY.'.create', compact('title','url','directory','rms','brands'));
     }
 
     /**
@@ -122,11 +125,13 @@ class ClientController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $role = 'relationship manager';
+        $brands = Brand::where('status',1)->pluck('name','id')
+            ->prepend('Select Brand', '');
         $rms = User::where('status', 0)
            ->whereRaw('LOWER(role) = ?', [strtolower($role)])
            ->pluck('name', 'id')
            ->prepend('Select Relationship Manager', '');
-        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','rms'));
+        return view(self::DIRECTORY.'.edit', compact(self::DIRECTORY, 'title','directory','url','rms','brands'));
     }
 
     /**

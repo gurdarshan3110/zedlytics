@@ -1,4 +1,18 @@
 <div class="form-group col-sm-6">
+    {{ html()->label('Brand') }}
+    <?php 
+    $brand = '';
+    if(!empty($client) && $client['brand_id'] != '' ){ $brand = $client['brand_id'];} else{ $brand = ''; } 
+    ?>
+    
+    @if ($brand != '')
+        {{ html()->select('brand_id', $brands)->class('form-control')->attributes(['disabled' => 'disabled']) }}
+    @else
+        {{ html()->select('brand_id', $brands)->class('form-control') }}
+    @endif
+</div>
+
+<div class="form-group col-sm-6">
     {{ html()->label('Client Code') }}
     @if(isset($client) && !empty($client))
         {{ html()->text('account_code')->class('form-control')->attribute('readonly', 'readonly')->value($client->client_code) }}
