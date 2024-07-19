@@ -30,6 +30,15 @@
             <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" id="logoutForm" action="{{route('logout')}}">
                         @csrf
             <span class="text-light text-end">
+                <a class="btn btn-primary" href="{{route('charts.index')}}">Charts</a>
+            </span>
+            <span class="text-light text-end me-4">
+                <a class="btn btn-primary" href="{{route('financial-calendar.index')}}">Financial Calendar</a>
+            </span>
+            <span class="text-light text-end">
+                {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}
+            </span>
+            <span class="text-light text-end">
                 {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}
             </span>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" onclick = "return confirm('Are you sure?')" type="submit">
