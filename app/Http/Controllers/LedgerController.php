@@ -186,6 +186,8 @@ class LedgerController extends Controller
         //dd($account);
         $account_type = (($account==null)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::CLIENT_ACCOUNT)?Model::ACCOUNT_TYPE_CLIENT_VAL:(($account->type==Account::BANK_ACCOUNT)?Model::ACCOUNT_TYPE_BANK_VAL:Model::ACCOUNT_TYPE_PARTY_VAL)));
 
+        $original_account_type = $account_type;
+
         $ledgerData = [
             'account_code' => $data[0],
             'account_type' => $account_type,

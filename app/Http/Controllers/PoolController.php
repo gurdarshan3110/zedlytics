@@ -157,7 +157,7 @@ class PoolController extends Controller
             $html .= '';
         } else {
             foreach ($rows as $row) {
-                $account_type = (($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'));
+                $account_type = (($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL && $row->original_account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL && $row->original_account_type==Model::ACCOUNT_TYPE_PARTY_VAL)?'pool-row':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row')));
                 $html .= '<tr class="'.$account_type.'">
                             <td class="excel-cell" contenteditable="true">'.$row->account_code.'</td>
                             <td class="excel-cell" contenteditable="true">'.Carbon::parse($row->ledger_date)->format('d/m/Y').'</td>
@@ -210,6 +210,8 @@ class PoolController extends Controller
         //dd($ledgerData);
         try {
             if($ledgerData['amount']!=null){
+                $entry = CashbookLedger::where('bank_id', $data[10])->where('transaction_id',$data[9])->first();
+                $ledgerData['remarks'] = "Pool entry from ".Carbon::parse($entry['ledger_date'])->format('d/m/Y h:i:s')." transfered to Account ".$data[0];
                 Model::updateOrCreate(
                     ['bank_id' => $data[10], 'transaction_id' => $data[9]],
                     $ledgerData

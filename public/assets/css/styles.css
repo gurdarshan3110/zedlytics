@@ -11438,6 +11438,11 @@ body {
   border-color: #FFEBCD;
 }
 
+.pool-row{
+  background-color: #7FFF00;
+  border-color: #7FFF00;
+}
+
 .bg-pool{
   background-color: #FFEBCD;
 }

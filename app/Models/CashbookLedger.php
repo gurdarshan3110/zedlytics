@@ -32,6 +32,7 @@ class CashbookLedger extends Model
     protected $fillable = [
         'account_code',
         'account_type',
+        'original_account_type',
         'bank_id',
         'utr_no',
         'transaction_id',
