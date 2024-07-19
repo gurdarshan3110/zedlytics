@@ -10,7 +10,7 @@ use App\Jobs\CreateNewClientsJob;
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());
 // })->purpose('Display an inspiring quote')->hourly();
-
+Schedule::job(new TransactionLogsJob, 'default')->everyTwoSeconds();
 Schedule::job(new FetchOpenPositionsJob, 'default')->everyFourMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();

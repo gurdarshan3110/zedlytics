@@ -15,7 +15,6 @@ class CreateTrxLogsTable extends Migration
     {
         Schema::create('trx_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('ark_id')->nullable();
             $table->unsignedBigInteger('ticketOrderId')->nullable();
             $table->unsignedBigInteger('userId')->nullable();
             $table->unsignedBigInteger('accountId')->nullable();

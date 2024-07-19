@@ -36,26 +36,23 @@ class TransactionLogsJob implements ShouldQueue
             CronJob::create(['cron_job_name' => 'Transaction Log API']);
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
+            $fromDate = Carbon::now()->subSeconds(5);
+            $toDate = Carbon::now()->toDateTimeString();
+            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            if ($response->successful()) {
+                $clientDatas = $response->json()['data'];
+                foreach ($clientDatas as $key => $clientData) {
+                    $trxLog = TrxLog::updateOrCreate(
+                        ['ticketOrderId' => $clientData['ticketOrderId']],
+                        $clientData
+                    );
+                } 
 
-            $currentDate = Carbon::now()->endOfDay()->toDateTimeString();
-            Log::info("https://bestbullapi.arktrader.io/api/apigatewayadmin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2024-07-18%2000:00:00&toDate=2024-07-18%2010:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
-            // $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=2024-07-17 00:00:00&toDate=2024-07-17 02:59:59&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
-            // if ($response->successful()) {
-
-            //     $clientDatas = $response->json()['data'];
-            //     foreach ($clientDatas as $key => $clientData) {
-            //         Log::info($clientData);
-            //         $trxLog = TrxLog::updateOrCreate(
-            //             ['ark_id' => $clientData['id']],
-            //             $clientData
-            //         );
-            //     } 
-
-            // } else {
-            //     // Handle API call failure
-            //     // Log the error or take appropriate actions
-            //     \Log::error("Failed to update transaction log: " . $response->body());
-            // }
+            } else {
+                // Handle API call failure
+                // Log the error or take appropriate actions
+                \Log::error("Failed to update transaction log: " . $response->body());
+            }
             
         } catch (\Exception $e) {
             // Handle any exceptions
