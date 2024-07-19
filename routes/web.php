@@ -109,6 +109,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::resource('transactions', TransactionLogController::class);
 
     Route::post('/generate-excel-report', [ReportController::class, 'generateExcelReport']);
+    Route::get('/financial-report', [ReportController::class, 'findex'])->name('financial-report.index');
     Route::resource('report', ReportController::class);
 
     Route::get('/aggregate/list', [AggregateController::class, 'list'])->name('aggregate.list');

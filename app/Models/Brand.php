@@ -82,6 +82,25 @@ class Brand extends Model
         return ['withdraw' => $withdraw, 'count' => $count];
     }
 
+    public function poolBetween($startDate,$endDate)
+    {
+        
+        $query = CashbookLedger::whereHas('bank', function ($query) {
+                            $query->where('brand_id', $this->id);
+                        })
+                        ->whereHas('party', function ($query) {
+                            $query->where('type', Party::POOL_TYPE_ZERO);
+                        })
+                        ->where('type', CashbookLedger::LEDGER_TYPE_CREDIT_VAL)
+                        ->where('account_type', CashbookLedger::ACCOUNT_TYPE_PARTY_VAL)
+                        ->whereBetween('ledger_date', [$startDate, $endDate]);
+
+        $pool = number_format(abs($query->sum('amount')), 2, '.', '');
+        $count = $query->count();
+
+        return ['pool' => $pool, 'count' => $count];
+    }
+
     public function withdrawalsBetween($startDate,$endDate)
     {
         $query = $this->hasManyThrough(CashbookLedger::class, Bank::class)

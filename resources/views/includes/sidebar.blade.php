@@ -11,7 +11,8 @@
                     ?>
                     @foreach ($modules as $i=> $module)
                         @php
-                            $permissionKey = (($i==0)?'dashboard':'view ' . $module->url);
+                            $moduleurl = str_replace('-',' ',$module->url);
+                            $permissionKey = (($i==0)?'dashboard':'view ' . $moduleurl);
                         @endphp
                         @if (in_array($permissionKey, $permissions))
                             <a class="nav-link {{ request()->is($module->url . '*') ? 'active' : '' }}" href="{{ route($module->url.'.index') }}">
