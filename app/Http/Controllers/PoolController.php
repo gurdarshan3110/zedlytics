@@ -54,7 +54,7 @@ class PoolController extends Controller
         $account = Account::findOrFail($id);
         $bankId = $account->bankAccounts->first()->bank_id;
         $today = Carbon::today()->toDateString();
-        $ledger = Model::whereDate('ledger_date', $today)->where('bank_id',$bankId)->orderBy('id','ASC')->get();
+        $ledger = Model::whereDate('ledger_date', $today)->where('bank_id',$bankId)->where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)->orderBy('id','ASC')->get();
         $accounts = Account::where('type',Account::BANK_ACCOUNT)->get();
         return view(self::DIRECTORY.'.create', compact('title','url','directory','bankId','ledger','accounts'));
     }
