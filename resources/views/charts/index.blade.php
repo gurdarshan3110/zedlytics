@@ -14,7 +14,7 @@
             
             <!--end::Create app-->
         </div>
-        <div class="card mb-4" style="height:520px;">
+        <div class="card mb-4" style="height:550px;">
             <div class="card-body">
                     <div class="h-100">                        <div class="tradingview-widget-container" style="height:100%;width:100%">
                           <div class="tradingview-widget-container__widget"></div>
