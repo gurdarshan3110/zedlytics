@@ -39,8 +39,8 @@ class CreateNewClientsJob implements ShouldQueue
             // Login to the API once
             
 
-            //$startDate = Carbon::now()->subMinutes(10);
-            $startDate = '2024-07-18 00:00:00';
+            $startDate = Carbon::now()->subMinutes(10);
+            //$startDate = '2024-07-18 00:00:00';
             $endDate = Carbon::now()->endOfDay()->toDateTimeString();
             $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/report/users/details/".$this->clientTreeUserIdNode."?fromDate=".$startDate."&toDate=".$endDate);
 
