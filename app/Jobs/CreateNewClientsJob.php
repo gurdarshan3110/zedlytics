@@ -50,6 +50,7 @@ class CreateNewClientsJob implements ShouldQueue
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
                     $clientData['client_code'] = $clientData['accountID'];
+                    $clientData['user_id'] = $clientData['userID'];
                     $clientData['name'] = $clientData['firstName'];
                     $clientData['phone_no'] = $clientData['accountID'].$clientData['userID'];
                     $clientData['email'] = $clientData['userID'].'@zedlytics.com';
