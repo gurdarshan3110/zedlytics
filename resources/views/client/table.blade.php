@@ -9,7 +9,7 @@
             <th>Email</th>
             <th>Phone No</th>
             <th>RM</th>
-            <th  style="width:15%;">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +28,16 @@
         var minDate, maxDate;
         
         var table = $('#record-table').DataTable({
+            "columnDefs": [
+                { "width": "7%", "targets": 0 },
+                { "width": "10%", "targets": 1 },
+                { "width": "7%", "targets": 2 },
+                { "width": "20%", "targets": 3 },
+                { "width": "20%", "targets": 4 },
+                { "width": "7%", "targets": 5 },
+                { "width": "19%", "targets": 6 },
+                { "width": "10%", "targets": 7 },
+            ],
             processing: true,
             serverSide: true,
             ajax: {

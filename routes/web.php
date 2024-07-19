@@ -14,6 +14,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AggregateController;
 use App\Http\Controllers\PoolController;
+use App\Http\Controllers\TransactionLogController;
 use App\Http\Controllers\MarginLimitMarketController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -103,6 +104,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     });
     Route::get('/timeline/list', [ActivityLogController::class, 'list'])->name('timeline.list');
     Route::resource('timeline', ActivityLogController::class);
+
+    Route::get('/transactions/list', [TransactionLogController::class, 'list'])->name('transactions.list');
+    Route::resource('transactions', TransactionLogController::class);
 
     Route::post('/generate-excel-report', [ReportController::class, 'generateExcelReport']);
     Route::resource('report', ReportController::class);

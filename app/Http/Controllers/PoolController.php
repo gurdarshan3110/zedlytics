@@ -144,10 +144,10 @@ class PoolController extends Controller
 
     public function fetchdata(Request $request,$date,$bank_id){
         //$rows = Model::whereDate('ledger_date', $date)->where('bank_id',$bank_id)->get();
-        $rows = Model::where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
-                      ->whereHas('party', function ($query) {
+        $rows = Model::whereHas('party', function ($query) {
                           $query->where('type', Party::POOL_TYPE_ZERO);
                       })
+                      ->where('account_type', Model::ACCOUNT_TYPE_PARTY_VAL)
                       ->whereDate('ledger_date', $date)
                       ->where('bank_id',$bank_id)
                       ->get();

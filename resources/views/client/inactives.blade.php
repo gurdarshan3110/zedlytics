@@ -9,7 +9,7 @@
             <th>Email</th>
             <th>Phone No</th>
             <th>RM</th>
-            <th  style="width:15%;">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -46,6 +46,16 @@
                 { data: 'rm', name: 'rm' },
                 { data: 'action', name: 'action', className: 'action', orderable: false, searchable: false },
             ],
+            "columnDefs": [
+                { "width": "7%", "targets": 0 },
+                { "width": "10%", "targets": 1 },
+                { "width": "7%", "targets": 2 },
+                { "width": "20%", "targets": 3 },
+                { "width": "20%", "targets": 4 },
+                { "width": "7%", "targets": 5 },
+                { "width": "19%", "targets": 6 },
+                { "width": "10%", "targets": 7 },
+            ],
             pageLength: 10,
             dom: 'Blfrtip',
             responsive: true,
@@ -79,5 +89,13 @@
                 var max=$('#max').val();
                 table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
             });
+        function autoAdjustColumns(table) {
+            var container = table.table().container();
+            var resizeObserver = new ResizeObserver(function () {
+                table.columns.adjust();
+            });
+            resizeObserver.observe(container);
+        }
+        autoAdjustColumns(table);
     </script>
 @endpush
