@@ -24,6 +24,7 @@ use App\Http\Middleware\CheckMacAddress;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\WithdrawRequestController;
 use App\Http\Controllers\LedgerLogController;
+use App\Http\Controllers\ChartsController;
 
 
 
@@ -117,6 +118,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::get('/margin-limit-menu/list', [MarginLimitMarketController::class, 'list'])->name('margin-limit-menu.list');
     Route::resource('margin-limit-menu', MarginLimitMarketController::class);
+
+    Route::get('/charts', [ChartsController::class, 'index'])->name('charts.index');
+    Route::get('/financial-calendar', [ChartsController::class, 'findex'])->name('financial-calendar.index');
 
     
     Route::resource('two-factor',TwoFactorController::class);
