@@ -90,17 +90,17 @@ class FetchOpenPositionsJob implements ShouldQueue
                     ]
                 );
             }
-            $client = Client::where('user_id',$item['userID'])->first();
-            if(empty($client) || $client==null){
-                $client = Client::create([
-                    'client_code' => 2,
-                    'user_id' => $item['userID'],
-                    'name' => $item['userID'],
-                    'phone_no' => $item['userID'].$item['userID'] ,
-                    'email' => $item['userID'] . '@zedlytics.com',
-                    'status' => 0,
-                ]);
-            }
+            // $client = Client::where('user_id',$item['userID'])->first();
+            // if(empty($client) || $client==null){
+            //     $client = Client::create([
+            //         'client_code' => 2,
+            //         'user_id' => $item['userID'],
+            //         'name' => $item['userID'],
+            //         'phone_no' => $item['userID'].$item['userID'] ,
+            //         'email' => $item['userID'] . '@zedlytics.com',
+            //         'status' => 0,
+            //     ]);
+            // }
             
         }
     }

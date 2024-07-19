@@ -50,7 +50,7 @@ class CreateNewClientsJob implements ShouldQueue
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
                     $client = Client::where('user_id',$clientData['userID'])->first();
-                    if(empty($client)){
+                    if(empty($client) || $client==null){
                         $clientData['client_code'] = $clientData['accountID'];
                         $clientData['user_id'] = $clientData['userID'];
                         $clientData['name'] = $clientData['firstName'];
