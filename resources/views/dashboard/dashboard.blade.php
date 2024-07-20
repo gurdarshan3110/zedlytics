@@ -16,7 +16,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex">
             <h3 class="mt-4 w-95">
-                {{$title}} @if(Auth::user()->user_type==\App\Models\User::USER_SUPER_ADMIN): Balance {{$totalBalance}}@endif
+                {{$title}} @if(Auth::user()->role=='Accounts Manager'): Balance {{$totalBalance}}@endif
             </h3>
         </div>
         
@@ -130,8 +130,8 @@
                                         </div>
                                         @push('jsscript')
                                         <script>
-                                            var todaysDeposits = @json($brand->todaysDeposits()); 
-                                            var todaysWithdrawals = @json($brand->todaysWithdrawals()); 
+                                            var todaysDeposits = @json($brand->todaysDeposits()['deposit']); 
+                                            var todaysWithdrawals = @json($brand->todaysWithdrawals()['withdraw']); 
                                             var difference = todaysDeposits - todaysWithdrawals;
                                             var id = {{$brand->id}};
                                             difference = difference.toFixed(2);
@@ -235,8 +235,8 @@
                                         </div>
                                         @push('jsscript')
                                         <script>
-                                            var todaysDeposits = @json($deposits); 
-                                            var todaysWithdrawals = @json($withdrawals); 
+                                            var todaysDeposits = @json($deposits['deposit']); 
+                                            var todaysWithdrawals = @json($withdrawals['withdraw']); 
                                             var difference = todaysDeposits - todaysWithdrawals;
                                             var id = '{{$brand->id}}';
                                             difference = difference.toFixed(2);

@@ -25,6 +25,10 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\WithdrawRequestController;
 use App\Http\Controllers\LedgerLogController;
 use App\Http\Controllers\ChartsController;
+use App\Http\Controllers\ComingSoonController;
+
+Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon.index');
+
 
 
 
