@@ -4,7 +4,7 @@ function resetLogoutTimer() {
     clearTimeout(logoutTimer);
     logoutTimer = setTimeout(function() {
         document.getElementById('logoutForm').submit();
-    }, 900000);
+    }, 3600000);
 }
 
 // Initialize the timer when the page is loaded or user interacts with the page
