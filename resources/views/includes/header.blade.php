@@ -38,9 +38,6 @@
             <span class="text-light text-end">
                 {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}
             </span>
-            <span class="text-light text-end">
-                {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}
-            </span>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" onclick = "return confirm('Are you sure?')" type="submit">
                 <i class="fa fa-power-off fs-3 text-danger"></i>
                     </button>
