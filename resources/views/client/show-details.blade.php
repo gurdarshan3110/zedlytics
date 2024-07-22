@@ -10,8 +10,8 @@
                     <div class="card-value">{{ $client->client_code }}</div>
                 </div>
                 <div class="form-group">
-                    <label>User ID:</label>
-                    <div class="card-value">{{ $client->user_id }}</div>
+                    <label>Parent:</label>
+                    <div class="card-value">{{ $client->parentId }}</div>
                 </div>
                 <div class="form-group">
                     <label>Username:</label>
@@ -91,11 +91,11 @@
             <div class="card card-fixed-height w-100 p-2">
                 <div class="form-group">
                     <label>Currencies Policies ID:</label>
-                    <div class="card-value">{{ $client->currenciesPoliciesID }}</div>
+                    <div class="card-value">{{ $client->currency_policy_names }}</div>
                 </div>
                 <div class="form-group">
                     <label>Generic Policies ID:</label>
-                    <div class="card-value">{{ $client->genericPoliciesID }}</div>
+                    <div class="card-value">{{ $client->generic_policy_names }}</div>
                 </div>
                 <div class="form-group">
                     <label>Ignore Liquidation:</label>
@@ -156,8 +156,8 @@
                     <div class="card-value">{{ $client->creditLoanPercentage }}</div>
                 </div>
                 <div class="form-group">
-                    <label>Parent ID:</label>
-                    <div class="card-value">{{ $client->parentId }}</div>
+                    <label>User ID:</label>
+                    <div class="card-value">{{ $client->user_id }}</div>
                 </div>
                 <div class="form-group">
                     <label>Currency Sign:</label>

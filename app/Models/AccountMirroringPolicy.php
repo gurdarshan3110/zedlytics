@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoboDealerPolicy extends Model
+class AccountMirroringPolicy extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
         'ark_id',
         'policyName',
@@ -16,14 +16,13 @@ class RoboDealerPolicy extends Model
         'parentId',
     ];
 
-    // Define any relationships if necessary
     public function parentPolicy()
     {
-        return $this->belongsTo(RoboDealerPolicy::class, 'parentId');
+        return $this->belongsTo(AccountMirroringPolicy::class, 'parentId');
     }
 
     public function childPolicies()
     {
-        return $this->hasMany(RoboDealerPolicy::class, 'parentId');
+        return $this->hasMany(AccountMirroringPolicy::class, 'parentId');
     }
 }

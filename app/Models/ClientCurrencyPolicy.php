@@ -10,6 +10,7 @@ class ClientCurrencyPolicy extends Model
     use HasFactory;
 
     protected $fillable = [
+        'ark_id',
         'policyName',
         'policyTypeId',
         'parentId',

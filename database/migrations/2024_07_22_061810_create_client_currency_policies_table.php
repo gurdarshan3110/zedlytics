@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('client_currency_policies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('ark_id');
             $table->string('policyName');
             $table->unsignedBigInteger('policyTypeId');
             $table->unsignedBigInteger('parentId')->nullable();

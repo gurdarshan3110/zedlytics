@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client_generic_policies', function (Blueprint $table) {
-             $table->id();
-            $table->unsignedBigInteger('ark_id')->nullable();
+        Schema::create('account_mirroring_policies', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('ark_id');
             $table->string('policyName');
+            $table->unsignedBigInteger('policyTypeId');
+            $table->unsignedBigInteger('parentId')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('client_generic_policies');
+        Schema::dropIfExists('account_mirroring_policies');
     }
 };

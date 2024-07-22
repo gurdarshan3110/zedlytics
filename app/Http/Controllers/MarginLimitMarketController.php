@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\MarginLimitMarket as Model;
+use App\Models\Brand;
 use App\Models\User;
 use DataTables;
 
@@ -22,6 +23,7 @@ class MarginLimitMarketController extends Controller
 
     const TITLE = 'Margin And Limits';
     const URL = 'margin-limit-menu';
+    const URL1 = 'margin limit';
     const DIRECTORY = 'marginlimit';
     const FNAME = 'Margin And Limits Menu';
 
@@ -30,8 +32,9 @@ class MarginLimitMarketController extends Controller
         $title = self::TITLE;
         $url = self::URL;
         $directory = self::DIRECTORY;
-        if(in_array('view '.$url,permissions())){
-            return view($directory.'.index', compact('title','url','directory'));
+        $brands = Brand::where('status','1')->get();
+        if(in_array('view '.self::URL1,permissions())){
+            return view($directory.'.index', compact('title','url','directory','brands'));
         }else{
             return redirect()->route('dashboard.index');
         }
@@ -161,6 +164,7 @@ class MarginLimitMarketController extends Controller
 
     public function list(Request $request)
     {
+        $brand = $request->input('brand');
         $length = $request->input('length');
         $start = $request->input('start');
         $search = $request->input('search.value'); // Getting search input
@@ -169,7 +173,7 @@ class MarginLimitMarketController extends Controller
         $status = $request->input('status');
         
         // Fetch the query with filtering and ordering
-        $query = Model::where('status', $status)
+        $query = Model::where('brand_id', $brand)
             ->when($search, function ($query, $search) {
                 // Add your searchable columns here
                 return $query->where(function ($q) use ($search) {

@@ -10,6 +10,7 @@ class ClientGenericPolicy extends Model
     use HasFactory;
 
     protected $fillable = [
+        'ark_id',
         'policyName',
     ];
 

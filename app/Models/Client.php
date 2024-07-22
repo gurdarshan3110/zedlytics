@@ -60,10 +60,13 @@ class Client extends Model
         'status',
     ];
 
+    protected $append = ['currency_policies_names','generic_policies_name','robo_policies_name','account_mirroring_policies_name'];
+
     // public function users()
     // {
     //     return $this->belongsToMany(User::class, 'user_clients');
     // }
+
     public function accounts()
     {
         return $this->hasMany(ClientAccount::class);
@@ -82,6 +85,26 @@ class Client extends Model
     public function logs()
     {
         return $this->hasMany(ClientLog::class)->orderBy('id', 'desc');
+    }
+
+    public function currencyPolicy()
+    {
+        return $this->hasMany(ClientCurrencyPolicy::class, 'ark_id', 'currenciesPoliciesID');
+    }
+
+    public function getCurrencyPolicyNamesAttribute()
+    {
+        return $this->currencyPolicy()->pluck('policyName')->implode(', ');
+    }
+
+    public function genericPolicy()
+    {
+        return $this->hasMany(ClientGenericPolicy::class, 'ark_id', 'genericPoliciesID');
+    }
+
+    public function getGenericNamesAttribute()
+    {
+        return $this->genericPolicy()->pluck('policyName')->implode(', ');
     }
 
 }

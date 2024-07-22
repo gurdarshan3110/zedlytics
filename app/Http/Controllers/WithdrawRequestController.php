@@ -13,6 +13,11 @@ use App\Models\ClientAccount;
 use App\Models\Account;
 use App\Jobs\FetchOpenPositionsJob;
 use App\Jobs\CreateNewClientsJob;
+use App\Jobs\ClientCurrencyPolicyJob;
+use App\Jobs\ClientGenericPolicyJob;
+use App\Jobs\RoboDealerPolicyJob;
+use App\Jobs\AgentCommissionPolicyJob;
+use App\Jobs\AccountMirroringPolicyJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -74,6 +79,36 @@ class WithdrawRequestController extends Controller
     {
         CreateNewClientsJob::dispatch();
         return response()->json(['message' => 'New Clients job dispatched successfully.']);
+    }
+
+    public function fetchClientCurrencyPolicies()
+    {
+        ClientCurrencyPolicyJob::dispatch();
+        return response()->json(['message' => 'Client Currency policies dispatched successfully.']);
+    }
+
+    public function fetchClientGenericPolicies()
+    {
+        ClientGenericPolicyJob::dispatch();
+        return response()->json(['message' => 'Client Generic policies dispatched successfully.']);
+    }
+
+    public function fetchRoboDealerPolicies()
+    {
+        RoboDealerPolicyJob::dispatch();
+        return response()->json(['message' => 'Robo Dealer policies dispatched successfully.']);
+    }
+
+    public function fetchAccountMirroringPolicies()
+    {
+        AccountMirroringPolicyJob::dispatch();
+        return response()->json(['message' => 'Robo Dealer policies dispatched successfully.']);
+    }
+
+    public function fetchAgentCommissionPolicies()
+    {
+        AgentCommissionPolicyJob::dispatch();
+        return response()->json(['message' => 'Agent Commission policies dispatched successfully.']);
     }
 
     public function fetchAndSaveClientRecords()

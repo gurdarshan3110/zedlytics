@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-bordered table-striped align-middle" id="record-table">
+    <table class="table table-bordered table-striped align-middle" id="record-table{{$brand->id}}">
         <thead>
         <tr class="fs-7">
             <th>SNO</th>
@@ -31,10 +31,10 @@
     <script type="text/javascript">
         var minDate, maxDate;
         
-        var table=$('#record-table').DataTable({
+        var table=$('#record-table{{$brand->id}}').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list?status=0",
+                ajax: "/{{$url}}/list?brand={{$brand->id}}",
                 columns: [
 
                     {data: 'id', name: 'id'},

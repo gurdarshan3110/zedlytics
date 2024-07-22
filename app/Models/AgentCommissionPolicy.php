@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoboDealerPolicy extends Model
+class AgentCommissionPolicy extends Model
 {
     use HasFactory;
 
@@ -16,14 +16,13 @@ class RoboDealerPolicy extends Model
         'parentId',
     ];
 
-    // Define any relationships if necessary
     public function parentPolicy()
     {
-        return $this->belongsTo(RoboDealerPolicy::class, 'parentId');
+        return $this->belongsTo(AgentCommissionPolicy::class, 'parentId');
     }
 
     public function childPolicies()
     {
-        return $this->hasMany(RoboDealerPolicy::class, 'parentId');
+        return $this->hasMany(AgentCommissionPolicy::class, 'parentId');
     }
 }

@@ -4,32 +4,22 @@
 
 <main>
     <div class="container-fluid px-4">
-        <!-- <div class="d-flex">
-            <h3 class="mt-4 w-95">
-                {{$title}}
-            </h3>
-            @if(in_array('create '.$directory, permissions()))
-            <div class="mt-auto me-3">
-                <a href="{{route($url.'.create')}}" class="btn btn-primary" tooltip="New">
-                    <span class=" d-md-inline">New</span>
-                </a>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @foreach($brands as $k => $brand)
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{(($k==0)?'active':'')}}" id="active-{{$brand->id}}-tab" data-bs-toggle="tab" data-bs-target="#active-{{$brand->id}}" type="button" role="tab" aria-controls="Active {{$brand->name}}" aria-selected="true">{{$brand->name}}</button>
+            </li>
+            @endforeach
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            @foreach($brands as $k => $brand)
+            <div class="tab-pane card fade {{(($k==0)?'show active':'')}}" id="active-{{$brand->id}}" role="tabpanel" aria-labelledby="active-{{$brand->id}}-tab">
+                @include('errors.flash.message')
+                <div class="card-body">
+                    @include($directory.'.table')
+                </div>
             </div>
-            @endif
-        </div>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/{{$url}}">Listing</a></li>
-        </ol>
-        <div class="d-flex flex-shrink-0">
-            
-        </div> -->
-        <div class="card mb-4 mt-1">
-            @include('errors.flash.message')
-            <div class="card-title ps-3 pt-3 text-bold">
-                {{$title}}
-            </div>
-            <div class="card-body">
-                @include($directory.'.table')
-            </div>
+            @endforeach
         </div>
     </div>
 </main>

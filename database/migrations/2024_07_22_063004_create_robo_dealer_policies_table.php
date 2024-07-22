@@ -13,6 +13,7 @@ return new class extends Migration
     {
          Schema::create('robo_dealer_policies', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('ark_id');
             $table->string('policyName');
             $table->unsignedBigInteger('policyTypeId');
             $table->unsignedBigInteger('parentId')->nullable();

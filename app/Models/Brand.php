@@ -31,6 +31,11 @@ class Brand extends Model
         return $this->hasMany(Bank::class)->where('status', 1);
     }
 
+    public function marginlimits()
+    {
+        return $this->hasMany(MarginLimitMarket::class);
+    }
+
     public function todaysDeposits()
     {
         $query = $this->hasManyThrough(CashbookLedger::class, Bank::class)

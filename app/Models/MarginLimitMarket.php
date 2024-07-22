@@ -13,6 +13,7 @@ class MarginLimitMarket extends Model
     protected $table = 'margin_limit_markets'; // Specify the table name if not following conventions
 
     protected $fillable = [
+        'brand_id',
         'market',
         'script',
         'minimum_deal',
