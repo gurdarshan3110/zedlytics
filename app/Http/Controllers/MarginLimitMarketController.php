@@ -197,8 +197,9 @@ class MarginLimitMarketController extends Controller
 
         // Prepare DataTables response
         return DataTables::of($data)
+            ->addIndexColumn() 
             ->addColumn('id', function ($row) {
-                return $row->id;
+                return (($row->brand_id==1)?$row->id:$row->id-218);
             })
             ->addColumn('market', function ($row) {
                 return (($row->market=='CRTPTOCURRENCIES')?'CRYPTO':$row->market);
