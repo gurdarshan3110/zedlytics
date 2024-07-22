@@ -13,7 +13,6 @@
             <th>INVTRY MARGIN</th>
             <th>TOT GRP LIMIT</th>
             <th>MARGIN TIME</th>
-            <th style="width:5%;">Action</th>
         </tr>
         </thead>
         <tbody class="fs-6">
@@ -47,8 +46,7 @@
                     {data: 'holding_maintainence_margin', name: 'holding_maintainence_margin'},
                     {data: 'inventory_day_margin', name: 'inventory_day_margin'},
                     {data: 'total_group_limit', name: 'total_group_limit'},
-                    {data: 'margin_calculation_time', name: 'margin_calculation_time'},
-                    {data: 'action', name: 'action',className:'action'},
+                    {data: 'margin_calculation_time', name: 'margin_calculation_time'}
                     
                 ],
                 pageLength:1000,
@@ -60,7 +58,15 @@
                     'copyHtml5',
                     'excelHtml5',
                     'csvHtml5',
-                    'pdfHtml5',
+                    {
+                        extend: 'pdfHtml5',
+                        title: '{{$brand->name}} Margin Limits', 
+                        filename: '{{$brand->name}}-margin-limits',
+                        pageSize: 'A3', 
+                        exportOptions: {
+                            columns: ':visible' 
+                        },
+                    }
                 ],
                 "language": {
                         "search": '',
