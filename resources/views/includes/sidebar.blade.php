@@ -12,6 +12,9 @@
                     @foreach ($modules as $i=> $module)
                         @php
                             $moduleurl = str_replace('-',' ',$module->url);
+                            if($module->url=='margin-limit-menu'){
+                                $moduleurl = 'margin-limit';
+                            }
                             $permissionKey = (($i==0)?'dashboard':'view ' . $moduleurl);
                         @endphp
                         @if (in_array($permissionKey, $permissions))
