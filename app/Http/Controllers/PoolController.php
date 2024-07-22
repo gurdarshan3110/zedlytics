@@ -210,7 +210,7 @@ class PoolController extends Controller
         //dd($ledgerData);
         try {
             if($ledgerData['amount']!=null){
-                $entry = CashbookLedger::where('bank_id', $data[10])->where('transaction_id',$data[9])->first();
+                $entry = Model::where('bank_id', $data[10])->where('transaction_id',$data[9])->first();
                 $ledgerData['remarks'] = "Pool entry from ".Carbon::parse($entry['ledger_date'])->format('d/m/Y h:i:s')." transfered to Account ".$data[0];
                 Model::updateOrCreate(
                     ['bank_id' => $data[10], 'transaction_id' => $data[9]],
