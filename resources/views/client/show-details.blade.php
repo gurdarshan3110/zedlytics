@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group">
                     <label>Generic Policies ID:</label>
-                    <div class="card-value">{{ $client->generic_policies_name }}</div>
+                    <div class="card-value">{{ $client->generic_policies_names }}</div>
                 </div>
                 <div class="form-group">
                     <label>Ignore Liquidation:</label>
