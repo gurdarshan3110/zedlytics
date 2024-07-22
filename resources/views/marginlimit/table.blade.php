@@ -86,5 +86,13 @@
                 var max=$('#max').val();
                 table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
             });
+        function autoAdjustColumns(table) {
+            var container = table.table().container();
+            var resizeObserver = new ResizeObserver(function () {
+                table.columns.adjust();
+            });
+            resizeObserver.observe(container);
+        }
+        autoAdjustColumns(table)
     </script>
 @endpush
