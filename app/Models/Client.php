@@ -72,6 +72,11 @@ class Client extends Model
         return $this->hasMany(ClientAccount::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Client::class, 'parentId','user_id');
+    }
+
     public function rmanager()
     {
         return $this->belongsTo(User::class,'rm');
@@ -94,6 +99,9 @@ class Client extends Model
 
     public function getCurrencyPoliciesNamesAttribute()
     {
+        if(empty($this->currencyPolicy())){
+            return 'NA';
+        }
         return $this->currencyPolicy()->pluck('policyName')->implode(', ');
     }
 
@@ -104,6 +112,9 @@ class Client extends Model
 
     public function getGenericPoliciesNamesAttribute()
     {
+        if(empty($this->genericPolicy())){
+            return 'NA';
+        }
         return $this->genericPolicy()->pluck('policyName')->implode(', ');
     }
 

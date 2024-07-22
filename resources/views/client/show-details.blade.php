@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <label>Parent:</label>
-                    <div class="card-value">{{ $client->parentId }}</div>
+                    <div class="card-value">{{ (($client->parentId!=0)?$client->parent->name:'NA') }}</div>
                 </div>
                 <div class="form-group">
                     <label>Username:</label>
