@@ -92,7 +92,7 @@ class Client extends Model
         return $this->hasMany(ClientCurrencyPolicy::class, 'ark_id', 'currenciesPoliciesID');
     }
 
-    public function getCurrencyPolicyNamesAttribute()
+    public function getCurrencyPoliciesNamesAttribute()
     {
         return $this->currencyPolicy()->pluck('policyName')->implode(', ');
     }
@@ -102,7 +102,7 @@ class Client extends Model
         return $this->hasMany(ClientGenericPolicy::class, 'ark_id', 'genericPoliciesID');
     }
 
-    public function getGenericNamesAttribute()
+    public function getGenericPoliciesNamesAttribute()
     {
         return $this->genericPolicy()->pluck('policyName')->implode(', ');
     }
