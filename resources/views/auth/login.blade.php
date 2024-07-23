@@ -14,7 +14,7 @@
         <link href="{{asset('/assets/css/styles.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-dark" style="background-color:#e2d1e5;">
+    <body class="" style="background-color:#e9e9e9;">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
