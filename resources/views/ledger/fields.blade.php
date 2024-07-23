@@ -251,8 +251,12 @@
                 $hintItems.removeClass('selected').eq(selectedHintIndex).addClass('selected');
             } else if (event.which === 13) { // Enter key
                 if ($hintItems.length > 0 && selectedHintIndex >= 0) {
-                    console.log($hintItems.length);
+                    //console.log($hintItems.length);
                     var selectedHintText = $hintItems.eq(selectedHintIndex).text();
+                    if (selectedHintText.includes('|')) {
+                        var parts = selectedHintText.split('|');
+                        var selectedHintText = parts[0].trim();
+                    }
                     $currentCell.text(selectedHintText);
                     $hintContainer.empty();
                     event.preventDefault();
@@ -357,11 +361,12 @@
                     hints.forEach(function(hint, index) {
                         var hintItem = $('<div>').addClass('hint-item');
                         hintItem.text(hint);
-                        hintItem.on('click', function() {
-                            //alert(hint);
-                            $(element).text(hint);
-                            $hintContainer.empty().hide();
-                        });
+                        // hintItem.on('click', function() {
+                        //     alert(hint);
+                        //     hint = hint.split('|');
+                        //     $(element).text(hint[0]);
+                        //     $hintContainer.empty().hide();
+                        // });
                         hintList.append(hintItem);
                     });
 
@@ -375,7 +380,7 @@
         $('#data-container').on('input', 'tr td:first-child[contenteditable="true"]', function() {
             var query = $(this).text();
 
-            if (query.length > 0) {
+            if (query.length >=3) {
                 $.ajax({
                     url: '/hints',
                     data: { query: query },

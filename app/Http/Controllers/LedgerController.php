@@ -61,8 +61,13 @@ class LedgerController extends Controller
     public function hints(Request $request)
     {
         $query = $request->input('query');
-        $hints = Account::where('account_code', 'LIKE', "%{$query}%")
-                     ->pluck('account_code'); 
+        $hints = Account::where('account_code', 'LIKE', "%{$query}%")->get()
+            ->map(function ($account) {
+                if ($account->type === Account::CLIENT_ACCOUNT){
+                    return $account->client_account_code;
+                }
+                return $account->account_code;
+            });
         return response()->json($hints);
     }
 

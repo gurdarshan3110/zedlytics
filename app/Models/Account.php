@@ -25,6 +25,8 @@ class Account extends Model
         'status',
     ];
 
+    protected $appends = ['username','client_account_code'];
+
     public function bankAccounts()
     {
         return $this->hasMany(BankAccount::class);
@@ -63,6 +65,28 @@ class Account extends Model
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'client_accounts');
+    }
+
+    public function getUsernameAttribute()
+    {
+        if ($this->type === self::CLIENT_ACCOUNT) {
+            $clientAccount = $this->clientAccounts()->first();
+            if ($clientAccount && $clientAccount->client) {
+                return $clientAccount->client->username;
+            }
+        }
+        return '';
+    }
+
+    public function getClientAccountCodeAttribute()
+    {
+        if ($this->type === self::CLIENT_ACCOUNT) {
+            $clientAccount = $this->clientAccounts()->first();
+            if ($clientAccount && $clientAccount->client) {
+                return $this->account_code.' | '.$clientAccount->client->username;
+            }
+        }
+        return '';
     }
 
 }
