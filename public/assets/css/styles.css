@@ -11606,7 +11606,7 @@ flex.justify-between.flex-1.sm\:hidden {
   min-width: fit-content !important;
 }
 
-button.btn-nonex {
+button.btn-none {
     border: 0px;
     background: transparent;
     padding: 0px;
