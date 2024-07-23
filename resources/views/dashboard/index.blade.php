@@ -66,8 +66,8 @@
                             <td>{{ $position['longQty'] }}</td>
                             <td>{{ $position['shortDeals'] }}</td>
                             <td>{{ $position['shortQty'] }}</td>
-                            <td class="{{(($position['netQty']>0)?'bg-success text-light':(($position['netQty']<0)?'bg-danger text-light':''))}}">{{ $position['netQty'] }}</td>
-                            <td class="{{ (($position['changeQty'] > 0) ? 'bg-success text-light' : (($position['changeQty'] == 0) ? 'text-dark' : 'bg-danger text-light')) }}">
+                            <td class="{{(($position['netQty']>0)?'bg-brand text-light':(($position['netQty']<0)?'bg-danger text-light':''))}}">{{ $position['netQty'] }}</td>
+                            <td class="{{ (($position['changeQty'] > 0) ? 'bg-brand text-light' : (($position['changeQty'] == 0) ? 'text-dark' : 'bg-danger text-light')) }}">
                                 {{ $position['changeQty'] }}
                             </td>
                             <td>{{ $position['lastChange'] }}</td>
@@ -165,15 +165,15 @@
                     $bankAccountCodes = $brand->banks->pluck('account_code')->toArray();
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
-                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light">Account Details for <strong>{{$brand->name}}</strong> <strong class="ms-2">(Balance: {{$brand->brandBalance()}})</strong></h5>
+                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary text-light">Account Details for <strong>{{$brand->name}}</strong> <strong class="ms-2">(Balance: {{$brand->brandBalance()}})</strong></h5>
                     @foreach($brand->banks as $data)
                         @if(in_array($data->account_code, permissions())) 
                         <div class="col-md-2 mt-1">
                             <div class="card {{(($data->bankBalance()
-                                <=$data->first_limit)?'bg-success':(($data->bankBalance()<=$data->second_limit)?'bg-warning':'bg-danger'))}} text-light">
+                                <=$data->first_limit)?'bg-brand-primary':(($data->bankBalance()<=$data->second_limit)?'bg-brand-warning':'bg-brand-danger'))}} text-light">
                                 <div class="card-body">
                                     <h6 class="card-title fs-7">{{$data->account_code}}</h6>
-                                    <h6 class="card-footer ps-1">{{$data->bankBalance()}}</h6>
+                                    <h6 class=" ps-1">{{$data->bankBalance()}}</h6>
                                 </div>
                             </div>
                             @if($data->bankBalance() >= $data->first_limit)
@@ -213,13 +213,13 @@
                     $todaysDeposit = $brand->todaysDeposits();
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
-                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light"><strong>{{$brand->name}}</strong> Financials</h5>
+                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary  text-light"><strong>{{$brand->name}}</strong> Financials</h5>
                     @if(in_array('dashboard charts', permissions()))
                     <div class="row mt-2">
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-primary p-2  text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
                                     <div class="row">
                                         <!-- First half of the card -->
                                         <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -317,7 +317,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-primary p-2  text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
@@ -422,7 +422,7 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
+                                    <h5 class="card-title bg-primary p-2  text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
                                     <?php
                                     $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
                                     $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
@@ -515,11 +515,11 @@
         </div>
         @if(in_array('dashboard charts', permissions()))
         <div class="row mt-2">
-            <h5 class="card-title mt-2 mb-2 p-2 bg-primary rounded text-light">Complete Overview</strong></h5>
+            <h5 class="card-title mt-2 mb-2 p-2 bg-primary  text-light">Complete Overview</strong></h5>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span></h5>
+                        <h5 class="card-title bg-primary p-2  text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -575,7 +575,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span></h5>
+                        <h5 class="card-title bg-primary p-2 text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -631,7 +631,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title bg-success p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span></h5>
+                        <h5 class="card-title bg-primary p-2 text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span></h5>
                         <div class="row">
                             <!-- First half of the card -->
                             <div class="col-md-6 d-flex flex-column justify-content-center">

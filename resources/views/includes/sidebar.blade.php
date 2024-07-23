@@ -3,7 +3,6 @@
         <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Menu Items</div>
                     <?php 
 
                         $modules = softModules();
@@ -20,7 +19,7 @@
                         @if (in_array($permissionKey, $permissions))
                             <a class="nav-link {{ request()->is($module->url . '*') ? 'active' : '' }}" href="{{ route($module->url.'.index') }}">
                                 <div class="sb-nav-link-icon">
-                                    <img src="{{ $module->icon ? asset($module->icon) : asset('/assets/images/default-icon.png') }}" class="icon">
+                                    <i class="fas {{ $module->icon}}"></i>
                                 </div>
                                 {{$module->name}}
                             </a>
@@ -28,7 +27,7 @@
                     @endforeach
                     <a class="nav-link {{ request()->is('two-factor' . '*') ? 'active' : '' }}" href="{{ route('two-factor.index') }}">
                         <div class="sb-nav-link-icon">
-                            <img src="{{ asset('/assets/images/2fa-icon.png') }}" class="icon">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
                         2FA
                     </a>
