@@ -165,6 +165,7 @@ class LedgerController extends Controller
         } else {
             foreach ($rows as $row) {
                 $account_type = (($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row'));
+                $accountName = Account::where('account_code',$row->account_code)->first();
                 $html .= '<tr class="'.$account_type.'">
                             <td class="excel-cell" contenteditable="true">'.$row->account_code.'</td>
                             <td class="excel-cell" contenteditable="true">'.$row->utr_no.'</td>
@@ -172,8 +173,8 @@ class LedgerController extends Controller
                             <td class="excel-cell text-end" contenteditable="true">'.(($row->type == Model::LEDGER_TYPE_DEBIT_VAL) ? abs($row->amount) : '').'</td>
                             <td class="excel-cell text-end">'.$row->current_balance.'</td>
                             <td class="excel-cell" contenteditable="true">'.$row->remarks.'</td>
-                            <td class="excel-cell"></td>
-                            <td class="excel-cell"></td>
+                            <td class="excel-cell">'.(($accountName!=null || $accountName!='')?$accountName->username:'NA').'</td>
+                            <td class="excel-cell">'.(($row->account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'User':(($row->account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'Bank':'Party')).'</td>
                             <td class="hide-cell">'.$row->transaction_id.'</td>
                           </tr>';
             }
@@ -221,7 +222,8 @@ class LedgerController extends Controller
                     $ledgerData
                 );
             }
-            return response()->json(['success' => true, 'message' => 'Data saved successfully','background' => (($account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row')),'transaction_id'=>$data[8]]);
+            $accountName = Account::where('account_code',$data[0])->first();
+            return response()->json(['success' => true, 'message' => 'Data saved successfully','background' => (($account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'client-row':(($account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'bank-row':'party-row')),'transaction_id'=>$data[8],'type' =>(($account_type==Model::ACCOUNT_TYPE_CLIENT_VAL)?'User':(($account_type==Model::ACCOUNT_TYPE_BANK_VAL)?'Bank':'Party')),'name'=>(($accountName!=null || $accountName!='')?$accountName->username:'NA') ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error saving data: ' . $e->getMessage()]);
         }

@@ -55,8 +55,11 @@
                     <td class="excel-cell text-end" contenteditable="true">{{(($row->type==App\Models\CashbookLedger::LEDGER_TYPE_DEBIT_VAL)?abs($row->amount):'')}}</td>
                     <td class="excel-cell text-end">{{$row->current_balance}}</td>
                     <td class="excel-cell" contenteditable="true">{{$row->remarks}}</td>
-                    <td class="excel-cell"></td>
-                    <td class="excel-cell"></td>
+                    <?php
+                    $accountName = App\Models\Account::where('account_code',$row->account_code)->first();
+                    ?>
+                    <td class="excel-cell">{{(($accountName!=null || $accountName!='')?$accountName->username:'NA')}}</td>
+                    <td class="excel-cell">{{(($row->account_type==App\Models\CashbookLedger::ACCOUNT_TYPE_CLIENT_VAL)?'User':(($row->account_type==App\Models\CashbookLedger::ACCOUNT_TYPE_BANK_VAL)?'Bank':'Party'))}}</td>
                     <td class="hide-cell">{{$row->transaction_id}}</td>
                   </tr>
                   @endforeach
@@ -103,6 +106,7 @@
             //console.log(data);
             $('#response-status').removeClass('green-blinking');
             $('#response-status').addClass('red-blinking');
+
             var bank = '{{$bankId}}';
             var date = $('#date').val();
             data.push(bank);
@@ -123,12 +127,13 @@
                     var backgroundColor = response.background;
                     
                     // Find the row containing the cell with the hidden transaction_id
+                    
                     var row = $('td.hide-cell').filter(function() {
                         return $(this).text() == transactionId;
                     }).closest('tr');
+                    row.find('td:nth-child(8)').text(response.type);
+                    row.find('td:nth-child(7)').text(response.name);
                     
-                    // Change the background color of the row
-                    //row.className= backgroundColor;
                     row.addClass(backgroundColor);
                 },
                 error: function(xhr, status, error) {

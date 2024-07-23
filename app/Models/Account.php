@@ -74,6 +74,18 @@ class Account extends Model
             if ($clientAccount && $clientAccount->client) {
                 return $clientAccount->client->username;
             }
+        }else if($this->type === self::BANK_ACCOUNT) {
+            $bankAccount = $this->bankAccounts()->first();
+            if ($bankAccount && $bankAccount->bank) {
+                return $bankAccount->bank->name;
+            }
+
+        }else {
+            $partyAccount = $this->partyAccounts()->first();
+            if ($partyAccount && $partyAccount->party) {
+                return $partyAccount->party->name;
+            }
+
         }
         return '';
     }

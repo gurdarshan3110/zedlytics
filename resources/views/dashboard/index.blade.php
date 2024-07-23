@@ -150,12 +150,12 @@
     @else
     <div class="container-fluid px-4">
         <div class="d-flex">
-            <h3 class="mt-4 w-95">
+            <p class="mt-2 mb-0 w-95">
                 {{$title}} @if(Auth::user()->user_type==\App\Models\User::USER_SUPER_ADMIN): Balance {{$totalBalance}}
 
                 (Withdrawal Requests : {{$withdrawRequests}})
                 @endif
-            </h3>
+            </p>
         </div>
         
         
