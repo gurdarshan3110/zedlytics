@@ -4,23 +4,6 @@
         overflow-y: auto;
         position: relative;
     }
-    .hint-list {
-        position: absolute;
-        z-index: 1000;
-        border: 1px solid #069a8e;
-        background-color: #fff;
-    }
-    .hint-item {
-        padding: 5px;
-        cursor: pointer;
-    }
-    .hint-item.selected {
-        background-color: #069a8e;
-    }
-    .highlight-row {
-        background-color: #069a8e36;
-    }
-    
 </style>
 <div class="row">
       <div class="col">
@@ -146,10 +129,6 @@
             var numRows = $('#excel-grid tbody tr').length;
             var numCols = $cells.length;
 
-            var $hintContainer = $('#hint-container');
-            var $hintItems = $hintContainer.find('.hint-item');
-            var selectedHintIndex = $hintItems.index($hintContainer.find('.selected'));
-
             // Handle arrow key navigation
             switch (event.which) {
                 case 37: // Left arrow
@@ -158,11 +137,9 @@
                     }
                     break;
                 case 38: // Up arrow
-                    if($hintContainer.html()==''){
-                        var $prevRow = $currentRow.prev();
-                        if ($prevRow.length > 0) {
-                            $prevRow.find('.excel-cell').eq(currentIndex).focus();
-                        }
+                    var $prevRow = $currentRow.prev();
+                    if ($prevRow.length > 0) {
+                        $prevRow.find('.excel-cell').eq(currentIndex).focus();
                     }
                     break;
                 case 39: // Right arrow
@@ -171,11 +148,9 @@
                     }
                     break;
                 case 40: // Down arrow
-                    if($hintContainer.html()==''){
-                        var $nextRow = $currentRow.next();
-                        if ($nextRow.length > 0) {
-                            $nextRow.find('.excel-cell').eq(currentIndex).focus();
-                        }
+                    var $nextRow = $currentRow.next();
+                    if ($nextRow.length > 0) {
+                        $nextRow.find('.excel-cell').eq(currentIndex).focus();
                     }
                     break;
                 case 13: // Enter key
@@ -241,22 +216,6 @@
                         }
                     }
                     break;
-            }
-
-            if (event.which === 40 && selectedHintIndex < $hintItems.length - 1) { // Down arrow
-                selectedHintIndex++;
-                $hintItems.removeClass('selected').eq(selectedHintIndex).addClass('selected');
-            } else if (event.which === 38 && selectedHintIndex > 0) { // Up arrow
-                selectedHintIndex--;
-                $hintItems.removeClass('selected').eq(selectedHintIndex).addClass('selected');
-            } else if (event.which === 13) { // Enter key
-                if ($hintItems.length > 0 && selectedHintIndex >= 0) {
-                    console.log($hintItems.length);
-                    var selectedHintText = $hintItems.eq(selectedHintIndex).text();
-                    $currentCell.text(selectedHintText);
-                    $hintContainer.empty();
-                    event.preventDefault();
-                }
             }
         });
 
@@ -393,36 +352,36 @@
 
         // Hide hints when moving to the next cell
         $('#data-container').on('focusout', 'tr td:first-child[contenteditable="true"]', function() {
-            $hintContainer.empty().hide();
+            //$hintContainer.empty().hide();
         });
 
-        // $('#data-container').on('focusin', 'tr td:first-child[contenteditable="true"]', function() {
-        //     $(document).on('keydown.hintNavigation', function(e) {
-        //         if ($hintContainer.is(':visible') && currentElement) {
-        //             var hintItems = $hintContainer.find('.hint-item');
+        $('#data-container').on('focusin', 'tr td:first-child[contenteditable="true"]', function() {
+            $(document).on('keydown.hintNavigation', function(e) {
+                if ($hintContainer.is(':visible') && currentElement) {
+                    var hintItems = $hintContainer.find('.hint-item');
 
-        //             if (e.key === 'ArrowDown') {
-        //                 selectedIndex = (selectedIndex + 1) % hintItems.length;
-        //                 hintItems.removeClass('selected');
-        //                 $(hintItems[selectedIndex]).addClass('selected');
-        //                 e.preventDefault();
-        //             } else if (e.key === 'ArrowUp') {
-        //                 selectedIndex = (selectedIndex - 1 + hintItems.length) % hintItems.length;
-        //                 hintItems.removeClass('selected');
-        //                 $(hintItems[selectedIndex]).addClass('selected');
-        //                 e.preventDefault();
-        //             } else if (e.key === 'Enter' && selectedIndex !== -1) {
-        //                 var selectedHint = $(hintItems[selectedIndex]).text();
-        //                 $(currentElement).text(selectedHint);
-        //                 $hintContainer.empty().hide();
-        //                 e.preventDefault();
-        //             } else if (e.key === 'Escape') {
-        //                 $hintContainer.empty().hide();
-        //                 e.preventDefault();
-        //             }
-        //         }
-        //     });
-        // });
+                    if (e.key === 'ArrowDown') {
+                        selectedIndex = (selectedIndex + 1) % hintItems.length;
+                        hintItems.removeClass('selected');
+                        $(hintItems[selectedIndex]).addClass('selected');
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowUp') {
+                        selectedIndex = (selectedIndex - 1 + hintItems.length) % hintItems.length;
+                        hintItems.removeClass('selected');
+                        $(hintItems[selectedIndex]).addClass('selected');
+                        e.preventDefault();
+                    } else if (e.key === 'Enter' && selectedIndex !== -1) {
+                        var selectedHint = $(hintItems[selectedIndex]).text();
+                        $(currentElement).text(selectedHint);
+                        $hintContainer.empty().hide();
+                        e.preventDefault();
+                    } else if (e.key === 'Escape') {
+                        $hintContainer.empty().hide();
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
 
         // Remove keydown event handler when focusing out of the cell
         $('#data-container').on('focusout', 'tr td:first-child[contenteditable="true"]', function() {
