@@ -11164,7 +11164,7 @@ body {
   background-color: #069a8e;
   color:#fff;
 }
-.sb-sidenav-light .sb-sidenav-menu .nav-link.active,.nav-link:hover svg{
+.sb-sidenav-light .sb-sidenav-menu .nav-link.active,.nav-link.active svg,.nav-link:hover svg{
   background-color: #069a8e;
   color:#fff;
 }
