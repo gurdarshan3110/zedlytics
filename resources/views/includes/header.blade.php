@@ -25,16 +25,27 @@
             </a>
             <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></a>
             <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}"><i class="fas fa-home" aria-hidden="true"></i></a>
-            
-            <!-- Sidebar Toggle-->
-            <form method="POST" class="d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0" id="logoutForm" action="{{route('logout')}}">
-                        @csrf
-            <span class="text-dark text-end">
+            <div class="dropdown d-md-inline-block ms-auto me-0 me-md-3 my-2 my-md-0">
+              <span class="text-dark text-end dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown" aria-expanded="false">
                 {{Auth::user()->name}} {{((Auth::user()->user_type!='super_admin')?'- ('.Auth::user()->employee_code.')':'')}}
+              </span>
+              <ul class="dropdown-menu" aria-labelledby="menu1">
+                <li><a class="dropdown-item" href="{{ route('two-factor.index') }}">2FA</a></li>
+                <li class="d-flex align-items-center">
+                    <form method="POST" class="dropdown-item" id="logoutForm" action="{{route('logout')}}">
+                        @csrf
+                        <button class=" btn-none text-dark text-decoration-none" onclick = "return confirm('Are you sure?')" type="submit">
+                            <i class="fa fa-power-off text-danger"></i> Logout
+                        </button>
+                    </form>
+                </li>
+              </ul>
+            </div>
+            <!-- Sidebar Toggle-->
+            
+            <span class="text-dark text-end">
+                
             </span>
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" onclick = "return confirm('Are you sure?')" type="submit">
-                <i class="fa fa-power-off fs-5 text-danger"></i>
-                    </button>
-            </form>
+            
             
         </nav>

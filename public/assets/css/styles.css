@@ -332,7 +332,7 @@ tfoot,
 tr,
 td,
 th {
-  border-color: inherit;
+  border-color: #c9c9c9;
   border-style: solid;
   border-width: 0;
 }
@@ -11602,7 +11602,15 @@ flex.justify-between.flex-1.sm\:hidden {
   padding: 4px;
 }
 
+.dropdown-menu{
+  min-width: fit-content !important;
+}
 
+button.btn-nonex {
+    border: 0px;
+    background: transparent;
+    padding: 0px;
+}
 
 @media (max-width: 576px) {
   .dataTables_length{

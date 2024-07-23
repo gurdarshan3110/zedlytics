@@ -25,12 +25,6 @@
                             </a>
                         @endif
                     @endforeach
-                    <a class="nav-link {{ request()->is('two-factor' . '*') ? 'active' : '' }}" href="{{ route('two-factor.index') }}">
-                        <div class="sb-nav-link-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        2FA
-                    </a>
                 </div>
             </div>
             <div class="sb-sidenav-footer bg-secondary px-3 text-muted">
