@@ -4,58 +4,54 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <?php 
-                        $modules = softModules();
+                        $modules = softModules(0);
                         $permissions = permissions();
                     ?>
 
-                    @php
-                        $activeModule = false;
-                    @endphp
-
-                    @foreach ($modules as $i => $module)
+                    @foreach ($modules as $module)
                         @php
-                            $moduleurl = str_replace('-', ' ', $module->url);
-                            if ($module->url == 'margin-limit-menu') {
-                                $moduleurl = 'margin limit';
+                            $childModules = softModules($module->id);
+                            $hasActiveChild = false;
+                            foreach ($childModules as $childModule) {
+                                $childModuleUrl = str_replace('-', ' ', $childModule->url);
+                                if (request()->is($childModule->url . '*')) {
+                                    $hasActiveChild = true;
+                                    break;
+                                }
                             }
-                            $permissionKey = (($i == 0) ? 'dashboard' : 'view ' . $moduleurl);
                         @endphp
-                        @if (in_array($permissionKey, $permissions) && request()->is($module->url . '*'))
-                            @php
-                                $activeModule = true;
-                            @endphp
+
+                        <a class="nav-link {{ $hasActiveChild ? '' : 'collapsed' }}" href="{{ count($childModules) > 0 ? '#' : route($module->url . '.index') }}" data-bs-toggle="{{ count($childModules) > 0 ? 'collapse' : '' }}" data-bs-target="#moduleCollapse{{ $module->id }}" aria-expanded="{{ $hasActiveChild ? 'true' : 'false' }}" aria-controls="moduleCollapse{{ $module->id }}">
+                            <div class="sb-nav-link-icon"><i class="fas {{ $module->icon }}"></i></div>
+                            {{ $module->name }}
+                            @if (count($childModules) > 0)
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            @endif
+                        </a>
+                        @if (count($childModules) > 0)
+                            <div class="collapse {{ $hasActiveChild ? 'show' : '' }}" id="moduleCollapse{{ $module->id }}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    @foreach ($childModules as $childModule)
+                                        @php
+                                            $childModuleUrl = str_replace('-', ' ', $childModule->url);
+                                            $childPermissionKey = 'view ' . $childModuleUrl;
+                                        @endphp
+                                        @if (in_array($childPermissionKey, $permissions))
+                                            <a class="nav-link {{ request()->is($childModule->url . '*') ? 'active' : '' }}" href="{{ route($childModule->url . '.index') }}">
+                                                <div class="sb-nav-link-icon">
+                                                    <i class="fas {{ $childModule->icon }}"></i>
+                                                </div>
+                                                {{ $childModule->name }}
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                </nav>
+                            </div>
                         @endif
                     @endforeach
-
-                    <a class="nav-link collapsed {{ $activeModule ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#menuListCollapse" aria-expanded="{{ $activeModule ? 'true' : 'false' }}" aria-controls="menuListCollapse">
-                        <div class="sb-nav-link-icon"><i class="fas fa-bars"></i></div>
-                        Menu List
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse {{ $activeModule ? 'show' : '' }}" id="menuListCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav">
-                            @foreach ($modules as $i => $module)
-                                @php
-                                    $moduleurl = str_replace('-', ' ', $module->url);
-                                    if ($module->url == 'margin-limit-menu') {
-                                        $moduleurl = 'margin limit';
-                                    }
-                                    $permissionKey = (($i == 0) ? 'dashboard' : 'view ' . $moduleurl);
-                                @endphp
-                                @if (in_array($permissionKey, $permissions))
-                                    <a class="nav-link {{ request()->is($module->url . '*') ? 'active' : '' }}" href="{{ route($module->url . '.index') }}">
-                                        <div class="sb-nav-link-icon">
-                                            <i class="fas {{ $module->icon }}"></i>
-                                        </div>
-                                        {{ $module->name }}
-                                    </a>
-                                @endif
-                            @endforeach
-                        </nav>
-                    </div>
                 </div>
             </div>
-            <div class="sb-sidenav-footer bg-primary  px-3 text-light">
+            <div class="sb-sidenav-footer bg-primary px-3 text-light">
                 &copy; ZedLytics {{ date('Y') }}
             </div>
         </nav>
