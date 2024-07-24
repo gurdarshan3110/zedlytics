@@ -14,6 +14,8 @@ class ModuleMaster extends Model
         'name',
         'icon',
         'url',
+        'parent',
+        'sno'
         'status',
     ];
 }
