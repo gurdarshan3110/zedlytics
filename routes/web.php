@@ -50,6 +50,8 @@ Route::get('/fetch-insert-clients', [WithdrawRequestController::class, 'fetchAnd
 
 Route::get('/run-job', [WithdrawRequestController::class, 'fetchNewClients']);
 
+Route::get('/new-dealers-job', [WithdrawRequestController::class, 'fetchNewDealers']);
+
 Route::get('/dispatch-client-currency-policies', [WithdrawRequestController::class, 'fetchClientCurrencyPolicies']);
 Route::get('/dispatch-client-generic-policies', [WithdrawRequestController::class, 'fetchClientGenericPolicies']);
 Route::get('/dispatch-robo-dealer-policies', [WithdrawRequestController::class, 'fetchRoboDealerPolicies']);

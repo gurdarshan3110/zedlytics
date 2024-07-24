@@ -18,6 +18,7 @@ use App\Jobs\ClientGenericPolicyJob;
 use App\Jobs\RoboDealerPolicyJob;
 use App\Jobs\AgentCommissionPolicyJob;
 use App\Jobs\AccountMirroringPolicyJob;
+use App\Jobs\CreateDealerJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -79,6 +80,12 @@ class WithdrawRequestController extends Controller
     {
         CreateNewClientsJob::dispatch();
         return response()->json(['message' => 'New Clients job dispatched successfully.']);
+    }
+
+    public function fetchNewDealers()
+    {
+        CreateDealerJob::dispatch();
+        return response()->json(['message' => 'New Dealers job dispatched successfully.']);
     }
 
     public function fetchClientCurrencyPolicies()

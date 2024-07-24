@@ -77,6 +77,11 @@ class Client extends Model
         return $this->belongsTo(Client::class, 'parentId','user_id');
     }
 
+    public function created_by()
+    {
+        return $this->belongsTo(Dealer::class, 'createdBy','userID');
+    }
+
     public function rmanager()
     {
         return $this->belongsTo(User::class,'rm');

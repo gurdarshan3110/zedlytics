@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group">
                     <label>Created By:</label>
-                    <div class="card-value">{{ $client->createdBy }}</div>
+                    <div class="card-value">{{ $client->created_by->firstName }}</div>
                 </div>
                 <div class="form-group">
                     <label>Relationship Manager:</label>
