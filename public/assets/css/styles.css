@@ -11613,7 +11613,7 @@ button.btn-none {
 }
 
 .nav-link {
-  border-bottom: 0.3px dotted;
+  border-bottom: 0.3px solid;
 }
 
 @media (max-width: 576px) {
