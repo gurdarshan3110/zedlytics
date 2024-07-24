@@ -11107,7 +11107,7 @@ body {
   transform: rotate(-90deg);
 }
 .sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-nested {
-  margin-left: 1.5rem;
+/*  margin-left: 1.5rem;*/
   flex-direction: column;
 }
 .sb-sidenav .sb-sidenav-footer {
@@ -11610,6 +11610,10 @@ button.btn-none {
     border: 0px;
     background: transparent;
     padding: 0px;
+}
+
+.nav-link {
+  border-bottom: 0.3px dotted;
 }
 
 @media (max-width: 576px) {

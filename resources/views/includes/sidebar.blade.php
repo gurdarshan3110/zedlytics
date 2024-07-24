@@ -37,9 +37,9 @@
                                             $childPermissionKey = 'view ' . $childModuleUrl;
                                         @endphp
                                         @if (in_array($childPermissionKey, $permissions))
-                                            <a class="nav-link {{ request()->is($childModule->url . '*') ? 'active' : '' }}" href="{{ route($childModule->url . '.index') }}">
+                                            <a class="nav-link sub-menu-item {{ request()->is($childModule->url . '*') ? 'active' : '' }}" href="{{ route($childModule->url . '.index') }}">
                                                 <div class="sb-nav-link-icon">
-                                                    <i class="fas {{ $childModule->icon }}"></i>
+                                                    <!-- <i class="fas {{ $childModule->icon }}"></i> -->
                                                 </div>
                                                 {{ $childModule->name }}
                                             </a>
