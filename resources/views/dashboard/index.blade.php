@@ -172,7 +172,7 @@
                             <div class="card {{(($data->bankBalance()
                                 <=$data->first_limit)?'bg-brand-primary':(($data->bankBalance()<=$data->second_limit)?'bg-brand-warning':'bg-brand-danger'))}} text-light">
                                 <div class="card-body">
-                                    <h6 class="card-title fs-7">{{$data->account_code}}</h6>
+                                    <h6 class="card-title fs-8">{{$data->account_code}}</h6>
                                     <h6 class=" ps-1">{{$data->bankBalance()}}</h6>
                                 </div>
                             </div>
