@@ -38,9 +38,7 @@
                                         @endphp
                                         @if (in_array($childPermissionKey, $permissions))
                                             <a class="nav-link sub-menu-item {{ request()->is($childModule->url . '*') ? 'active' : '' }}" href="{{ route($childModule->url . '.index') }}">
-                                                <div class="sb-nav-link-icon">
-                                                    <!-- <i class="fas {{ $childModule->icon }}"></i> -->
-                                                </div>
+                                                <i class="fas fa-circle ms-4 me-2"></i>
                                                 {{ $childModule->name }}
                                             </a>
                                         @endif
