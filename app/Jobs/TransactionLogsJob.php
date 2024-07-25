@@ -35,19 +35,25 @@ class TransactionLogsJob implements ShouldQueue
             $data = $response->json();
             
             $this->token = $data['data']['token'];
-            $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];            
+            $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];    
+            $fDate=null;        
+            $tDate=null;        
             $cronJob = CronJob::where('cron_job_name','Transaction Log API')->latest()->first();
-            $getTime = $this->getCronTime($cronJob['start_time'],$cronJob['end_time']);
+            if(!empty($cronjob)){
+                $fDate=$cronJob['start_time'];        
+                $tDate=$cronJob['end_time'];
+            }
+            $getTime = $this->getCronTime($fDate,$tDate);
             $fromDate = $getTime['from_date'];
             $toDate = $getTime['to_date'];
-            Log::error('From Date',$fromDate);
-            Log::error('To Date',$toDate);
+            //Log::info('From Date',$fromDate);
+            //Log::error('To Date',$toDate);
             $cronjob = CronJob::create([
                 'cron_job_name' => 'Transaction Log API',
                 'start_time' => $fromDate,
                 'end_time' => $toDate,
             ]);
-            //dd($cronjob);
+            
             $response = Http::timeout(360)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
@@ -70,7 +76,7 @@ class TransactionLogsJob implements ShouldQueue
             
         } catch (\Exception $e) {
             // Handle any exceptions
-            Log::error('Failed to create client and account: ' . $e->getMessage());
+            Log::error('Failed to create transaction: ' . $e->getMessage());
         }
     }
 
