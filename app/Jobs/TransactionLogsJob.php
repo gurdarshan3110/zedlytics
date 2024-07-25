@@ -25,7 +25,7 @@ class TransactionLogsJob implements ShouldQueue
     public function handle()
     {
         try {
-            set_time_limit(900);
+            set_time_limit(1800);
             $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
                 'password' => env('BESTBULL_PASSWORD'),
@@ -36,14 +36,20 @@ class TransactionLogsJob implements ShouldQueue
             CronJob::create(['cron_job_name' => 'Transaction Log API']);
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
-            $fromDate = Carbon::now()->subSeconds(2);
-            $toDate = Carbon::now()->toDateTimeString();
-            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $fromDate = '2024-07-23 21:30:00';
+            $toDate = '2024-07-24 21:29:59';
+            //$fromDate = Carbon::now()->subSeconds(2);
+            //$toDate = Carbon::now()->toDateTimeString();
+            $response = Http::timeout(180)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
+                    $clientData['ark_id'] = $clientData['id'];
                     $trxLog = TrxLog::updateOrCreate(
-                        ['ticketOrderId' => $clientData['ticketOrderId']],
+                        [
+                            'ticketOrderId' => $clientData['ticketOrderId'],
+                            'ark_id' => $clientData['ark_id'],
+                        ],
                         $clientData
                     );
                 } 

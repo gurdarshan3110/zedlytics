@@ -12,6 +12,7 @@ class TrxLog extends Model
     protected $table = 'trx_logs';
 
     protected $fillable = [
+        'ark_id',
         'ticketOrderId',
         'userId',
         'accountId',
@@ -47,7 +48,7 @@ class TrxLog extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class, 'user_id');
+        return $this->belongsTo(Client::class, 'user_id','userId');
     }
 
 }

@@ -12,6 +12,7 @@ use App\Models\Client;
 use App\Models\ClientAccount;
 use App\Models\Account;
 use App\Jobs\FetchOpenPositionsJob;
+use App\Jobs\TransactionLogsJob;
 use App\Jobs\CreateNewClientsJob;
 use App\Jobs\ClientCurrencyPolicyJob;
 use App\Jobs\ClientGenericPolicyJob;
@@ -80,6 +81,12 @@ class WithdrawRequestController extends Controller
     {
         CreateNewClientsJob::dispatch();
         return response()->json(['message' => 'New Clients job dispatched successfully.']);
+    }
+
+    public function fetchTransactionLog()
+    {
+        TransactionLogsJob::dispatch();
+        return response()->json(['message' => 'New Transaction log job dispatched successfully.']);
     }
 
     public function fetchNewDealers()

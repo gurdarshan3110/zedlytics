@@ -35,6 +35,9 @@
                                         @php
                                             $childModuleUrl = str_replace('-', ' ', $childModule->url);
                                             $childPermissionKey = 'view ' . $childModuleUrl;
+                                            if($childModuleUrl=='margin limit menu'){
+                                               $childPermissionKey = 'view margin limit';
+                                            }
                                         @endphp
                                         @if (in_array($childPermissionKey, $permissions))
                                             <a class="nav-link sub-menu-item {{ request()->is($childModule->url . '*') ? 'active' : '' }}" href="{{ route($childModule->url . '.index') }}">
