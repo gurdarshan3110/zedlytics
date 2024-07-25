@@ -39,14 +39,15 @@ class TransactionLogsJob implements ShouldQueue
             $fDate=null;        
             $tDate=null;        
             $cronJob = CronJob::where('cron_job_name','Transaction Log API')->latest()->first();
-            if(!empty($cronjob)){
+            if($cronJob){
                 $fDate=$cronJob['start_time'];        
                 $tDate=$cronJob['end_time'];
             }
+            //dd($fDate);
             $getTime = $this->getCronTime($fDate,$tDate);
             $fromDate = $getTime['from_date'];
             $toDate = $getTime['to_date'];
-            //Log::info('From Date',$fromDate);
+            //dd('From Date '.$cronJob);
             //Log::error('To Date',$toDate);
             $cronjob = CronJob::create([
                 'cron_job_name' => 'Transaction Log API',

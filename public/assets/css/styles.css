@@ -8098,7 +8098,7 @@ textarea.form-control-lg {
 /* rtl:end:remove */
 .text-primary {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #069a8e !important;/*rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;*/
 }
 
 .text-secondary {
@@ -11044,7 +11044,7 @@ body {
 
 .sb-topnav {
   padding-left: 0;
-  height: 56px;
+  height: 48px;
   z-index: 1039;
 }
 .sb-topnav .navbar-brand {
@@ -11620,6 +11620,81 @@ button.btn-none {
   font-size: 6px !important;
 }
 
+.bell-icon{
+  color:#ad7b03 !important;
+  font-size:20px;
+  position: relative;
+}
+.bell-count {
+    font-size: 9px;
+    bottom: 14px;
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid #000;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 16px;
+    background-color: #0b4c68 !important;
+    color: #fff !important;
+    font-style: italic;
+/*    animation: blink 1s infinite;*/
+}
+
+.chat-icon{
+  color:#ad7b03 !important;
+  font-size:20px;
+  position: relative;
+}
+
+.chat-count {
+    font-size: 9px;
+    bottom: 14px;
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid #000;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 21px;
+    background-color: #0b4c68 !important;
+    color: #fff !important;
+    font-style: italic;
+/*    animation: blink 1s infinite;*/
+}
+
+.avatar{
+  background-color: transparent !important;
+  border: 1px solid #069a8e;
+  /*  box-shadow: 0px 1px 5px 1px #069a8e;*/
+  color: #0b4c68 !important;
+  font-weight: 300;
+  font-size: 13px;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.fs-custom{
+  font-size: 14px !important;
+}
+
+.deposit_amt{
+  color: #36a2eb;
+}
+
+.sup-count {
+    font-style: italic;
+    font-size: 12px;
+    position: absolute;
+}
+
+.bg-fff{
+  background-color: #fff !important;
+}
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

@@ -88,3 +88,9 @@ function closingBalance($date,$bank_id){
     $balance = CashbookLedger::where('bank_id', $bank_id)->whereDate('ledger_date','<', $date)->sum('amount');
     return $balance;
 }
+
+function nameInitials($name){
+    preg_match_all('/\b\w/', $name, $matches);
+    $initials = implode('', $matches[0]);
+    return $initials;
+}
