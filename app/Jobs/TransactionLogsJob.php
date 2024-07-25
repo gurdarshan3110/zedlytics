@@ -38,7 +38,7 @@ class TransactionLogsJob implements ShouldQueue
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];    
             $fDate=null;        
             $tDate=null;        
-            $cronJob = CronJob::where('cron_job_name','Transaction Log API')->latest()->first();
+            $cronJob = CronJob::where('cron_job_name','Transactions Log API')->latest()->first();
             if($cronJob){
                 $fDate=$cronJob['start_time'];        
                 $tDate=$cronJob['end_time'];
@@ -50,7 +50,7 @@ class TransactionLogsJob implements ShouldQueue
             //dd('From Date '.$cronJob);
             Log::info('To Date '.$toDate);
             $cronjob = CronJob::create([
-                'cron_job_name' => 'Transaction Log API',
+                'cron_job_name' => 'Transactions Log API',
                 'start_time' => $fromDate,
                 'end_time' => $toDate,
             ]);
