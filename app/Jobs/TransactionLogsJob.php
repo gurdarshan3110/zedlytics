@@ -26,7 +26,7 @@ class TransactionLogsJob implements ShouldQueue
     {
         try {
             set_time_limit(3600);
-            $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
+            $response = Http::post(env('API_BASE_URL').'login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
                 'password' => env('BESTBULL_PASSWORD'),
                 'userName' => env('BESTBULL_USERNAME'),
@@ -55,7 +55,7 @@ class TransactionLogsJob implements ShouldQueue
                 'end_time' => $toDate,
             ]);
             
-            $response = Http::timeout(360)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $response = Http::timeout(360)->withToken($this->token)->get(env('API_BASE_URL')."admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
