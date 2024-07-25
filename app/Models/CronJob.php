@@ -24,6 +24,8 @@ class CronJob extends Model
     protected $fillable = [
         'cron_job_name',
         'hit_time',
+        'start_time',
+        'end_time'
     ];
 
     /**

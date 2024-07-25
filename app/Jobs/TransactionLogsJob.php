@@ -25,7 +25,7 @@ class TransactionLogsJob implements ShouldQueue
     public function handle()
     {
         try {
-            set_time_limit(1800);
+            set_time_limit(3600);
             $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
                 'password' => env('BESTBULL_PASSWORD'),
@@ -33,14 +33,20 @@ class TransactionLogsJob implements ShouldQueue
             ]);
 
             $data = $response->json();
-            CronJob::create(['cron_job_name' => 'Transaction Log API']);
+            
             $this->token = $data['data']['token'];
-            $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
-            $fromDate = '2024-07-23 21:30:00';
-            $toDate = '2024-07-24 21:29:59';
-            //$fromDate = Carbon::now()->subSeconds(2);
-            //$toDate = Carbon::now()->toDateTimeString();
-            $response = Http::timeout(180)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+            $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];            
+            $cronJob = CronJob::where('cron_job_name','Transaction Log API')->latest()->first();
+            $getTime = $this->getCronTime($cronJob['start_time'],$cronJob['end_time']);
+            $fromDate = $getTime['from_date'];
+            $toDate = $getTime['to_date'];
+            CronJob::create([
+                'cron_job_name' => 'Transaction Log API',
+                'start_time' => $fromDate,
+                'end_time' => $toDate,
+            ]);
+
+            $response = Http::timeout(360)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
@@ -65,4 +71,27 @@ class TransactionLogsJob implements ShouldQueue
             Log::error('Failed to create client and account: ' . $e->getMessage());
         }
     }
+
+    public function getCronTime($start_time, $end_time) {
+        if ($start_time == null && $end_time == null) {
+            return array(
+                'from_date' => '2022-07-06 00:00:00',
+                'to_date'   => '2022-07-06 11:59:59'
+            );
+        }
+
+        if ($start_time != null) {
+            $start_time = date('Y-m-d H:i:s', strtotime($start_time . ' +1 day'));
+        }
+
+        if ($end_time != null) {
+            $end_time = date('Y-m-d H:i:s', strtotime($end_time . ' +1 day'));
+        }
+
+        return array(
+            'from_date' => $start_time,
+            'to_date'   => $end_time
+        );
+    }
+
 }
