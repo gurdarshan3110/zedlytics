@@ -65,7 +65,7 @@ class TransactionLogsJob implements ShouldQueue
             } else {
                 // Handle API call failure
                 // Log the error or take appropriate actions
-                \Log::error("Failed to update transaction log: " . $response->body());
+                Log::error("Failed to update transaction log: " . $response->body());
             }
             
         } catch (\Exception $e) {
