@@ -40,12 +40,13 @@ class TransactionLogsJob implements ShouldQueue
             $getTime = $this->getCronTime($cronJob['start_time'],$cronJob['end_time']);
             $fromDate = $getTime['from_date'];
             $toDate = $getTime['to_date'];
-            CronJob::create([
+
+            $cronjob = CronJob::create([
                 'cron_job_name' => 'Transaction Log API',
                 'start_time' => $fromDate,
                 'end_time' => $toDate,
             ]);
-
+            //dd($cronjob);
             $response = Http::timeout(360)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
