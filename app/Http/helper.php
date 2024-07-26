@@ -135,10 +135,8 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/'.$date->toDateString().'/'.$id.'">
                     <p class="text-center m-0">Equity</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
-                        <div class="w-75 fs-14 text-right">
+                        <div class="w-100 fs-14 text-center">
                             '.$equity.'
-                        </div>
-                        <div class="w-25 fs-14 text-right">
                         '.(($equity>=$lastequity)?'<i class="fa fa-long-arrow-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-long-arrow-down text-danger  ms-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             
                         </div>
