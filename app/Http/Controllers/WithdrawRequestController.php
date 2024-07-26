@@ -72,8 +72,7 @@ class WithdrawRequestController extends Controller
 
     public function fetchOpenPositions()
     {
-        $this->login();
-        FetchOpenPositionsJob::dispatch($this->token, $this->clientTreeUserIdNode);
+        FetchOpenPositionsJob::dispatch();
         return response()->json(['message' => 'Open positions fetching job dispatched successfully.']);
     }
 
@@ -176,46 +175,7 @@ class WithdrawRequestController extends Controller
 
     public function fetchAndInsertClientRecords()
     {
-        $this->login();
-        CronJob::create(['cron_job_name' => 'Update Client Info Job']);
-
-        $clients = Client::where('client_code', 2)->where('status', 0)->get();
-
-        foreach ($clients as $client) {
-            $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
-
-            // Handle the response as needed
-            if ($response->successful()) {
-
-                $clientData = $response->json()['data'];
-                //dd($clientData);
-                // Update client information
-                $clientData['client_code'] = $clientData['accountId'];
-                $clientData['phone_no'] = $clientData['accountId'].$clientData['id'];
-                $clientData['email'] = $clientData['id'].'@zedlytics.com';
-                $clientData['name'] = $clientData['firstName'];
-                $clientData['country'] = $clientData['country'];
-                $clientData['status'] = 0;
-                $client = Client::updateOrCreate(
-                    ['user_id' => $clientData['id']],
-                    $clientData
-                );
-                $clientData['type'] = Account::CLIENT_ACCOUNT;
-                $account = Account::updateOrCreate(
-                    ['account_code' => $clientData['client_code']],
-                    $clientData
-                );
-
-                $map = ClientAccount::updateOrCreate(
-                    ['account_id' => $account['id']],
-                    ['client_id'=>$client['id']]
-                );
-
-            } else {
-                // Handle API call failure
-                // Log the error or take appropriate actions
-                \Log::error("Failed to update client with user_id {$client->user_id}: " . $response->body());
-            }
-        }
+        CreateNewClientsJob::dispatch();
+        return response()->json(['message' => 'New Client dispatched successfully.']);
     }
 }
