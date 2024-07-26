@@ -234,7 +234,7 @@ class DashboardController extends Controller
         if($brand=='all'){
             $banks = Bank::where('status',1)->get();
             return view('dashboard.financials', compact('title',
-                'date','banks'
+                'date','banks','brand'
             ));
         }else{
             $banks = Bank::where('status',1)->where('brand_id',$brand)->get();
