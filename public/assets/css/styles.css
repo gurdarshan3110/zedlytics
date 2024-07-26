@@ -11711,8 +11711,20 @@ button.btn-none {
   margin-right: 4px !important;
 }
 
+.me-2px{
+  margin-right: 2px !important;
+}
+
 .ms-4px{
   margin-left: 4px !important;
+}
+
+.w-85{
+  width: 85% !important;
+}
+
+.w-15{
+  width: 15% !important;
 }
 
 @media (max-width: 576px) {
