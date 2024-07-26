@@ -11711,6 +11711,10 @@ button.btn-none {
   margin-right: 4px !important;
 }
 
+.ms-4px{
+  margin-left: 4px !important;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

@@ -123,7 +123,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                             '.(($actualWithdraw!='' && $withdraw==$actualWithdraw)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').$withdraw.'
                         </div>
                         <div class="w-25 d-flex align-items-center">
-                            '.(($withdraw>=$lastwithdraw)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            '.(($withdraw>=$lastwithdraw)?'<i class="fa fa-long-arrow-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-long-arrow-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             <span class="fs-7 ms-1 mt-2">
                                 '.$withdrawCount.'
                             </span>
@@ -135,9 +135,12 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/'.$date->toDateString().'/'.$id.'">
                     <p class="text-center m-0">Equity</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
-                        <div class="w-100 fs-14">
-                            '.(($equity>=$lastequity)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                        <div class="w-75 fs-14 text-right">
                             '.$equity.'
+                        </div>
+                        <div class="w-25 fs-14 text-right">
+                        '.(($equity>=$lastequity)?'<i class="fa fa-long-arrow-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-long-arrow-down text-danger  ms-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            
                         </div>
                     </div>
                 </a>
@@ -147,7 +150,6 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Gap</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14">
-                            '.(($gap>=$lastgap)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             '.$gap.'
                         </div>
                     </div>
@@ -157,8 +159,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/'.$date->toDateString().'/'.$id.'">
                     <p class="text-center m-0">Parking</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
-                        <div class="w-100 fs-14">
-                            '.(($parking>=$lastparking)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                        <div class="w-100 fs-14"> 
                             '.$parking.'
                         </div>
                     </div>
