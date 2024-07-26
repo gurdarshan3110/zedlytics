@@ -71,214 +71,74 @@
                     $gap = 0;
                     $todayEquityRecords = $brand->equityRecords($startDate->toDateString(),$startDate->toDateString());
                     $todayParkings = $brand->parkings($startDate->toDateString());
+                    $todaysWithdraw = $brand->todaysWithdrawals();
+                    $todaysDeposit = $brand->todaysDeposits();
                 @endphp
                 @if(array_intersect($bankAccountCodes, permissions()))
-                    <h5 class="card-title mt-2 mb-2 p-2 bg-primary text-light"><strong>{{$brand->name}}</strong> Financials</h5>
+                    <!-- <h5 class="card-title mt-2 mb-2 p-2 bg-primary  text-light"><strong>{{$brand->name}}</strong> Financials</h5> -->
                     @if(in_array('dashboard charts', permissions()))
                     <div class="row mt-2">
+                        @php
+                            $todayDeposit = $todaysDeposit['deposit'];
+                            $todayDepositCount = $todaysDeposit['count'];
+                            $todayWithdraw = $todaysWithdraw['withdraw'];
+                            $todayWithdrawCount = $todaysWithdraw['count'];
+                            $todayActualDeposit = $todayEquityRecords['deposit'];
+                            $todayActualWithdraw = $todayEquityRecords['withdraw'];
+                            $todayEquity = $todayEquityRecords['equity'];
+                            $todayGap = $todayDeposit - $todayWithdraw;
+                            $todayParking = $todayParkings;
+                     
+                            $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
+                            $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
+                            $gap = $deposits['deposit'] - $withdrawals['withdraw'];
+                            $yesterdayEquityRecords = $brand->equityRecords($yesterdayStartDate->toDateString(),$yesterdayStartDate->toDateString());
+                            $yesterdayParkings = $brand->parkings($yesterdayStartDate->toDateString());
+
+                            $yesterDeposit = $deposits['deposit'];
+                            $yesterDepositCount = $deposits['count'];
+                            $yesterWithdraw = $withdrawals['withdraw'];
+                            $yesterWithdrawCount = $withdrawals['count'];
+                            $yesterActualDeposit = $yesterdayEquityRecords['deposit'];
+                            $yesterActualWithdraw = $yesterdayEquityRecords['withdraw'];
+                            $yesterEquity = $yesterdayEquityRecords['equity'];
+                            $yesterGap = $yesterDeposit - $yesterWithdraw;
+                            $yesterParking = $yesterdayParkings;
+
+
+                            $dayBdeposits = $brand->depositsBetween($dayBeforeYesterdayStartDate,$dayBeforeYesterdayEndDate);
+                            $dayBwithdrawals = $brand->withdrawalsBetween($dayBeforeYesterdayStartDate,$dayBeforeYesterdayEndDate);
+                            $dayBgap = $deposits['deposit'] - $withdrawals['withdraw'];
+                            $dayByesterdayEquityRecords = $brand->equityRecords($dayBeforeYesterdayStartDate->toDateString(),$dayBeforeYesterdayEndDate->toDateString());
+                            $dayByesterdayParkings = $brand->parkings($dayBeforeYesterdayStartDate->toDateString());
+
+                            $daybefYesDeposit = $dayBdeposits['deposit'];
+                            $daybefYesWithdraw = $dayBwithdrawals['withdraw'];
+                            $daybefYesEquity = $dayByesterdayEquityRecords['equity'];
+                            $daybefYesGap = $daybefYesDeposit - $daybefYesWithdraw;
+                            $daybefYesParking = $dayByesterdayParkings;
+
+                        @endphp
                         <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title bg-primary p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials </span><span class="text-end w-25">{{$brand->name}}</span></h5>
-                                    <div class="row">
-                                        <!-- First half of the card -->
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
-                                                <div class="card-text fw-bold deposit text-dark">
-                                                    <div class="w-100 fw-bold">Deposits: {{ $brand->todaysDeposits()['count'] }}</div> 
-                                                    <div class="w-100">{{ $brand->todaysDeposits()['deposit'] }} 
-                                                        @if($todayEquityRecords!=null && $brand->todaysDeposits()['deposit']==$todayEquityRecords['deposit'])
-                                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                                        @else
-                                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
-                                                <div class="card-text mt-3 fw-bold withdraw">
-                                                    <div class="w-100 fw-bold">Withdraw: {{ $brand->todaysWithdrawals()['count'] }}</div> 
-                                                    <div class="w-100">{{ $brand->todaysWithdrawals()['withdraw'] }}
-                                                        @if($todayEquityRecords!=null && $brand->todaysWithdrawals()['withdraw']==$todayEquityRecords['withdraw'])
-                                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                                        @else
-                                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <div class="card-text mt-3 fw-bold gap">
-                                                <div class="w-100 fw-bold">Gap:</div> 
-                                                <div class="w-100">{{ $brand->todaysDeposits()['deposit']- $brand->todaysWithdrawals()['withdraw']}}</div>
-                                            </div>
-                                        </div>
-                                        <!-- Second half of the card -->
-                                        <div class="col-md-6">
-                                            <canvas id="myPieChart{{$brand->id}}a" width="50" height="50"></canvas>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold equity text-dark">
-                                                <div class="w-100 fw-bold">Equity:</div> 
-                                                <div class="w-100">{{ $todayEquityRecords==null?0:$todayEquityRecords['equity'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold parking text-dark">
-                                                <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $todayParkings }}</div>
-                                            </div>
-                                        </div>
-                                        @push('jsscript')
-                                        <script>
-                                            var todaysDeposits = @json($brand->todaysDeposits()['deposit']); 
-                                            var todaysWithdrawals = @json($brand->todaysWithdrawals()['withdraw']); 
-                                            var difference = todaysDeposits - todaysWithdrawals;
-                                            var id = {{$brand->id}};
-                                            difference = difference.toFixed(2);
-                                            var ctx = document.getElementById('myPieChart'+id+'a').getContext('2d');
-                                            var myPieChart = new Chart(ctx, {
-                                                type: 'pie',
-                                                data: {
-                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
-                                                    datasets: [{
-                                                        data: [todaysDeposits, todaysWithdrawals, difference],
-                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-                                                    }]
-                                                },
-                                                options: {
-                                                    responsive: true,
-                                                    plugins: {
-                                                        legend: {
-                                                            position: 'top',
-                                                        },
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: function(context) {
-                                                                    var label = context.label || '';
-                                                                    if (label) {
-                                                                        label += ': ';
-                                                                    }
-                                                                    if (context.raw !== null) {
-                                                                        label += context.raw;
-                                                                    }
-                                                                    return label;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        </script>
-                                        @endpush
-                                    </div>
+                            <div class="card bg-fff">
+                                <div class="card-body financial">
+                                    <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
+                                    <p class="text-dark">{{date('d M Y l',strtotime($startDate))}}</p>
+                                    {!! financialCard($brand->id,$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title bg-primary p-2 rounded text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span><span class="text-end w-25">{{$brand->name}}</span></h5>
-                                    <?php
-                                    $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
-                                    $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
-                                    $gap = $deposits['deposit'] - $withdrawals['withdraw'];
-                                    $yesterdayEquityRecords = $brand->equityRecords($yesterdayStartDate->toDateString(),$yesterdayStartDate->toDateString());
-                                    $yesterdayParkings = $brand->parkings($yesterdayStartDate->toDateString());
-                                    ?>
-                                    <div class="row">
-                                        <!-- First half of the card -->
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
-                                                <div class="card-text fw-bold deposit text-dark">
-                                                    <div class="w-100 fw-bold">Deposits: {{ $deposits['count'] }}</div> 
-                                                    <div class="w-100">{{ $deposits['deposit'] }}
-                                                        @if($yesterdayEquityRecords!=null && $deposits['deposit']==$yesterdayEquityRecords['deposit'])
-                                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                                        @else
-                                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/{{$brand->id}}">
-                                                <div class="card-text mt-3 fw-bold withdraw">
-                                                    <div class="w-100 fw-bold">Withdraw: {{ $withdrawals['count'] }}</div> 
-                                                    <div class="w-100">{{ $withdrawals['withdraw'] }}
-                                                        @if($yesterdayEquityRecords!=null && $withdrawals['withdraw']==$yesterdayEquityRecords['withdraw'])
-                                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                                        @else
-                                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <div class="card-text mt-3 fw-bold gap">
-                                                <div class="w-100 fw-bold">Gap:</div> 
-                                                <div class="w-100">{{ $gap}}</div>
-                                            </div>
-                                        </div>
-                                        <!-- Second half of the card -->
-                                        <div class="col-md-6">
-                                            <canvas id="myPieChart{{$brand->id}}b" width="50" height="50"></canvas>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold equity text-dark">
-                                                <div class="w-100 fw-bold">Equity:</div> 
-                                                <div class="w-100">{{ $yesterdayEquityRecords==null?0:$yesterdayEquityRecords['equity'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column justify-content-center">
-                                            <div class="card-text mt-3 fw-bold parking text-dark">
-                                                <div class="w-100 fw-bold">Parking:</div> 
-                                                <div class="w-100">{{ $yesterdayParkings }}</div>
-                                            </div>
-                                        </div>
-                                        @push('jsscript')
-                                        <script>
-                                            var todaysDeposits = @json($deposits['deposit']); 
-                                            var todaysWithdrawals = @json($withdrawals['withdraw']); 
-                                            var difference = todaysDeposits - todaysWithdrawals;
-                                            var id = '{{$brand->id}}';
-                                            difference = difference.toFixed(2);
-                                            var ctx = document.getElementById('myPieChart'+id+'b').getContext('2d');
-                                            var myPieChart = new Chart(ctx, {
-                                                type: 'pie',
-                                                data: {
-                                                    labels: ['Deposits', 'Withdrawals', 'Gap'],
-                                                    datasets: [{
-                                                        data: [todaysDeposits, todaysWithdrawals, difference],
-                                                        backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56'],
-                                                    }]
-                                                },
-                                                options: {
-                                                    responsive: true,
-                                                    plugins: {
-                                                        legend: {
-                                                            position: 'top',
-                                                        },
-                                                        tooltip: {
-                                                            callbacks: {
-                                                                label: function(context) {
-                                                                    var label = context.label || '';
-                                                                    if (label) {
-                                                                        label += ': ';
-                                                                    }
-                                                                    if (context.raw !== null) {
-                                                                        label += context.raw;
-                                                                    }
-                                                                    return label;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        </script>
-                                        @endpush
-                                    </div>
+                            <div class="card bg-fff">
+                                <div class="card-body financial">
+                                    <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
+                                    <p class="text-dark">{{date('d M Y l',strtotime($yesterdayStartDate))}}</p>
+                                    {!! financialCard($brand->id,$yesterdayStartDate,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity,$yesterActualDeposit,$yesterActualWithdraw,$yesterDepositCount,$yesterWithdrawCount,$daybefYesDeposit,$daybefYesWithdraw,$daybefYesGap,$daybefYesParking,$daybefYesEquity) !!}
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     @endif
                 @endif
