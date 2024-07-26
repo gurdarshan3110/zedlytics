@@ -107,7 +107,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                             '.(($actualDeposit!='' && $deposit==$actualDeposit)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').$deposit.'
                         </div>
                         <div class="w-25 d-flex align-items-center">
-                            '.(($deposit>=$lastdeposit)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-success  me-4px fs-5 me-0" aria-hidden="true"></i>').'
+                            '.(($deposit>=$lastdeposit)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').'
                             <span class="fs-7 ms-1 mt-2">
                                 '.$depositCount.'
                             </span>
@@ -123,7 +123,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                             '.(($actualWithdraw!='' && $withdraw==$actualWithdraw)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').$withdraw.'
                         </div>
                         <div class="w-25 d-flex align-items-center">
-                            '.(($withdraw>=$lastwithdraw)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-success  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            '.(($withdraw>=$lastwithdraw)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             <span class="fs-7 ms-1 mt-2">
                                 '.$withdrawCount.'
                             </span>
@@ -136,7 +136,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Equity</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14">
-                            '.(($equity>=$lastequity)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-success  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            '.(($equity>=$lastequity)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             '.$equity.'
                         </div>
                     </div>
@@ -147,7 +147,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Gap</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14">
-                            '.(($gap>=$lastgap)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-success  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            '.(($gap>=$lastgap)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             '.$gap.'
                         </div>
                     </div>
@@ -158,7 +158,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Parking</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14">
-                            '.(($parking>=$lastparking)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-success  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
+                            '.(($parking>=$lastparking)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').' 
                             '.$parking.'
                         </div>
                     </div>
