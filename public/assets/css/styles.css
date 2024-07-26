@@ -7192,6 +7192,7 @@ textarea.form-control-lg {
 
 .border-bottom-1 {
   border-bottom: 2px solid #0b4c68 !important;
+  padding-bottom: 10px !important;
 }
 
 .border-start {

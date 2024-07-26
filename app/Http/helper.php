@@ -104,7 +104,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/'.$date->toDateString().'/'.$id.'">
                     <div class="card-text d-flex text-dark border-bottom-1">
                         <div class="w-75 fs-3">
-                            '.(($actualDeposit!='' && $deposit==$actualDeposit)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').$deposit.'
+                            '.(($actualDeposit!='' && $deposit==$actualDeposit)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').format_amount($deposit).'
                         </div>
                         <div class="w-25 d-flex align-items-center">
                             '.(($deposit>=$lastdeposit)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').'
@@ -120,7 +120,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Withdrawal</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-85 fs-14 text-center">
-                            '.(($actualWithdraw!='' && $withdraw==$actualWithdraw)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').$withdraw.'
+                            '.(($actualWithdraw!='' && $withdraw==$actualWithdraw)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').format_amount($withdraw).'
                         </div>
                         <div class="w-15 d-flex align-items-center text-end">
                             '.(($withdraw>=$lastwithdraw)?'<i class="fa fa-long-arrow-up text-success  me-2px fs-14 me-0" aria-hidden="true"></i>':'<i class="fa fa-long-arrow-down text-danger  me-4px fs-14 me-0" aria-hidden="true"></i>').' 
@@ -136,9 +136,9 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Equity</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-85 fs-14 text-center">
-                            '.$equity.'
+                            '.format_amount($equity).'
                     </div>
-                    <div class="w-15 fs-14 text-end">
+                    <div class="w-15 fs-14 text-center">
                         '.(($equity>=$lastequity)?'<i class="fa fa-long-arrow-up text-success  me-4px fs-14 me-0" aria-hidden="true"></i>':'<i class="fa fa-long-arrow-down text-danger  ms-4px fs-14 me-0" aria-hidden="true"></i>').' 
                             
                         </div>
@@ -150,7 +150,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Gap</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14">
-                            '.$gap.'
+                            '.format_amount($gap).'
                         </div>
                     </div>
                 </a>
@@ -160,7 +160,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                     <p class="text-center m-0">Parking</p>
                     <div class="card-text d-flex text-dark m-0 text-center">
                         <div class="w-100 fs-14"> 
-                            '.$parking.'
+                            '.format_amount($parking).'
                         </div>
                     </div>
                 </a>
@@ -168,4 +168,23 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
         </div>
     ';
     return $content;
+}
+
+function format_amount($number) {
+    $decimal = '';
+    if (strpos($number, '.') !== false) {
+        list($number, $decimal) = explode('.', $number);
+        $decimal = '.' . substr($decimal, 0, 2); // Limiting to 2 decimal places
+    }
+    
+    $lastThree = substr($number, -3);
+    $restUnits = substr($number, 0, -3);
+    if(strlen($restUnits) > 0) {
+        $restUnits = preg_replace("/\B(?=(\d{2})+(?!\d))/", ",", $restUnits);
+        $number = $restUnits . "," . $lastThree;
+    } else {
+        $number = $lastThree;
+    }
+
+    return $number . $decimal;
 }
