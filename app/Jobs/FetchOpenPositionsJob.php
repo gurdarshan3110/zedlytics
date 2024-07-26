@@ -30,9 +30,9 @@ class FetchOpenPositionsJob implements ShouldQueue
 
     public function handle()
     {
-        $username ='ZL';
-        $password ='ZED786';
-        $base_url ='https://bestbullapi.arktrader.io/api/apigateway/';
+        $username =config('services.bestbull.username');
+        $password =config('services.bestbull.password');
+        $this->baseUrl =config('services.bestbull.base_url');
         $response = Http::post($base_url.'login/public/api/v1/login', [
             'companyName' => 'Best Bull',
             'password' => $password,
