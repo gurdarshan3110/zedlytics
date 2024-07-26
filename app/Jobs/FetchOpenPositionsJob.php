@@ -23,9 +23,12 @@ class FetchOpenPositionsJob implements ShouldQueue
     //private $token;
     //private $clientTreeUserIdNode;
 
+    protected $token;
+    protected $baseUrl;
+
     public function __construct()
     {
-        
+        $this->baseUrl = config('services.bestbull.base_url');
     }
 
     public function handle()
