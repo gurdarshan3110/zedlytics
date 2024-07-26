@@ -226,17 +226,7 @@
                             $todayEquity = $todayEquityRecords['equity'];
                             $todayGap = $todayDeposit - $todayWithdraw;
                             $todayParking = $todayParkings;
-                        @endphp
-                        <div class="col-md-4">
-                            <div class="card bg-fff">
-                                <div class="card-body financial">
-                                    <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
-                                    <p class="text-dark">{{date('d M Y l',strtotime($startDate))}}</p>
-                                    {!! financialCard($brand->id,$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount) !!}
-                                </div>
-                            </div>
-                        </div>
-                        @php
+                     
                             $deposits = $brand->depositsBetween($yesterdayStartDate,$yesterdayEndDate);
                             $withdrawals = $brand->withdrawalsBetween($yesterdayStartDate,$yesterdayEndDate);
                             $gap = $deposits['deposit'] - $withdrawals['withdraw'];
@@ -252,39 +242,75 @@
                             $yesterEquity = $yesterdayEquityRecords['equity'];
                             $yesterGap = $yesterDeposit - $yesterWithdraw;
                             $yesterParking = $yesterdayParkings;
+
+
+                            $dayBdeposits = $brand->depositsBetween($dayBeforeYesterdayStartDate,$dayBeforeYesterdayEndDate);
+                            $dayBwithdrawals = $brand->withdrawalsBetween($dayBeforeYesterdayStartDate,$dayBeforeYesterdayEndDate);
+                            $dayBgap = $deposits['deposit'] - $withdrawals['withdraw'];
+                            $dayByesterdayEquityRecords = $brand->equityRecords($dayBeforeYesterdayStartDate->toDateString(),$dayBeforeYesterdayEndDate->toDateString());
+                            $dayByesterdayParkings = $brand->parkings($dayBeforeYesterdayStartDate->toDateString());
+
+                            $daybefYesDeposit = $dayBdeposits['deposit'];
+                            $daybefYesWithdraw = $dayBwithdrawals['withdraw'];
+                            $daybefYesEquity = $dayByesterdayEquityRecords['equity'];
+                            $daybefYesGap = $daybefYesDeposit - $daybefYesWithdraw;
+                            $daybefYesParking = $dayByesterdayParkings;
+
                         @endphp
                         <div class="col-md-4">
                             <div class="card bg-fff">
                                 <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
+                                    <p class="text-dark">{{date('d M Y l',strtotime($startDate))}}</p>
+                                    {!! financialCard($brand->id,$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card bg-fff">
+                                <div class="card-body financial">
+                                    <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('d M Y l',strtotime($yesterdayStartDate))}}</p>
-                                    {!! financialCard($brand->id,$yesterdayStartDate,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity,$yesterActualDeposit,$yesterActualWithdraw,$yesterDepositCount,$yesterWithdrawCount) !!}
+                                    {!! financialCard($brand->id,$yesterdayStartDate,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity,$yesterActualDeposit,$yesterActualWithdraw,$yesterDepositCount,$yesterWithdrawCount,$daybefYesDeposit,$daybefYesWithdraw,$daybefYesGap,$daybefYesParking,$daybefYesEquity) !!}
                                 </div>
                             </div>
                         </div>
                         @php
-                        $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
-                        $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
-                        $gap = $deposits['deposit'] - $withdrawals['withdraw'];
-                        $monthEquityRecords = $brand->equityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
-                        $monthParkings = $brand->parkingsupto($monthStartDate->toDateString(),$monthEndDate->toDateString());
-                        
-                        $monDeposit = $deposits['deposit'];
-                        $monDepositCount = $deposits['count'];
-                        $monWithdraw = $withdrawals['withdraw'];
-                        $monWithdrawCount = $withdrawals['count'];
-                        $monActualDeposit = $monthEquityRecords['deposit'];
-                        $monActualWithdraw = $monthEquityRecords['withdraw'];
-                        $monEquity = $monthEquityRecords['equity'];
-                        $monGap = $monDeposit - $monWithdraw;
-                        $monParking = $monthParkings;
+                            $deposits = $brand->depositsBetween($monthStartDate,$monthEndDate);
+                            $withdrawals = $brand->withdrawalsBetween($monthStartDate,$monthEndDate);
+                            $gap = $deposits['deposit'] - $withdrawals['withdraw'];
+                            $monthEquityRecords = $brand->equityRecords($monthStartDate->toDateString(),$monthEndDate->toDateString());
+                            $monthParkings = $brand->parkingsupto($monthStartDate->toDateString(),$monthEndDate->toDateString());
+                            
+                            $monDeposit = $deposits['deposit'];
+                            $monDepositCount = $deposits['count'];
+                            $monWithdraw = $withdrawals['withdraw'];
+                            $monWithdrawCount = $withdrawals['count'];
+                            $monActualDeposit = $monthEquityRecords['deposit'];
+                            $monActualWithdraw = $monthEquityRecords['withdraw'];
+                            $monEquity = $monthEquityRecords['equity'];
+                            $monGap = $monDeposit - $monWithdraw;
+                            $monParking = $monthParkings;
+
+                            $monBedeposits = $brand->depositsBetween($monthBeforeStartDate,$monthBeforeEndDate);
+                            $monBewithdrawals = $brand->withdrawalsBetween($monthBeforeStartDate,$monthBeforeEndDate);
+                            $monBegap = $deposits['deposit'] - $withdrawals['withdraw'];
+                            $monBemonthEquityRecords = $brand->equityRecords($monthBeforeStartDate->toDateString(),$monthBeforeEndDate->toDateString());
+                            $monBemonthParkings = $brand->parkingsupto($monthBeforeStartDate->toDateString(),$monthBeforeEndDate->toDateString());
+                            
+                            $monBDeposit = $monBedeposits['deposit'];
+                            $monBWithdraw = $monBewithdrawals['withdraw'];
+                            $monBEquity = $monBemonthEquityRecords['equity'];
+                            $monBGap = $monBDeposit - $monBWithdraw;
+                            $monBParking = $monBemonthParkings;
                         @endphp
                         <div class="col-md-4">
                             <div class="card bg-fff">
                                 <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('M Y',strtotime($monthStartDate))}}</p>
-                                    {!! financialCard($brand->id,$monthStartDate,$monDeposit,$monWithdraw,$monGap,$monParking,$monEquity,$monActualDeposit,$monActualWithdraw,$monDepositCount,$monWithdrawCount) !!}
+                                    {!! financialCard($brand->id,$monthStartDate,$monDeposit,$monWithdraw,$monGap,$monParking,$monEquity,$monActualDeposit,$monActualWithdraw,$monDepositCount,$monWithdrawCount,$monBDeposit,$monBWithdraw,$monBGap,$monBParking,$monBEquity) !!}
                                 </div>
                             </div>
                         </div>
@@ -296,170 +322,61 @@
         </div>
         @if(in_array('dashboard charts', permissions()))
         <div class="row mt-2">
-            <h5 class="card-title mt-2 mb-2 p-2 bg-primary  text-light">Complete Overview</strong></h5>
+            <h5 class="card-title mt-2 mb-2 p-2 text-dark">Complete Overview</h5>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-primary p-2  text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($startDate))}} Financials</span></h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
-                                    <div class="card-text fw-bold deposit text-dark">
-                                        <div class="w-100 fw-bold">Deposits: {{ $todaysDeposits['count'] }}</div> 
-                                        <div class="w-100">{{ $todaysDeposits['deposit'] }}
-                                           @if($todaysEquity!=null && $todaysDeposits['deposit']==$todaysEquity['deposit'])
-                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                            @else
-                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$startDate->toDateString()}}/all">
-                                    <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw: {{ $todaysWithdrawals['count'] }}</div> 
-                                        <div class="w-100">{{ $todaysWithdrawals['withdraw'] }}
-                                            @if($todaysEquity!=null && $todaysWithdrawals['withdraw']==$todaysEquity['withdraw'])
-                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                            @else
-                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $todaysDeposits['deposit'] - $todaysWithdrawals['withdraw'] }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart" width="50" height="50"></canvas>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold equity text-dark">
-                                    <div class="w-100 fw-bold">Equity:</div> 
-                                    <div class="w-100">{{ $todaysEquity==null?0:$todaysEquity['equity'] }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold parking text-dark">
-                                    <div class="w-100 fw-bold">Parking:</div> 
-                                    <div class="w-100">{{ $todaysParkings }}</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body bg-fff">
+                        <p class="text-dark">{{date('M Y',strtotime($startDate))}}</p>
+                        @php
+                            $todayDeposit = $todaysDeposits['deposit'];
+                            $todayDepositCount = $todaysDeposits['count'];
+                            $todayWithdraw = $todaysWithdrawals['withdraw'];
+                            $todayWithdrawCount = $todaysWithdrawals['count'];
+                            $todayActualDeposit = $todaysEquity['deposit'];
+                            $todayActualWithdraw = $todaysEquity['withdraw'];
+                            $todayEquity = $todaysEquity['equity'];
+                            $todayGap = $todayDeposit - $todayWithdraw;
+                            $todayParking = $todaysParkings;
+                        @endphp
+                        {!! financialCard('all',$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-primary p-2 text-light w-100 d-flex"><span class="text-start w-75">{{date('d/m/Y',strtotime($endDate))}} Financials</span></h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
-                                    <div class="card-text fw-bold deposit">
-                                        <div class="w-100 fw-bold">Deposits: {{ $yesterdayDeposits['count'] }}</div> 
-                                        <div class="w-100">{{ $yesterdayDeposits['deposit'] }}
-                                            @if($yesterdaysEquity!=null && $yesterdayDeposits['deposit']==$yesterdaysEquity['deposit'])
-                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                            @else
-                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/{{$endDate->toDateString()}}/all">
-                                    <div class="card-text mt-3 fw-bold withdraw">
-                                        <div class="w-100 fw-bold">Withdraw: {{ $yesterdayWithdrawals['count'] }}</div> 
-                                        <div class="w-100">{{ $yesterdayWithdrawals['withdraw'] }}
-                                            @if($yesterdaysEquity!=null && $yesterdayWithdrawals['withdraw']==$yesterdaysEquity['withdraw'])
-                                            <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                            @else
-                                            <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $yesterdayDeposits['deposit'] - $yesterdayWithdrawals['withdraw'] }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart2" width="50" height="50"></canvas>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold equity text-dark">
-                                    <div class="w-100 fw-bold">Equity:</div> 
-                                    <div class="w-100">{{ $yesterdaysEquity==null?0:$yesterdaysEquity['equity'] }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold parking text-dark">
-                                    <div class="w-100 fw-bold">Parking:</div> 
-                                    <div class="w-100">{{ $yesterdaysParkings }}</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body bg-fff">
+                        <p class="text-dark">{{date('M Y',strtotime($endDate))}}</p>
+                        @php
+                            $todayDeposit = $yesterdayDeposits['deposit'];
+                            $todayDepositCount = $yesterdayDeposits['count'];
+                            $todayWithdraw = $yesterdayWithdrawals['withdraw'];
+                            $todayWithdrawCount = $yesterdayWithdrawals['count'];
+                            $todayActualDeposit = $yesterdaysEquity['deposit'];
+                            $todayActualWithdraw = $yesterdaysEquity['withdraw'];
+                            $todayEquity = $yesterdaysEquity['equity'];
+                            $todayGap = $todayDeposit - $todayWithdraw;
+                            $todayParking = $yesterdaysParkings;
+                        @endphp
+                        {!! financialCard('all',$endDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title bg-primary p-2 text-light w-100 d-flex"><span class="text-start w-75">Monthly Financials</span></h5>
-                        <div class="row">
-                            <!-- First half of the card -->
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text fw-bold deposit">
-                                    <div class="w-100 fw-bold">Deposits: {{ $monthlyDeposits['count'] }}</div> 
-                                    <div class="w-100">{{ $monthlyDeposits['deposit'] }}
-                                        @if($monthlyEquity!=null && $monthlyDeposits['deposit']==$monthlyEquity['deposit'])
-                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                        @else
-                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="card-text mt-3 fw-bold withdraw">
-                                    <div class="w-100 fw-bold">Withdraw: {{ $monthlyWithdrawals['count'] }}</div> 
-                                    <div class="w-100">{{ $monthlyWithdrawals['withdraw'] }}
-                                        @if($monthlyEquity!=null && $monthlyWithdrawals['withdraw']==$monthlyEquity['withdraw'])
-                                        <img src="{{asset('/assets/images/tick-icon.png')}}" class="icon float-end"/>
-                                        @else
-                                        <img src="{{asset('/assets/images/cross-icon.png')}}" class="icon float-end"/>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="card-text mt-3 fw-bold gap">
-                                    <div class="w-100 fw-bold">Gap:</div> 
-                                    <div class="w-100">{{ $monthlyDeposits['deposit'] -$monthlyWithdrawals['withdraw'] }}</div>
-                                </div>
-                            </div>
-                            <!-- Second half of the card -->
-                            <div class="col-md-6">
-                                <canvas id="myPieChart3" width="50" height="50"></canvas>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold equity text-dark">
-                                    <div class="w-100 fw-bold">Equity:</div> 
-                                    <div class="w-100">{{ $monthlyEquity==null?0:$monthlyEquity['equity'] }}</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column justify-content-center">
-                                <div class="card-text mt-3 fw-bold parking text-dark">
-                                    <div class="w-100 fw-bold">Parking:</div> 
-                                    <div class="w-100">{{ $monthlyParkings }}</div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body bg-fff">
+                        <p class="text-dark">{{date('M Y',strtotime($endDate))}}</p>
+                        @php
+                            $todayDeposit = $monthlyDeposits['deposit'];
+                            $todayDepositCount = $monthlyDeposits['count'];
+                            $todayWithdraw = $monthlyWithdrawals['withdraw'];
+                            $todayWithdrawCount = $monthlyWithdrawals['count'];
+                            $todayActualDeposit = $monthlyEquity['deposit'];
+                            $todayActualWithdraw = $monthlyEquity['withdraw'];
+                            $todayEquity = $monthlyEquity['equity'];
+                            $todayGap = $todayDeposit - $todayWithdraw;
+                            $todayParking = $monthlyParkings;
+                        @endphp
+                        {!! financialCard('all',$endDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
                     </div>
                 </div>
             </div>

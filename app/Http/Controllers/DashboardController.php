@@ -122,6 +122,11 @@ class DashboardController extends Controller
                 ->all();
 
         }
+
+        $dayBeforeYesterdayStartDate = Carbon::yesterday()->subDay()->startOfDay();
+        $dayBeforeYesterdayEndDate = Carbon::yesterday()->subDay()->endOfDay();
+        $monthBeforeStartDate = Carbon::now()->subMonth()->startOfMonth();
+        $monthBeforeEndDate = Carbon::now()->subMonth()->endOfMonth();
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -149,7 +154,11 @@ class DashboardController extends Controller
             'monthStartDate',
             'monthEndDate',
             'withdrawRequests',
-            'positions'
+            'positions',
+            'dayBeforeYesterdayStartDate',
+            'dayBeforeYesterdayEndDate',
+            'monthBeforeStartDate',
+            'monthBeforeEndDate',
         ));
     }
 
@@ -187,6 +196,10 @@ class DashboardController extends Controller
         //$endDate = Carbon::tomorrow()->endOfDay();
 
         $brands = Brand::where('status',1)->get();
+        $dayBeforeYesterdayStartDate = Carbon::yesterday()->subDay()->startOfDay();
+        $dayBeforeYesterdayEndDate = Carbon::yesterday()->subDay()->endOfDay();
+        $monthBeforeStartDate = Carbon::now()->subMonth()->startOfMonth();
+        $monthBeforeEndDate = Carbon::now()->subMonth()->endOfMonth();
         return view('dashboard.dashboard', compact(
             'title',
             'totalBalance',
@@ -207,6 +220,10 @@ class DashboardController extends Controller
             'yesterdayEndDate',
             'monthStartDate',
             'monthEndDate',
+            'dayBeforeYesterdayStartDate',
+            'dayBeforeYesterdayEndDate',
+            'monthBeforeStartDate',
+            'monthBeforeEndDate',
         ));
     }
 

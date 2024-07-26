@@ -11704,6 +11704,13 @@ button.btn-none {
   padding: 10px;
 }
 
+.fs-14{
+  font-size: 14px !important;
+}
+.me-4px{
+  margin-right: 4px !important;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;
