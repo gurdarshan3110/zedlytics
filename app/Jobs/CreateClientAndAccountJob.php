@@ -26,10 +26,13 @@ class CreateClientAndAccountJob implements ShouldQueue
     public function handle()
     {
         try {
-            $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
+            $username =config('services.bestbull.username');
+            $password =config('services.bestbull.password');
+            $this->baseUrl =config('services.bestbull.base_url');
+            $response = Http::post($this->baseUrl.'login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
-                'password' => env('BESTBULL_PASSWORD'),
-                'userName' => env('BESTBULL_USERNAME'),
+                'password' => $password,
+                'userName' => $username,
             ]);
 
             $data = $response->json();
@@ -39,7 +42,7 @@ class CreateClientAndAccountJob implements ShouldQueue
             $clients = Client::where('client_code', 2)->where('status', 0)->get();
 
             foreach ($clients as $client) {
-                $response = Http::withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/user/{$client->user_id}");
+                $response = Http::withToken($this->token)->get($this->baseUrl."admin/public/api/v1/user/{$client->user_id}");
 
                 // Handle the response as needed
                 if ($response->successful()) {

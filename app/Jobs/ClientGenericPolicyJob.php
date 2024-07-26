@@ -21,7 +21,7 @@ class ClientGenericPolicyJob implements ShouldQueue
 
     public function __construct()
     {
-        $this->baseUrl = env('API_BASE_URL');
+        //$this->baseUrl = env('API_BASE_URL');
     }
 
     /**
@@ -32,10 +32,13 @@ class ClientGenericPolicyJob implements ShouldQueue
     public function handle()
     {
         try {
+            $username =config('services.bestbull.username');
+            $password =config('services.bestbull.password');
+            $this->baseUrl =config('services.bestbull.base_url');
             $response = Http::post($this->baseUrl.'login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
-                'password' => env('BESTBULL_PASSWORD'),
-                'userName' => env('BESTBULL_USERNAME'),
+                'password' => $password,
+                'userName' => $username,
             ]);
 
             $data = $response->json();

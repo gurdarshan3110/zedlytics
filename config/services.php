@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'bestbull' => [
+        'username' => env('BESTBULL_USERNAME'),
+        'password' => env('BESTBULL_PASSWORD'),
+        'base_url' => env('API_BASE_URL'),
+    ],
+
 ];

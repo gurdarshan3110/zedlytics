@@ -27,10 +27,13 @@ class CreateNewClientsJob implements ShouldQueue
     public function handle()
     {
         try {
-            $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
+            $username =config('services.bestbull.username');
+            $password =config('services.bestbull.password');
+            $this->baseUrl =config('services.bestbull.base_url');
+            $response = Http::post($this->baseUrl.'login/public/api/v1/login', [
                 'companyName' => 'Best Bull',
-                'password' => env('BESTBULL_PASSWORD'),
-                'userName' => env('BESTBULL_USERNAME'),
+                'password' => $password,
+                'userName' => $username,
             ]);
 
             $data = $response->json();
@@ -42,7 +45,7 @@ class CreateNewClientsJob implements ShouldQueue
             $startDate = Carbon::now()->subMinutes(10);
             //$startDate = '2024-07-18 00:00:00';
             $endDate = Carbon::now()->endOfDay()->toDateTimeString();
-            $response = Http::timeout(60)->withToken($this->token)->get("https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/report/users/details/".$this->clientTreeUserIdNode."?fromDate=".$startDate."&toDate=".$endDate);
+            $response = Http::timeout(60)->withToken($this->token)->get($this->baseUrl."admin/public/api/v1/report/users/details/".$this->clientTreeUserIdNode."?fromDate=".$startDate."&toDate=".$endDate);
 
             // Handle the response as needed
             if ($response->successful()) {

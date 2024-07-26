@@ -30,10 +30,13 @@ class FetchOpenPositionsJob implements ShouldQueue
 
     public function handle()
     {
-        $response = Http::post('https://bestbullapi.arktrader.io/api/apigateway/login/public/api/v1/login', [
+        $username =config('services.bestbull.username');
+        $password =config('services.bestbull.password');
+        $base_url =config('services.bestbull.base_url');
+        $response = Http::post($base_url.'login/public/api/v1/login', [
             'companyName' => 'Best Bull',
-            'password' => env('BESTBULL_PASSWORD'),
-            'userName' => env('BESTBULL_USERNAME'),
+            'password' => $password,
+            'userName' => $username,
         ]);
 
         $data = $response->json();
@@ -49,7 +52,7 @@ class FetchOpenPositionsJob implements ShouldQueue
         $fromDate = '2020-01-01 00:00:00';
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
-        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=&withDemo=false&fromDate=' . $fromDate . '&toDate=' . $toDate);
+        $response = Http::withToken($this->token)->get($base_url.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=&withDemo=false&fromDate=' . $fromDate . '&toDate=' . $toDate);
 
         $data = $response->json();
 
@@ -107,7 +110,7 @@ class FetchOpenPositionsJob implements ShouldQueue
 
     protected function fetchBaseCurrencyData()
     {
-        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/currency');
+        $response = Http::withToken($this->token)->get($this->baseUrl.'admin/public/api/v1/currency');
         
         $data = $response->json();
 
