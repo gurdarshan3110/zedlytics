@@ -13,18 +13,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use App\Models\Client;
-use App\Models\Account;
-use App\Models\ClientAccount;
 
 class FetchOpenPositionsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    //private $token;
-    //private $clientTreeUserIdNode;
-
     protected $token;
     protected $baseUrl;
+    protected $clientTreeUserIdNode;
 
     public function __construct()
     {
@@ -33,18 +29,28 @@ class FetchOpenPositionsJob implements ShouldQueue
 
     public function handle()
     {
-        $username =config('services.bestbull.username');
-        $password =config('services.bestbull.password');
-        $this->baseUrl =config('services.bestbull.base_url');
-        $response = Http::post($base_url.'login/public/api/v1/login', [
+        $username = config('services.bestbull.username');
+        $password = config('services.bestbull.password');
+
+        $response = Http::post($this->baseUrl.'login/public/api/v1/login', [
             'companyName' => 'Best Bull',
             'password' => $password,
             'userName' => $username,
         ]);
 
+        if ($response->failed()) {
+            // Handle login failure (e.g., log the error or notify someone)
+            return;
+        }
+
         $data = $response->json();
-        $this->token = $data['data']['token'];
-        $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
+        $this->token = $data['data']['token'] ?? null;
+        $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0] ?? null;
+
+        if (!$this->token || !$this->clientTreeUserIdNode) {
+            // Handle missing token or clientTreeUserIdNode
+            return;
+        }
 
         OpenPosition::truncate();
         BaseCurrency::query()->delete();
@@ -55,7 +61,17 @@ class FetchOpenPositionsJob implements ShouldQueue
         $fromDate = '2020-01-01 00:00:00';
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
-        $response = Http::withToken($this->token)->get($base_url.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0?currencyIds=&withDemo=false&fromDate=' . $fromDate . '&toDate=' . $toDate);
+        $response = Http::withToken($this->token)->get($this->baseUrl.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0', [
+            'currencyIds' => '',
+            'withDemo' => false,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+        ]);
+
+        if ($response->failed()) {
+            // Handle fetch failure (e.g., log the error or notify someone)
+            return;
+        }
 
         $data = $response->json();
 
@@ -77,6 +93,7 @@ class FetchOpenPositionsJob implements ShouldQueue
                     'status' => 0,
                 ]
             );
+
             if ($item['closeAmount'] != 0) {
                 OpenPosition::updateOrCreate(
                     ['ticketID' => $item['ticketID'] . '1'],
@@ -96,25 +113,18 @@ class FetchOpenPositionsJob implements ShouldQueue
                     ]
                 );
             }
-            // $client = Client::where('user_id',$item['userID'])->first();
-            // if(empty($client) || $client==null){
-            //     $client = Client::create([
-            //         'client_code' => 2,
-            //         'user_id' => $item['userID'],
-            //         'name' => $item['userID'],
-            //         'phone_no' => $item['userID'].$item['userID'] ,
-            //         'email' => $item['userID'] . '@zedlytics.com',
-            //         'status' => 0,
-            //     ]);
-            // }
-            
         }
     }
 
     protected function fetchBaseCurrencyData()
     {
         $response = Http::withToken($this->token)->get($this->baseUrl.'admin/public/api/v1/currency');
-        
+
+        if ($response->failed()) {
+            // Handle fetch failure (e.g., log the error or notify someone)
+            return;
+        }
+
         $data = $response->json();
 
         foreach ($data['data'] as $item) {
