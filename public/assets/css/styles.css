@@ -11699,6 +11699,11 @@ button.btn-none {
 .bg-fff{
   background-color: #fff !important;
 }
+
+.financial{
+  padding: 10px;
+}
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

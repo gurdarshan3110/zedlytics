@@ -229,7 +229,7 @@
                         @endphp
                         <div class="col-md-4">
                             <div class="card bg-fff">
-                                <div class="card-body">
+                                <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('d M Y l',strtotime($startDate))}}</p>
                                     {!! financialCard($brand->id,$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount) !!}
@@ -255,7 +255,7 @@
                         @endphp
                         <div class="col-md-4">
                             <div class="card bg-fff">
-                                <div class="card-body">
+                                <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('d M Y l',strtotime($yesterdayStartDate))}}</p>
                                     {!! financialCard($brand->id,$yesterdayStartDate,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity,$yesterActualDeposit,$yesterActualWithdraw,$yesterDepositCount,$yesterWithdrawCount) !!}
@@ -281,7 +281,7 @@
                         @endphp
                         <div class="col-md-4">
                             <div class="card bg-fff">
-                                <div class="card-body">
+                                <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('M Y',strtotime($monthStartDate))}}</p>
                                     {!! financialCard($brand->id,$monthStartDate,$monDeposit,$monWithdraw,$monGap,$monParking,$monEquity,$monActualDeposit,$monActualWithdraw,$monDepositCount,$monWithdrawCount) !!}
