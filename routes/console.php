@@ -14,6 +14,6 @@ use App\Jobs\CreateNewClientsJob;
 Schedule::job(new FetchOpenPositionsJob, 'default')->everyFourMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 //Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
-Schedule::job(new TransactionLogsJob, 'default')->everyTenMinutes();
+//Schedule::job(new TransactionLogsJob, 'default')->everyTenMinutes();
 
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
