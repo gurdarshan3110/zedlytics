@@ -205,8 +205,8 @@ class ClientController extends Controller
                       ->orWhere('username', 'like', "{$search}%")
                       ->orWhere('phone_no', 'like', "%{$search}%");
                 });
-            });
-            //->orderBy($columns[$order['column']]['data'], $order['dir']);
+            })
+            ->orderBy($columns[$order['column']]['data'], $order['dir']);
 
         // Get the total number of records after filtering
         $filteredRecords = $query->count();
