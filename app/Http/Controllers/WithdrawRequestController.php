@@ -19,6 +19,7 @@ use App\Jobs\ClientGenericPolicyJob;
 use App\Jobs\RoboDealerPolicyJob;
 use App\Jobs\AgentCommissionPolicyJob;
 use App\Jobs\AccountMirroringPolicyJob;
+use App\Jobs\WithdrawRequestJob;
 use App\Jobs\CreateDealerJob;
 use Carbon\Carbon;
 
@@ -40,32 +41,15 @@ class WithdrawRequestController extends Controller
         ]);
 
         $data = $response->json();
+        //dd($this->baseUrl.'login/public/api/v1/login');
         $this->token = $data['data']['token'];
         $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
     }
 
     public function fetchWithdrawRequests()
     {
-        $this->login();
-
-        $response = Http::withToken($this->token)->get($this->baseUrl.'admin/public/api/v1/cashDelivery/pending/' . $this->clientTreeUserIdNode);
-        CronJob::create(['cron_job_name' => 'Open Withdraw Request API']);
-        $data = $response->json();
-        WithdrawRequest::where('status', 0)->update(['status' => 1]);
-        foreach ($data['data'] as $item) {
-            WithdrawRequest::updateOrCreate(
-                ['request_id' => $item['requestId']],
-                [
-                    'comment' => $item['comment'],
-                    'request_status' => $item['status'],
-                    'amount' => $item['amount'],
-                    'branch_id' => $item['branchId'],
-                    'request_date' => $item['requestDate'],
-                    'user_id' => $item['userId'],
-                    'status' => 0,
-                ]
-            );
-        }
+        WithdrawRequestJob::dispatch();
+        return response()->json(['message' => 'Withdraw request job dispatched successfully.']);
     }
 
     public function pushWithdrawRequestsToDB()
