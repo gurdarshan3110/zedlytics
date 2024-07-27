@@ -48,8 +48,8 @@ class WithdrawRequestController extends Controller
     {
         $this->login();
 
-        $response = Http::withToken($this->token)->get('https://bestbullapi.arktrader.io/api/apigateway/admin/public/api/v1/cashDelivery/pending/' . $this->clientTreeUserIdNode);
-        
+        $response = Http::withToken($this->token)->get($this->baseUrl.'admin/public/api/v1/cashDelivery/pending/' . $this->clientTreeUserIdNode);
+        CronJob::create(['cron_job_name' => 'Open Withdraw Request API']);
         $data = $response->json();
         WithdrawRequest::where('status', 0)->update(['status' => 1]);
         foreach ($data['data'] as $item) {
