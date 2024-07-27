@@ -36,7 +36,7 @@
                 { "width": "20%", "targets": 4 },
                 { "width": "7%", "targets": 5 },
                 { "width": "19%", "targets": 6 },
-                { "width": "10%", "targets": 7 },
+                { "width": "10%", "targets": 7, "orderable": false }, 
             ],
             processing: true,
             serverSide: true,
