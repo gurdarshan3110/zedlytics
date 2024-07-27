@@ -25,7 +25,7 @@ class TransactionLogsJob implements ShouldQueue
     public function handle()
     {
         try {
-            set_time_limit(3600);
+            set_time_limit(-1);
             $username =config('services.bestbull.username');
             $password =config('services.bestbull.password');
             $this->baseUrl =config('services.bestbull.base_url');
