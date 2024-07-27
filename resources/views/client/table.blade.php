@@ -26,7 +26,7 @@
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript">
         var minDate, maxDate;
-        
+
         var table = $('#record-table').DataTable({
             "columnDefs": [
                 { "width": "7%", "targets": 0 },
@@ -36,7 +36,7 @@
                 { "width": "20%", "targets": 4 },
                 { "width": "7%", "targets": 5 },
                 { "width": "19%", "targets": 6 },
-                { "width": "10%", "targets": 7, "orderable": false }, 
+                { "width": "10%", "targets": 7, "orderable": false }, // Action column not sortable
             ],
             processing: true,
             serverSide: true,
@@ -48,13 +48,13 @@
                 }
             },
             columns: [
-                { data: 'brand', name: 'brand' },
-                { data: 'client_code', name: 'client_code' },
-                { data: 'username', name: 'username' },
-                { data: 'name', name: 'name' },
-                { data: 'email', name: 'email' },
-                { data: 'phone_no', name: 'phone_no' },
-                { data: 'rm', name: 'rm' },
+                { data: 'brand', name: 'brand', orderable: true },
+                { data: 'client_code', name: 'client_code', orderable: true },
+                { data: 'username', name: 'username', orderable: true },
+                { data: 'name', name: 'name', orderable: true },
+                { data: 'email', name: 'email', orderable: true },
+                { data: 'phone_no', name: 'phone_no', orderable: true },
+                { data: 'rm', name: 'rm', orderable: true },
                 { data: 'action', name: 'action', className: 'action', orderable: false, searchable: false },
             ],
             pageLength: 10,
@@ -86,11 +86,11 @@
             }
         });
 
-
-            $('#filter').click(function(){
-                var min=$('#min').val();
-                var max=$('#max').val();
-                table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
-            });
+        $('#filter').click(function(){
+            var min = $('#min').val();
+            var max = $('#max').val();
+            table.ajax.url('/agencies/list?min=' + min + '&max=' + max).load();
+        });
     </script>
+
 @endpush
