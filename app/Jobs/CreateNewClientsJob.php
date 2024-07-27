@@ -40,10 +40,10 @@ class CreateNewClientsJob implements ShouldQueue
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];
             // Login to the API once
-            
+            CronJob::create(['cron_job_name' => 'New Clients API']);
 
-            $startDate = Carbon::now()->subMinutes(10);
-            //$startDate = '2024-07-18 00:00:00';
+            //$startDate = Carbon::now()->subMinutes(10);
+            $startDate = '2024-07-23 00:00:00';
             $endDate = Carbon::now()->endOfDay()->toDateTimeString();
             $response = Http::timeout(60)->withToken($this->token)->get($this->baseUrl."admin/public/api/v1/report/users/details/".$this->clientTreeUserIdNode."?fromDate=".$startDate."&toDate=".$endDate);
 
@@ -75,7 +75,7 @@ class CreateNewClientsJob implements ShouldQueue
                             ['account_id' => $account['id']],
                             ['client_id'=>$client['id']]
                         );
-                        CronJob::create(['cron_job_name' => 'New Clients API']);
+                        
                     }
                 }
             } else {
