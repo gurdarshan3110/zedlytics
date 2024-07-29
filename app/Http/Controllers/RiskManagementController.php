@@ -64,21 +64,21 @@ class RiskManagementController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
-        $topTenWinners = TrxLog::with('client')->select('userId','accountId')
-            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+        $topTenWinners = TrxLog::select('userId', DB::raw('SUM(closeProfit) as totalCloseProfit'))
+            ->whereDate('createdDate', $date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId')
+            ->groupBy('userId')
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
+            ->with('client') // Eager load the client relationship
             ->get();
-        $topTenLosers = TrxLog::with('client')->select('userId','accountId')
-            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+        $topTenLosers = TrxLog::select('userId', DB::raw('SUM(closeProfit) as totalCloseProfit'))
+            ->whereDate('createdDate', $date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId')
+            ->groupBy('userId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
+            ->with('client') 
             ->get();
 
         return response()->json([
