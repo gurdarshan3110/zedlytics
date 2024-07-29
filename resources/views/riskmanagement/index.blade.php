@@ -60,6 +60,7 @@ $(document).ready(function() {
         // Update winners table
         if (winners.length > 0) {
             $.each(winners, function(index, winner) {
+                console.log(winner);
                 $('#top-table-winners tbody').append(
                     '<tr>' +
                         '<td>' + winner.accountId + '</td>' +
