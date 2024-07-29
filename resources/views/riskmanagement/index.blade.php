@@ -21,12 +21,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="card bg-fff">
+                        <div class="card bg-fff p-2">
                             @include($directory.'.top-ten-winners')
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="card bg-fff">
+                        <div class="card bg-fff p-2">
                             @include($directory.'.top-ten-lossers')
                         </div>
                     </div>

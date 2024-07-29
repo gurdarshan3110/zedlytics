@@ -42,7 +42,7 @@ class RiskManagementController extends Controller
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
-            ->orderBy('totalCloseProfit', 'asc')
+            ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
         $topTenLossers = TrxLog::select('userId','accountId')
@@ -50,7 +50,7 @@ class RiskManagementController extends Controller
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
-            ->orderBy('totalCloseProfit', 'desc')
+            ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
         if(in_array('view '.$fname,permissions())){
@@ -69,7 +69,7 @@ class RiskManagementController extends Controller
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
-            ->orderBy('totalCloseProfit', 'asc')
+            ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
         $topTenLosers = TrxLog::select('userId','accountId')
@@ -77,7 +77,7 @@ class RiskManagementController extends Controller
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
-            ->orderBy('totalCloseProfit', 'desc')
+            ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
 
