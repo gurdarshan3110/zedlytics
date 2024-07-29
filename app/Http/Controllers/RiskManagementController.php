@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\trxlog as Model;
+use App\Models\Trxlog as Model;
 use App\Models\Client;
 use App\Models\Account;
 use App\Models\Permission;
