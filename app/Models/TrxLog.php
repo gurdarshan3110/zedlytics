@@ -48,7 +48,7 @@ class TrxLog extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class, 'user_id','userId');
+        return $this->belongsTo(Client::class, 'userId','user_id');
     }
 
 }
