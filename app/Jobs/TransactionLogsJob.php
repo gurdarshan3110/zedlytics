@@ -87,16 +87,16 @@ class TransactionLogsJob implements ShouldQueue
         if ($start_time == null && $end_time == null) {
             return array(
                 'from_date' => '2024-07-26 00:00:00',
-                'to_date'   => '2024-07-26 02:59:59'
+                'to_date'   => '2024-07-26 00:59:59'
             );
         }
 
         if ($start_time != null) {
-            $start_time = date('Y-m-d H:i:s', strtotime($start_time . ' +3 Hours'));
+            $start_time = date('Y-m-d H:i:s', strtotime($start_time . ' +1 Hours'));
         }
 
         if ($end_time != null) {
-            $end_time = date('Y-m-d H:i:s', strtotime($end_time . ' +3 Hours'));
+            $end_time = date('Y-m-d H:i:s', strtotime($end_time . ' +1 Hours'));
         }
 
         return array(
