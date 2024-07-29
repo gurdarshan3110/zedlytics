@@ -35,9 +35,8 @@ class RiskManagementController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
-        if($date==''){
-            $date = Carbon::today()->toDateString();
-        }
+        $date = Carbon::today()->toDateString();
+        
         $topTenWinners = TrxLog::select('userId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
