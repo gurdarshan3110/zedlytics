@@ -29,7 +29,7 @@ class RiskManagementController extends Controller
     const DIRECTORY = 'riskmanagement';
     const FNAME = 'risk management';
 
-    public function index($date)
+    public function index()
     {
         $title = self::TITLE;
         $url = self::URL;
