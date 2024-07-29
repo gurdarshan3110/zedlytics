@@ -37,7 +37,7 @@ class RiskManagementController extends Controller
         $fname = self::FNAME;
         $date = Carbon::today()->toDateString();
         
-        $topTenWinners = TrxLog::with('client')->select('userId','accountId','username')
+        $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
