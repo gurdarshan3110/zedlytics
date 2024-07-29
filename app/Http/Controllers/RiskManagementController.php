@@ -40,14 +40,14 @@ class RiskManagementController extends Controller
         $topTenWinners = TrxLog::select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
-            ->groupBy('userId')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
         $topTenLossers = TrxLog::select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
-            ->groupBy('userId')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
@@ -65,14 +65,14 @@ class RiskManagementController extends Controller
         $topTenWinners = TrxLog::select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
-            ->groupBy('userId')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
         $topTenLosers = TrxLog::select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
-            ->groupBy('userId')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
