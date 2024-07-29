@@ -89,7 +89,8 @@ class BankController extends Controller
         Permission::create([
             'name' => $input['account_code'],
             'guard_name' => 'web',
-            'parent' => 'New Bank Account'
+            'parent' => 'New Bank Account',
+            'fid' => $input['brand_id']
         ]);
         return redirect()->route(self::URL.'.index', $bank->id)->with('success', self::FNAME.' created successfully.');
     }
@@ -138,7 +139,7 @@ class BankController extends Controller
         $account = Account::where('account_code', $bank->account_code)->first();
         $rules = [
             'name' => 'required',
-            'account_code' => 'required|unique:accounts,id,'.$account->id,
+            'account_code' => 'required|unique:accounts,account_code,'.$account->id.',id',
             'status' => 'required'
         ];
 
@@ -156,6 +157,7 @@ class BankController extends Controller
 
         $permission = Permission::where('name', $bank->account_code)->first();
         $permission->name = $input['account_code'];
+        $permission->fid = $bank->brand_id;
 
         $permission->update();
         $bank->update($input);

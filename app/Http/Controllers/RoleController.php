@@ -240,4 +240,66 @@ class RoleController extends Controller
         return $randomString;
     }
 
+    public function getPermissionsByParent($parentId)
+    {
+        $role = Model::find($parentId);
+
+        if (!$role) {
+            return response()->json(['error' => 'Role not found.'], 404);
+        }
+
+        $permissions = Permission::all();
+        $roles = Model::all();
+
+        // Generate the HTML content
+        $content = '<div class="form-check mb-3">
+                        <input type="checkbox" id="select-all-permissions" class="form-check-input">
+                        <label for="select-all-permissions" class="form-check-label">Select All</label>
+                    </div>';
+
+        $permissionsByParent = $permissions->groupBy('parent');
+        $lastParentName = null;
+
+        foreach ($permissionsByParent as $parentId => $permissionsGroup) {
+            $parentName = $permissionsGroup->first()->parent;
+
+            if ($parentName !== $lastParentName) {
+                $content .= '<div class="permission-group mb-4">
+                                <h5>' . ucwords($parentName) . '</h5>
+                                <div class="row">';
+            } else {
+                $content .= '<div class="row mt-3">';
+            }
+
+            foreach ($permissionsGroup as $permission) {
+                $checked = $role->permissions->contains('id', $permission->id) ? 'checked' : '';
+                $content .= '<div class="col-sm-3">
+                                <div class="form-check">
+                                    <input 
+                                        type="checkbox" 
+                                        name="permissions[]" 
+                                        value="' . $permission->id . '" 
+                                        id="permission_' . $permission->id . '" 
+                                        class="form-check-input permission-checkbox"
+                                        ' . $checked . '
+                                    >
+                                    <label 
+                                        for="permission_' . $permission->id . '" 
+                                        class="form-check-label">
+                                        ' . ucwords($permission->name) . '
+                                    </label>
+                                </div>
+                            </div>';
+            }
+
+            $content .= '</div></div>';
+
+            $lastParentName = $parentName;
+        }
+
+        return $content;
+    }
+
+
+
 }

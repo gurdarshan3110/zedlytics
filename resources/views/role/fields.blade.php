@@ -5,7 +5,7 @@
 
 <div class="form-group col-sm-6">
     {{ html()->label('Parent Role')->for('parent_id') }}
-    {{ html()->select('parent_id',$roleOptions)->class('form-control')->placeholder('Select Parent Role') }}
+    {{ html()->select('parent_id',$roleOptions)->class('form-control')->placeholder('Select Parent Role')->id('parent_id') }}
 </div>
 
 <div id="permissions-container">
@@ -26,7 +26,7 @@
         @endphp
         
         @if ($parentName !== $lastParentName)
-            <div class="permission-group mb-4">
+            <div class="permission-group mb-4 card bg-fff p-2">
                 <h5>{{ ucwords($parentName) }}</h5>
                 <div class="row">
         @else
@@ -64,6 +64,40 @@
 
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const parentRoleSelect = document.getElementById('parent_id');
+            const permissionsList = document.getElementById('permissions-container');
+
+            parentRoleSelect.addEventListener('change', function() {
+                const parentId = this.value;
+
+                if (parentId) {
+                    fetch(`/permissions/${parentId}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            permissionsList.innerHTML = html;
+                            attachSelectAllListener();
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                } else {
+                    permissionsList.innerHTML = '<p>Please select a parent role to see permissions.</p>';
+                }
+            });
+
+            function attachSelectAllListener() {
+                const selectAllCheckbox = document.getElementById('select-all-permissions');
+                const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');
+
+                selectAllCheckbox.addEventListener('change', function() {
+                    permissionCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+        });
+
         (function() {
             const selectAllCheckbox = document.getElementById('select-all-permissions');
             const permissionCheckboxes = document.querySelectorAll('.permission-checkbox');

@@ -82,6 +82,10 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::put('/employees/{employee}/macaddress', [EmployeeController::class, 'macaddress'])->name('employees.macaddress');
     Route::resource('employees', EmployeeController::class);
 
+    // web.php
+    Route::get('/permissions/{parentId}', [RoleController::class, 'getPermissionsByParent']);
+
+
     Route::get('/roles/list', [RoleController::class, 'list'])->name('roles.list');
     Route::resource('roles', RoleController::class);
 

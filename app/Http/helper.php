@@ -104,7 +104,7 @@ function financialCard($id,$date,$deposit,$withdraw,$gap,$parking,$equity,$actua
                 <a class="text-decoration-none text-dark cursor-pointer" href="/financial-details/'.$date->toDateString().'/'.$id.'">
                     <div class="card-text d-flex text-dark border-bottom-1">
                         <div class="w-75 fs-3">
-                            '.(($actualDeposit!='' && $deposit==$actualDeposit)?'<i class="fa fa-check text-success me-4px" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px" aria-hidden="true"></i>').format_amount($deposit).'
+                            '.(($actualDeposit!='' && $deposit==$actualDeposit)?'<i class="fa fa-check text-success me-4px fs-7" aria-hidden="true"></i>':'<i class="fa fa-times text-danger me-4px fs-7" aria-hidden="true"></i>').format_amount($deposit).'
                         </div>
                         <div class="w-25 d-flex align-items-center">
                             '.(($deposit>=$lastdeposit)?'<i class="fa fa-angle-double-up text-success  me-4px fs-5 me-0" aria-hidden="true"></i>':'<i class="fa fa-angle-double-down text-danger  me-4px fs-5 me-0" aria-hidden="true"></i>').'

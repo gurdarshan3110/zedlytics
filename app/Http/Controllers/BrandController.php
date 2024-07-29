@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Brand as Model;
 use App\Models\Account;
+use App\Models\Permission;
 use App\Models\User;
 use DataTables;
 
@@ -82,7 +83,12 @@ class BrandController extends Controller
         $brand = Model::create($input);
         $account = Account::create($input);
         $account->banks()->attach($brand);
-
+        Permission::create([
+            'name' => $input['name'],
+            'guard_name' => 'web',
+            'parent' => 'Brand',
+            'fid' => $brand->id,
+        ]);
         return redirect()->route(self::URL.'.index', $brand->id)->with('success', self::FNAME.' created successfully.');
     }
 
@@ -128,7 +134,7 @@ class BrandController extends Controller
         $account = Account::where('account_code', $brand->account_code)->first();
         $rules = [
             'name' => 'required',
-            'account_code' => 'required|unique:accounts,id,'.$account->id,
+            'account_code' => 'required|unique:accounts,account_code,'.$account->id.',id',
             'status' => 'required'
         ];
 
@@ -146,7 +152,11 @@ class BrandController extends Controller
         
         $brand->update($input);
         $account->update($input);
-
+        Permission::updateOrCreate(['fid'=>$brand->id],[
+            'name' => $input['name'],
+            'guard_name' => 'web',
+            'parent' => 'Brand',
+        ]);
         return redirect()->route(self::URL.'.index')
                          ->with('success', self::FNAME.' updated successfully.');
     }
