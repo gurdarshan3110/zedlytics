@@ -37,19 +37,19 @@ class RiskManagementController extends Controller
         $fname = self::FNAME;
         $date = Carbon::today()->toDateString();
         
-        $topTenWinners = TrxLog::select('userId','accountId','username')
+        $topTenWinners = TrxLog::with('client')->select('userId','accountId','username')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId','username')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
-        $topTenLossers = TrxLog::select('userId','accountId','username')
+        $topTenLossers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId','username')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
@@ -64,19 +64,19 @@ class RiskManagementController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
-        $topTenWinners = TrxLog::select('userId','accountId','username')
+        $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId','username')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
-        $topTenLosers = TrxLog::select('userId','accountId','username')
+        $topTenLosers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId','username')
+            ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
