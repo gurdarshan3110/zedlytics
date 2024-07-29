@@ -25,6 +25,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\WithdrawRequestController;
 use App\Http\Controllers\LedgerLogController;
 use App\Http\Controllers\ChartsController;
+use App\Http\Controllers\RiskManagementController;
 use App\Http\Controllers\ComingSoonController;
 
 Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon.index');
@@ -136,6 +137,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::get('/margin-limit-menu/list', [MarginLimitMarketController::class, 'list'])->name('margin-limit-menu.list');
     Route::resource('margin-limit-menu', MarginLimitMarketController::class);
+
+    Route::get('/risk-management/list', [RiskManagementController::class, 'list'])->name('risk-management.list');
+    Route::resource('risk-management', RiskManagementController::class);
 
     Route::get('/charts', [ChartsController::class, 'index'])->name('charts.index');
     Route::get('/financial-calendar', [ChartsController::class, 'findex'])->name('financial-calendar.index');
