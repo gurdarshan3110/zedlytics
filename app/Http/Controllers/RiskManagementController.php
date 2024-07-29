@@ -69,7 +69,7 @@ class RiskManagementController extends Controller
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
-        $topTenLossers = TrxLog::select('userId')
+        $topTenLosers = TrxLog::select('userId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
