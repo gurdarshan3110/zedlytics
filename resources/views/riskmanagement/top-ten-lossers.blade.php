@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <h3>Top 10 Winners</h3>
+    <h3>Top 10 Losers</h3>
     <table class="table table-bordered table-striped w-100 align-middle fs-6" id="top-table-losers">
         <thead>
         <tr>
