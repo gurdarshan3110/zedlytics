@@ -86,8 +86,8 @@ class TransactionLogsJob implements ShouldQueue
     public function getCronTime($start_time, $end_time) {
         if ($start_time == null && $end_time == null) {
             return array(
-                'from_date' => '2022-07-06 00:00:00',
-                'to_date'   => '2022-07-06 11:59:59'
+                'from_date' => '2024-07-26 00:00:00',
+                'to_date'   => '2024-07-26 11:59:59'
             );
         }
 
