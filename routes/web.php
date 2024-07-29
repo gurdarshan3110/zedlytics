@@ -30,9 +30,6 @@ use App\Http\Controllers\ComingSoonController;
 
 Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon.index');
 
-
-
-
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->intended('/dashboard');
@@ -138,6 +135,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::get('/margin-limit-menu/list', [MarginLimitMarketController::class, 'list'])->name('margin-limit-menu.list');
     Route::resource('margin-limit-menu', MarginLimitMarketController::class);
 
+    Route::get('/trx-logs', [RiskManagementController::class, 'getTrxLogs'])->name('trx-logs');
     Route::get('/risk-management/list', [RiskManagementController::class, 'list'])->name('risk-management.list');
     Route::resource('risk-management', RiskManagementController::class);
 

@@ -29,13 +29,15 @@ class RiskManagementController extends Controller
     const DIRECTORY = 'riskmanagement';
     const FNAME = 'risk management';
 
-    public function index()
+    public function index($date)
     {
         $title = self::TITLE;
         $url = self::URL;
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
-        $date = Carbon::today()->toDateString();
+        if($date==''){
+            $date = Carbon::today()->toDateString();
+        }
         $topTenWinners = TrxLog::select('userId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
@@ -43,7 +45,7 @@ class RiskManagementController extends Controller
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
-        $topTenLossers = TrxLog::select('userId')
+        $topTenLossers = TrxLog::select('userId1')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
@@ -56,5 +58,31 @@ class RiskManagementController extends Controller
             return redirect()->route('dashboard.index');
         }
     }
+
+    public function getTrxLogs(Request $request)
+    {
+        $date = $request->input('date', Carbon::today()->toDateString());
+
+        $topTenWinners = TrxLog::select('userId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereDate('createdDate',$date)
+            ->groupBy('userId')
+            ->orderBy('totalCloseProfit', 'asc')
+            ->limit(10)
+            ->get();
+        $topTenLossers = TrxLog::select('userId1')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereDate('createdDate',$date)
+            ->groupBy('userId')
+            ->orderBy('totalCloseProfit', 'desc')
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'topTenWinners' => $topTenWinners,
+            'topTenLosers' => $topTenLosers,
+        ]);
+    }
+
 
 }

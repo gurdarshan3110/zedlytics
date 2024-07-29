@@ -1,5 +1,6 @@
 <div class="table-responsive">
-    <table class="table table-bordered table-striped w-100 align-middle fs-6" id="record-table">
+    <h3>Top 10 Winners</h3>
+    <table class="table table-bordered table-striped w-100 align-middle fs-6" id="top-table-losers">
         <thead>
         <tr>
             <th>Account Id</th>
