@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\Trxlog as Model;
+use App\Models\TrxLog;
 use App\Models\Client;
 use App\Models\Account;
 use App\Models\Permission;
@@ -36,14 +36,14 @@ class RiskManagementController extends Controller
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
         $date = Carbon::today()->toDateString();
-        $topTenWinners = Model::select('userId')
+        $topTenWinners = TrxLog::select('userId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
-        $topTenLossers = Model::select('userId')
+        $topTenLossers = TrxLog::select('userId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
