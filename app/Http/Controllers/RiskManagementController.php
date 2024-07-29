@@ -37,14 +37,14 @@ class RiskManagementController extends Controller
         $fname = self::FNAME;
         $date = Carbon::today()->toDateString();
         
-        $topTenWinners = TrxLog::select('userId')
+        $topTenWinners = TrxLog::select('userId,accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
-        $topTenLossers = TrxLog::select('userId')
+        $topTenLossers = TrxLog::select('userId,accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
@@ -62,14 +62,14 @@ class RiskManagementController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
-        $topTenWinners = TrxLog::select('userId')
+        $topTenWinners = TrxLog::select('userId,accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
-        $topTenLosers = TrxLog::select('userId')
+        $topTenLosers = TrxLog::select('userId,accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereDate('createdDate',$date)
             ->groupBy('userId')
