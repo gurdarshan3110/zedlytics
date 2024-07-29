@@ -156,7 +156,6 @@ class BankController extends Controller
         }
 
         $permission = Permission::where('name', $bank->account_code)->first();
-        $permission->name = $input['account_code'];
         $permission->fid = $bank->brand_id;
 
         $permission->update();
