@@ -92,11 +92,11 @@ class TransactionsReLogJob implements ShouldQueue
         }
 
         if ($start_time != null) {
-            $start_time = Carbon::parse($end_time)->subMinutes(4)->format('Y-m-d H:i:s');
+            $start_time = Carbon::parse($end_time)->format('Y-m-d H:i:s');
         }
 
         if ($end_time != null) {
-            $end_time = Carbon::parse($end_time)->format('Y-m-d H:i:s');
+            $end_time = Carbon::parse($end_time)->addMinutes(3)->format('Y-m-d H:i:s');
         }
 
         return array(
