@@ -7,6 +7,7 @@ use App\Jobs\CreateClientAndAccountJob;
 use App\Jobs\TransactionLogsJob;
 use App\Jobs\CreateNewClientsJob;
 use App\Jobs\WithdrawRequestJob;
+use App\Jobs\TransactionsReLogJob;
 
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());
@@ -17,5 +18,6 @@ Schedule::job(new WithdrawRequestJob, 'default')->everyTwoMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 //Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
 Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
+Schedule::job(new TransactionsReLogJob, 'default')->everyThreeMinute();
 
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();

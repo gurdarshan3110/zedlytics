@@ -17,11 +17,8 @@
         <script src="{{ asset('/assets/js/activity-monitor.js') }}"></script>
 
     </head>
-    @if(Auth::user()->role=='Partner')
     <body class="sb-nav-fixed sb-sidenav-toggled">
-    @else
-    <body class="sb-nav-fixed">
-    @endif
+    <!-- <body class="sb-nav-fixed"> -->
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-secondary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}">
