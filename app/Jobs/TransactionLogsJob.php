@@ -92,7 +92,7 @@ class TransactionLogsJob implements ShouldQueue
         }
 
         if ($start_time != null) {
-            $start_time = Carbon::now()->subMinutes(60)->format('Y-m-d H:i:s');
+            $start_time = Carbon::now()->subHours(3)->format('Y-m-d H:i:s');
         }
 
         if ($end_time != null) {
