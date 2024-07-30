@@ -12,10 +12,10 @@
         <tbody>
             @foreach($topTenLossers as $losser)
                 <tr>
-                    <td>$losser->accountId</td>
-                    <td>$losser->client->username</td>
-                    <td>$losser->client->name</td>
-                    <td>$losser->totalCloseProfit</td>
+                    <td>{{$losser->accountId}}</td>
+                    <td>{{$losser->client->username}}</td>
+                    <td>{{$losser->client->name}}</td>
+                    <td>{{$losser->totalCloseProfit}}</td>
                 </tr>
             @endforeach
         </tbody>
