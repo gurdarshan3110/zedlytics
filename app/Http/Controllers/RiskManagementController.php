@@ -35,11 +35,14 @@ class RiskManagementController extends Controller
         $url = self::URL;
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
-        $date = Carbon::today()->toDateString();
+        $timezone = 'Asia/Kolkata';
+
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
         
         $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+            ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
@@ -47,7 +50,7 @@ class RiskManagementController extends Controller
             ->get();
         $topTenLossers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+            ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
@@ -64,9 +67,14 @@ class RiskManagementController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
+        $timezone = 'Asia/Kolkata';
+
+        $startDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
         $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+            ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'desc')
@@ -74,7 +82,7 @@ class RiskManagementController extends Controller
             ->get();
         $topTenLosers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
-            ->whereDate('createdDate',$date)
+            ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
             ->groupBy('userId','accountId')
             ->orderBy('totalCloseProfit', 'asc')
