@@ -61,7 +61,7 @@
                         <tr>
                             <td>{{ $serial }}</td>
                             <td>{{ $position['parent'] }}</td>
-                            <td><a href="/segregate-positions/{{$position['currency_id']}}" class="text-decoration-none" target="_blank">{{ $position['currency_name'] }}</a></td>
+                            <td><a href="/segregate-positions/{{$position['currency_id']}}" class="text-decoration-none text-black text-decoration-underline" target="_blank">{{ $position['currency_name'] }}</a></td>
                             <td>{{ $position['longDeals'] }}</td>
                             <td>{{ $position['longQty'] }}</td>
                             <td>{{ $position['shortDeals'] }}</td>
