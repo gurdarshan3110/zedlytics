@@ -3,9 +3,11 @@
         <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
+                    @if(Auth::user()->role!='Partner')
                     <?php 
                         $modules = softModules(0);
                         $permissions = permissions();
+
                     ?>
 
                     @foreach ($modules as $module)
@@ -50,6 +52,7 @@
                             </div>
                         @endif
                     @endforeach
+                    @endif
                 </div>
             </div>
             <div class="sb-sidenav-footer bg-primary px-3 text-light">
