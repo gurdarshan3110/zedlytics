@@ -86,8 +86,8 @@ class TransactionsReLogJob implements ShouldQueue
     public function getCronTime($start_time, $end_time) {
         if ($start_time == null && $end_time == null) {
             return array(
-                'from_date' => '2024-07-29 21:30:00',
-                'to_date'   => '2024-07-29 21:31:59'
+                'start_time' => '2024-07-29 21:30:00',
+                'end_time'   => '2024-07-29 21:31:59'
             );
         }
 
