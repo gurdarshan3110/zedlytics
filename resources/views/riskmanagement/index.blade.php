@@ -1,7 +1,14 @@
 @extends('includes.app')
 
 @section('content')
-
+<script>
+    function autoReload() {
+        setTimeout(function() {
+            location.reload();
+        }, 120000); 
+    }
+    window.onload = autoReload;
+</script>
 <main>
     <div class="container-fluid px-4">
         <div class="d-flex">

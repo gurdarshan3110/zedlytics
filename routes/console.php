@@ -16,6 +16,6 @@ Schedule::job(new FetchOpenPositionsJob, 'default')->everyFourMinutes();
 Schedule::job(new WithdrawRequestJob, 'default')->everyTwoMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 //Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
-Schedule::job(new TransactionLogsJob, 'default')->everyFiveMinutes();
+Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
 
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
