@@ -36,7 +36,7 @@ class RiskManagementController extends Controller
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
         $timezone = 'Asia/Kolkata';
-
+        $date = Carbon::today()->toDateString();
         $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
         $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
         
