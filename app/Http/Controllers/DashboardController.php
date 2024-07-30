@@ -63,7 +63,7 @@ class DashboardController extends Controller
         $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
         $positions = [];
         if(Auth::user()->role=='Partner'){
-            $lastCronJob = CronJob::latest()->skip(1)->first();  
+            $lastCronJob = CronJob::where('cron_job_name','Open Position')->latest()->skip(1)->first();  
             $lastCronJobTime = null;
 
             if ($lastCronJob) {
