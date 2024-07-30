@@ -82,7 +82,7 @@ class TransactionLogsJob implements ShouldQueue
             Log::error('Failed to create transaction: ' . $e->getMessage());
         }
     }
-sdf
+
     public function getCronTime($start_time, $end_time) {
         if ($start_time == null && $end_time == null) {
             return array(
