@@ -47,8 +47,8 @@ class TransactionLogsJob implements ShouldQueue
             }
             //dd($fDate);
             $getTime = $this->getCronTime($fDate,$tDate);
-            $fromDate = $getTime['from_date'];
-            $toDate = $getTime['to_date'];
+            $fromDate = $getTime['start_time'];
+            $toDate = $getTime['end_time'];
             //dd('From Date '.$cronJob);
             //Log::info('To Date '.$toDate);
             $cronjob = CronJob::create([
@@ -100,8 +100,8 @@ class TransactionLogsJob implements ShouldQueue
         }
 
         return array(
-            'from_date' => $start_time,
-            'to_date'   => $end_time
+            'start_time' => $start_time,
+            'end_time'   => $end_time
         );
     }
 
