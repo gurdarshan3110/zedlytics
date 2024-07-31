@@ -56,7 +56,7 @@ class TransactionLogsJob implements ShouldQueue
                 'start_time' => $fromDate,
                 'end_time' => $toDate,
             ]);
-            
+            Log::info($this->baseUrl."admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             $response = Http::timeout(360)->withToken($this->token)->get($this->baseUrl."admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
