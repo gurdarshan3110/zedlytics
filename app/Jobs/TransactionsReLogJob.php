@@ -70,7 +70,8 @@ class TransactionsReLogJob implements ShouldQueue
                         $clientData
                     );
                 } 
-
+                $cronjob->status = 1;
+                $cronjob->save();
             } else {
                 // Handle API call failure
                 // Log the error or take appropriate actions
