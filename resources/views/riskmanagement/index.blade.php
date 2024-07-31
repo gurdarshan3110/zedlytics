@@ -24,21 +24,16 @@
             
             <!--end::Create app-->
         </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="card bg-fff p-2">
-                            @include($directory.'.top-ten-winners')
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="card bg-fff p-2">
-                            @include($directory.'.top-ten-lossers')
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card bg-fff p-2">
+                    @include($directory.'.top-ten-winners')
                 </div>
-                
+            </div>
+            <div class="col-sm-4">
+                <div class="card bg-fff p-2">
+                    @include($directory.'.top-ten-lossers')
+                </div>
             </div>
         </div>
     </div>
@@ -53,6 +48,7 @@ $(document).ready(function() {
             data: { date: date },
             success: function(data) {
                 updateResults(data.topTenWinners, data.topTenLosers);
+                updateViewMoreLinks(date);
             },
             error: function(xhr, status, error) {
                 console.error('AJAX Error: ' + status + error);
@@ -96,6 +92,10 @@ $(document).ready(function() {
         } else {
             $('#top-table-losers tbody').append('<tr><td colspan="4">No losers found for this date.</td></tr>');
         }
+    }
+    function updateViewMoreLinks(date) {
+        $('#view-more-winners').attr('href', '{{ route("moreWL", ["status" => "winners"]) }}' + '&date=' + date);
+        $('#view-more-losers').attr('href', '{{ route("moreWL", ["status" => "losers"]) }}' + '&date=' + date);
     }
 });
 </script>

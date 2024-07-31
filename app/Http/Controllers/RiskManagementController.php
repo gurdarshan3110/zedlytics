@@ -92,8 +92,42 @@ class RiskManagementController extends Controller
         return response()->json([
             'topTenWinners' => $topTenWinners,
             'topTenLosers' => $topTenLosers,
+            'date' => $date
         ]);
     }
 
+    public function moreWL(Request $request)
+    {
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $status = $request->query('status');
+        $date = $request->query('date');
+        $title = 'Losers List';
+        $timezone = 'Asia/Kolkata';
+
+        $startDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->endOfDay()->subHours(2)->subMinutes(30);
+        if ($status == 'winners') {
+            $title = 'Winners List';
+            $data = TrxLog::with('client')->select('userId','accountId')
+                ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+                ->whereBetween('createdDate', [$startDate, $endDate])
+                ->whereNotNull('closeProfit')
+                ->groupBy('userId','accountId')
+                ->orderBy('totalCloseProfit', 'desc')
+                ->get();
+        }else{
+            $data = TrxLog::with('client')->select('userId','accountId')
+                ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+                ->whereBetween('createdDate', [$startDate, $endDate])
+                ->whereNotNull('closeProfit')
+                ->groupBy('userId','accountId')
+                ->orderBy('totalCloseProfit', 'asc')
+                ->get();
+        }
+
+        return view($directory.'.more-wl', compact('data', 'title','date','url','directory'));
+    }
 
 }
