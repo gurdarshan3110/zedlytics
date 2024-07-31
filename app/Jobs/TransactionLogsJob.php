@@ -70,7 +70,11 @@ class TransactionLogsJob implements ShouldQueue
                         $clientData
                     );
                 } 
-
+                $cronjob = CronJob::create([
+                    'cron_job_name' => 'Transactions Log API Completed',
+                    'start_time' => $fromDate,
+                    'end_time' => $toDate,
+                ]);
             } else {
                 // Handle API call failure
                 // Log the error or take appropriate actions
@@ -92,11 +96,13 @@ class TransactionLogsJob implements ShouldQueue
         }
 
         if ($start_time != null) {
-            $start_time = Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s');
+            //$start_time = Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s');
+            $start_time = '2024-07-31 00:00:00';
         }
 
         if ($end_time != null) {
-            $end_time = Carbon::now()->format('Y-m-d H:i:s');
+            //$end_time = Carbon::now()->format('Y-m-d H:i:s');
+            $end_time = '2024-07-31 00:59:59';
         }
 
         return array(
