@@ -93,13 +93,15 @@ class TransactionLogsJob implements ShouldQueue
         }
 
         if ($start_time != null) {
-            $start_time = Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s');
+            //$start_time = Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s');
             //$start_time = '2024-07-31 09:00:00';
+            $start_time = Carbon::now('Asia/Kolkata')->subMinutes(59)->setTimezone('Asia/Riyadh')->format('Y-m-d H:i:s');
         }
 
         if ($end_time != null) {
-            $end_time = Carbon::now()->format('Y-m-d H:i:s');
+            //$end_time = Carbon::now()->format('Y-m-d H:i:s');
             //$end_time = '2024-07-31 09:59:59';
+            $end_time = Carbon::now('Asia/Kolkata')->setTimezone('Asia/Riyadh')->format('Y-m-d H:i:s');
         }
 
         return array(
