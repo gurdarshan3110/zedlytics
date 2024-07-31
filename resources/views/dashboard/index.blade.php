@@ -357,7 +357,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body bg-fff">
-                        <p class="text-dark">{{date('M Y',strtotime($startDate))}}</p>
+                        <p class="text-dark">{{date('d M Y',strtotime($startDate))}}</p>
                         @php
                             $todayDeposit = $todaysDeposits['deposit'];
                             $todayDepositCount = $todaysDeposits['count'];
@@ -368,27 +368,36 @@
                             $todayEquity = $todaysEquity['equity'];
                             $todayGap = $todayDeposit - $todayWithdraw;
                             $todayParking = $todaysParkings;
+
+                            $yesterDayDeposit = $yesterdayDeposits['deposit'];
+                            $yesterDayDepositCount = $yesterdayDeposits['count'];
+                            $yesterDayWithdraw = $yesterdayWithdrawals['withdraw'];
+                            $yesterDayWithdrawCount = $yesterdayWithdrawals['count'];
+                            $yesterDayActualDeposit = $yesterdaysEquity['deposit'];
+                            $yesterDayActualWithdraw = $yesterdaysEquity['withdraw'];
+                            $yesterDayEquity = $yesterdaysEquity['equity'];
+                            $yesterDayGap = $yesterDayDeposit - $yesterDayWithdraw;
+                            $yesterDayParking = $yesterdaysParkings;
+
+                            $dayBefyesterDeposit = $dayBefYesDeposits['deposit'];
+                            $dayBefyesterDepositCount = $dayBefYesDeposits['count'];
+                            $dayBefyesterWithdraw = $dayBefYesWithdrawals['withdraw'];
+                            $dayBefyesterWithdrawCount = $dayBefYesWithdrawals['count'];
+                            $dayBefyesterActualDeposit = $dayBefYesEquity['deposit'];
+                            $dayBefyesterActualWithdraw = $dayBefYesEquity['withdraw'];
+                            $dayBefyesterEquity = $dayBefYesEquity['equity'];
+                            $dayBefyesterGap = $dayBefyesterDeposit - $dayBefyesterWithdraw;
+                            $dayBefyesterParking = $dayBefYesParkings;
                         @endphp
-                        {!! financialCard('all',$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
+                        {!! financialCard('all',$startDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDayDeposit,$yesterDayWithdraw,$yesterDayGap,$yesterDayParking,$yesterDayEquity) !!}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body bg-fff">
-                        <p class="text-dark">{{date('M Y',strtotime($endDate))}}</p>
-                        @php
-                            $todayDeposit = $yesterdayDeposits['deposit'];
-                            $todayDepositCount = $yesterdayDeposits['count'];
-                            $todayWithdraw = $yesterdayWithdrawals['withdraw'];
-                            $todayWithdrawCount = $yesterdayWithdrawals['count'];
-                            $todayActualDeposit = $yesterdaysEquity['deposit'];
-                            $todayActualWithdraw = $yesterdaysEquity['withdraw'];
-                            $todayEquity = $yesterdaysEquity['equity'];
-                            $todayGap = $todayDeposit - $todayWithdraw;
-                            $todayParking = $yesterdaysParkings;
-                        @endphp
-                        {!! financialCard('all',$endDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
+                        <p class="text-dark">{{date('d M Y',strtotime($yesterdayStartDate))}}</p>
+                        {!! financialCard('all',$endDate,$yesterDayDeposit,$yesterDayWithdraw,$yesterDayGap,$yesterDayParking,$yesterDayEquity,$yesterDayActualDeposit,$yesterDayActualWithdraw,$yesterDayDepositCount,$yesterDayWithdrawCount,$dayBefyesterDeposit,$dayBefyesterWithdraw,$dayBefyesterGap,$dayBefyesterParking,$dayBefyesterEquity) !!}
                     </div>
                 </div>
             </div>
@@ -406,6 +415,16 @@
                             $todayEquity = $monthlyEquity['equity'];
                             $todayGap = $todayDeposit - $todayWithdraw;
                             $todayParking = $monthlyParkings;
+
+                            $yesterDeposit = $yesMonthlyDeposits['deposit'];
+                            $yesterDepositCount = $yesMonthlyDeposits['count'];
+                            $yesterWithdraw = $yesMonthlyWithdrawals['withdraw'];
+                            $yesterWithdrawCount = $yesMonthlyWithdrawals['count'];
+                            $yesterActualDeposit = $yesMonthlyEquity['deposit'];
+                            $yesterActualWithdraw = $yesMonthlyEquity['withdraw'];
+                            $yesterEquity = $yesMonthlyEquity['equity'];
+                            $yesterGap = $yesterDeposit - $yesterWithdraw;
+                            $yesterParking = $yesMonthlyParkings;
                         @endphp
                         {!! financialCard('all',$endDate,$todayDeposit,$todayWithdraw,$todayGap,$todayParking,$todayEquity,$todayActualDeposit,$todayActualWithdraw,$todayDepositCount,$todayWithdrawCount,$yesterDeposit,$yesterWithdraw,$yesterGap,$yesterParking,$yesterEquity) !!}
                     </div>

@@ -47,6 +47,14 @@ class DashboardController extends Controller
         $yesterdaysParkings = CashbookLedger::getParkings($yesterdayStartDate->toDateString(),$yesterdayEndDate->toDateString());
         $yesterdaysEquity = CashbookLedger::getEquityRecords($yesterdayEndDate->toDateString(),$yesterdayEndDate->toDateString());
 
+        $dayBeforeYesterdayStartDate = Carbon::yesterday()->subDay()->startOfDay();
+        $dayBeforeYesterdayEndDate = Carbon::yesterday()->subDay()->endOfDay();
+
+        $dayBefYesDeposits = CashbookLedger::getDepositsBetween($dayBeforeYesterdayStartDate, $dayBeforeYesterdayEndDate);
+        $dayBefYesWithdrawals = CashbookLedger::getWithdrawalsBetween($dayBeforeYesterdayStartDate, $dayBeforeYesterdayEndDate);
+        $dayBefYesParkings = CashbookLedger::getParkings($dayBeforeYesterdayStartDate->toDateString(),$dayBeforeYesterdayEndDate->toDateString());
+        $dayBefYesEquity = CashbookLedger::getEquityRecords($dayBeforeYesterdayEndDate->toDateString(),$dayBeforeYesterdayEndDate->toDateString());
+
 
         $monthStartDate = Carbon::now()->startOfMonth();
         $monthEndDate = Carbon::now()->endOfMonth();
@@ -58,6 +66,16 @@ class DashboardController extends Controller
 
         $startDate = Carbon::today()->endOfDay();
         //$endDate = Carbon::tomorrow()->endOfDay();
+
+        $monthBeforeStartDate = Carbon::now()->subMonth()->startOfMonth();
+        $monthBeforeEndDate = Carbon::now()->subMonth()->endOfMonth();
+
+        $yesMonthlyDeposits = CashbookLedger::getDepositsBetween($monthBeforeStartDate, $monthBeforeEndDate);
+        $yesMonthlyWithdrawals = CashbookLedger::getWithdrawalsBetween($monthBeforeStartDate, $monthBeforeEndDate);
+        $yesMonthlyParkings = CashbookLedger::getParkings($monthBeforeStartDate->toDateString(),$monthBeforeEndDate->toDateString());
+        $yesMonthlyEquity = CashbookLedger::getEquityRecords($monthBeforeStartDate->toDateString(),$monthBeforeEndDate->toDateString());
+
+
 
         $brands = Brand::where('status',1)->get();
         $withdrawRequests = WithdrawRequest::where('status',0)->sum('amount');
@@ -123,10 +141,6 @@ class DashboardController extends Controller
 
         }
 
-        $dayBeforeYesterdayStartDate = Carbon::yesterday()->subDay()->startOfDay();
-        $dayBeforeYesterdayEndDate = Carbon::yesterday()->subDay()->endOfDay();
-        $monthBeforeStartDate = Carbon::now()->subMonth()->startOfMonth();
-        $monthBeforeEndDate = Carbon::now()->subMonth()->endOfMonth();
         return view('dashboard.index', compact(
             'title',
             'totalBalance',
@@ -142,6 +156,14 @@ class DashboardController extends Controller
             'monthlyWithdrawals',
             'monthlyParkings',
             'monthlyEquity',
+            'dayBefYesDeposits',
+            'dayBefYesWithdrawals',
+            'dayBefYesParkings',
+            'dayBefYesEquity',
+            'yesMonthlyDeposits',
+            'yesMonthlyWithdrawals',
+            'yesMonthlyParkings',
+            'yesMonthlyEquity',
             'todayData',
             'weekData',
             'monthData',
