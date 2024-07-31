@@ -25,7 +25,8 @@ class CronJob extends Model
         'cron_job_name',
         'hit_time',
         'start_time',
-        'end_time'
+        'end_time',
+        'status'
     ];
 
     /**
