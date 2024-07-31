@@ -17,6 +17,21 @@
         <script type="text/javascript">
             $( document ).ready(function() {
                 $('input').attr('autocomplete','off');
+                var menuVal = localStorage.getItem('menu');
+                if(menuVal==1){
+                    document.body.classList.remove('sb-sidenav-toggled');
+                }else{
+                    document.body.classList.add('sb-sidenav-toggled');
+                }
+                $('#sidebarToggle').click(function(){
+                    if(menuVal==true){
+                        localStorage.setItem('menu',0);
+                        document.body.classList.add('sb-sidenav-toggled');
+                    }else{
+                        localStorage.setItem('menu',1);
+                        document.body.classList.remove('sb-sidenav-toggled');
+                    }
+                })
             });
         </script>
         @stack('jsscript')

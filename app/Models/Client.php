@@ -58,6 +58,10 @@ class Client extends Model
         'third_language',
         'liquidated',
         'status',
+        'transfered',
+        'transfered_from',
+        'transfered_to',
+        'status',
     ];
 
     protected $append = ['currency_policies_names','generic_policies_names','robo_policies_name','account_mirroring_policies_name'];

@@ -17,9 +17,7 @@
         <script src="{{ asset('/assets/js/activity-monitor.js') }}"></script>
 
     </head>
-    <body class="sb-nav-fixed sb-sidenav-toggled">
-    <!-- <body class="sb-nav-fixed"> -->
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-secondary">
+    <body class="sb-nav-fixed sb-sidenav-toggled">        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-secondary">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{((in_array('employee dashboard', permissions()))?'/employee-dashboard':'/dashboard')}}">
                 <img src="{{asset('/assets/images/watermark.png')}}" class="logo"/>

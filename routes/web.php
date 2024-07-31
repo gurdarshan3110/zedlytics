@@ -57,6 +57,8 @@ Route::get('/dispatch-client-generic-policies', [WithdrawRequestController::clas
 Route::get('/dispatch-robo-dealer-policies', [WithdrawRequestController::class, 'fetchRoboDealerPolicies']);
 Route::get('/dispatch-account-mirroring-policies', [WithdrawRequestController::class, 'fetchAccountMirroringPolicies']);
 Route::get('/dispatch-agent-commission-policies', [WithdrawRequestController::class, 'fetchAgentCommissionPolicies']);
+Route::get('/dispatch-transfer-user', [WithdrawRequestController::class, 'fetchTransferUser']);
+
 
 
 
@@ -88,6 +90,8 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::resource('roles', RoleController::class);
 
     Route::get('/clients/list', [ClientController::class, 'list'])->name('clients.list');
+    Route::get('/clients/{client}/transfer', [ClientController::class, 'transfer'])->name('clients.transfer');
+    Route::put('/clients/{client}/transfered', [ClientController::class, 'transfered'])->name('clients.transfered');
     Route::post('/clients/notes', [ClientController::class, 'addNotes'])->name('clients.notes');
     Route::resource('clients', ClientController::class);
 

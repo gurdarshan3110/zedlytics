@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckMacAddress;
 use App\Http\Middleware\TrackActivity;
 use App\Console\Commands\UpdateClientsFromCsv;
+use App\Console\Commands\UpdateTransferClientsFromCSV;
 use \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use \Illuminate\Contracts\Auth\Middleware\Authorize;
 
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         UpdateClientsFromCsv::class,
         UpdateClientsBrandCsv::class,
         UpdateMarginFromCsv::class,
+        UpdateTransferClientsFromCSV::class,
         
     ])
     ->withExceptions(function (Exceptions $exceptions) {

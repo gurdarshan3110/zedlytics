@@ -186,109 +186,150 @@ class ClientController extends Controller
                          ->with('success', self::FNAME.' deleted successfully.');
     }
 
+    public function transfer(Model $client)
+    {
+        $title = 'Transfer '.self::FNAME;
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $transferedFrom = Model::where('user_id',$client->parentId)->pluck('name','id');
+        $transferedTo = Model::where('status',1)->pluck('name','user_id')
+            ->prepend('Select Parent', '');
+        return view(self::DIRECTORY.'.transfer', compact(self::DIRECTORY, 'title','directory','url','transferedTo','transferedFrom'));
+    }
+
+    public function transfered(Request $request, Model $client)
+    {
+        $input = $request->all();
+        $rules = [
+            'transfered_to' => 'required|string|max:255',
+        ];
+
+        $validator = Validator::make($input, $rules);
+        
+        if ($validator->fails()) {
+            $errors = '';
+            foreach ($validator->errors()->all() as $error) {
+                $errors = $errors.$error;
+            }
+            return redirect()->route(self::URL.'.index')
+                    ->with('error',$errors)
+                    ->withInput();
+        }
+        $input['transfered_from'] = $client->parentId;
+        $input['transfered'] = 1;
+        $client->update($input);
+
+        return redirect()->route(self::URL.'.index')
+                         ->with('success', self::FNAME.' transfered successfully.');
+    }
+
     public function list(Request $request)
-{
-    $length = $request->input('length');
-    $start = $request->input('start');
-    $search = $request->input('search.value'); // Getting search input
-    $order = $request->input('order')[0]; // Getting ordering input
-    $columns = $request->input('columns'); // Getting column data
-    $status = $request->input('status');
+    {
+        $length = $request->input('length');
+        $start = $request->input('start');
+        $search = $request->input('search.value'); // Getting search input
+        $order = $request->input('order')[0]; // Getting ordering input
+        $columns = $request->input('columns'); // Getting column data
+        $status = $request->input('status');
 
-    // Map DataTable column names to database column names
-    $columnMap = [
-        'client_code' => 'client_code',
-        'username' => 'username',
-        'name' => 'name',
-        'email' => 'email',
-        'phone_no' => 'phone_no',
-        'rm' => 'rm', // Assuming rm is a field in clients table, otherwise, remove or handle it differently
-    ];
+        // Map DataTable column names to database column names
+        $columnMap = [
+            'client_code' => 'client_code',
+            'username' => 'username',
+            'name' => 'name',
+            'email' => 'email',
+            'phone_no' => 'phone_no',
+            'rm' => 'rm', // Assuming rm is a field in clients table, otherwise, remove or handle it differently
+        ];
 
-    $orderColumnIndex = $order['column'];
-    $orderDirection = $order['dir'];
-    $orderColumnName = $columns[$orderColumnIndex]['data'];
-    $orderByColumn = $columnMap[$orderColumnName] ?? 'client_code'; 
+        $orderColumnIndex = $order['column'];
+        $orderDirection = $order['dir'];
+        $orderColumnName = $columns[$orderColumnIndex]['data'];
+        $orderByColumn = $columnMap[$orderColumnName] ?? 'client_code'; 
 
-    // Fetch the query with filtering and ordering
-    $query = Model::with(['brand', 'rmanager'])
-        ->where('status', $status)
-        ->when($search, function ($query, $search) {
-            // Add your searchable columns here
-            return $query->where(function ($q) use ($search) {
-                $q->where('client_code', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('phone_no', 'like', "%{$search}%");
-            });
-        })
-        ->orderBy($orderByColumn, $orderDirection);
+        // Fetch the query with filtering and ordering
+        $query = Model::with(['brand', 'rmanager'])
+            ->where('status', $status)
+            ->when($search, function ($query, $search) {
+                // Add your searchable columns here
+                return $query->where(function ($q) use ($search) {
+                    $q->where('client_code', 'like', "%{$search}%")
+                      ->orWhere('name', 'like', "%{$search}%")
+                      ->orWhere('username', 'like', "%{$search}%")
+                      ->orWhere('phone_no', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy($orderByColumn, $orderDirection);
 
-    // Print the SQL query for debugging
-    
+        // Print the SQL query for debugging
+        
 
-    // Get the total number of records after filtering
-    $filteredRecords = $query->count();
+        // Get the total number of records after filtering
+        $filteredRecords = $query->count();
 
-    // Paginate the results
-    $data = $query->skip($start)->take($length);//->get();
-    // $sql = $data->toSql();
-    // $bindings = $query->getBindings();
-    // dd(vsprintf(str_replace('?', '%s', $sql), array_map(function ($binding) {
-    //     return is_numeric($binding) ? $binding : "'{$binding}'";
-    // }, $bindings)));
-    // Prepare DataTables response
-    return DataTables::of($data)
-        ->addColumn('brand', function ($row) {
-            return (($row->brand_id != null) ? $row->brand->name : '');
-        })
-        ->addColumn('client_code', function ($row) {
-            return $row->client_code;
-        })
-        ->addColumn('username', function ($row) {
-            return $row->username;
-        })
-        ->addColumn('name', function ($row) {
-            return ucwords($row->name);
-        })
-        ->addColumn('email', function ($row) {
-            return $row->email;
-        })
-        ->addColumn('phone_no', function ($row) {
-            return $row->phone_no;
-        })
-        ->addColumn('rm', function ($row) {
-            return (($row->rm != null) ? $row->rmanager->name : '');
-        })
-        ->addColumn('action', function ($row) {
-            $msg = 'Are you sure?';
-            $action = '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">
-                '.csrf_field().'
-                '.method_field('DELETE').'
-                <div class="btn-group">
-                <a href="'.route(self::URL.'.show', [$row]).'"
-                       class="btn btn-success btn-xs">
-                    <i class="far fa-eye"></i>
-                </a>
-                '.(in_array('edit '.self::DIRECTORY, permissions()) ? '
-                <a href="'.route(self::URL.'.edit', [$row]).'"
-                   class="btn btn-warning btn-xs">
-                    <i class="far fa-edit"></i>
-                </a>' : '').(in_array('delete '.self::DIRECTORY, permissions()) ? '
-                <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>' : '').'
-            </div>
-            </form>';
+        // Paginate the results
+        $data = $query->skip($start)->take($length);//->get();
+        // $sql = $data->toSql();
+        // $bindings = $query->getBindings();
+        // dd(vsprintf(str_replace('?', '%s', $sql), array_map(function ($binding) {
+        //     return is_numeric($binding) ? $binding : "'{$binding}'";
+        // }, $bindings)));
+        // Prepare DataTables response
+        return DataTables::of($data)
+            ->addColumn('brand', function ($row) {
+                return (($row->brand_id != null) ? $row->brand->name : '');
+            })
+            ->addColumn('client_code', function ($row) {
+                return $row->client_code;
+            })
+            ->addColumn('username', function ($row) {
+                return $row->username;
+            })
+            ->addColumn('name', function ($row) {
+                return ucwords($row->name);
+            })
+            ->addColumn('email', function ($row) {
+                return $row->email;
+            })
+            ->addColumn('phone_no', function ($row) {
+                return $row->phone_no;
+            })
+            ->addColumn('rm', function ($row) {
+                return (($row->rm != null) ? $row->rmanager->name : '');
+            })
+            ->addColumn('action', function ($row) {
+                $msg = 'Are you sure?';
+                $action = '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">
+                    '.csrf_field().'
+                    '.method_field('DELETE').'
+                    <div class="btn-group">
+                    <a href="'.route(self::URL.'.show', [$row]).'"
+                           class="btn btn-success btn-xs">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <a href="'.route(self::URL.'.transfer', [$row]).'"
+                           class="btn btn-primary btn-xs">
+                        <i class="fa fa-exchange" aria-hidden="true"></i>
+                    </a>
+                    '.(in_array('edit '.self::DIRECTORY, permissions()) ? '
+                    <a href="'.route(self::URL.'.edit', [$row]).'"
+                       class="btn btn-warning btn-xs">
+                        <i class="far fa-edit"></i>
+                    </a>' : '').(in_array('delete '.self::DIRECTORY, permissions()) ? '
+                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm(\''.$msg.'\')"><i class="far fa-trash-alt"></i></button>' : '').'
+                </div>
+                </form>';
 
-            return $action;
-        })
-        ->rawColumns(['action'])
-        ->with([
-            'draw' => $request->input('draw'),
-            'recordsTotal' => Model::where('status', $status)->count(),
-            'recordsFiltered' => $filteredRecords,
-        ])
-        ->make(true);
-}
+                return $action;
+            })
+            ->rawColumns(['action'])
+            ->with([
+                'draw' => $request->input('draw'),
+                'recordsTotal' => Model::where('status', $status)->count(),
+                'recordsFiltered' => $filteredRecords,
+            ])
+            ->make(true);
+    }
 
 
     public function addNotes(Request $request, Model $client)

@@ -21,6 +21,7 @@ use App\Jobs\AgentCommissionPolicyJob;
 use App\Jobs\AccountMirroringPolicyJob;
 use App\Jobs\WithdrawRequestJob;
 use App\Jobs\CreateDealerJob;
+use App\Jobs\TransferUserJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -50,6 +51,12 @@ class WithdrawRequestController extends Controller
     {
         WithdrawRequestJob::dispatch();
         return response()->json(['message' => 'Withdraw request job dispatched successfully.']);
+    }
+
+    public function fetchTransferUser()
+    {
+        TransferUserJob::dispatch();
+        return response()->json(['message' => 'Transfer User job dispatched successfully.']);
     }
 
     public function pushWithdrawRequestsToDB()
