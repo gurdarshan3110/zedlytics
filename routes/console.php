@@ -20,6 +20,6 @@ Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 //Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
 Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
 Schedule::job(new TransactionsReLogJob, 'default')->everyThreeMinutes();
-//Schedule::job(new TransferUserJob, 'default')->twiceDaily(10, 17);
+Schedule::job(new TransferUserJob, 'default')->everyTwoMinutes();
 //Schedule::job(new TransferUserJob, 'default')->weeklyOn(7, '13:00');
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
