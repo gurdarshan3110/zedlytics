@@ -95,7 +95,7 @@ class TransactionLogsJob implements ShouldQueue
         if ($start_time != null) {
             //$start_time = Carbon::now()->subMinutes(2)->format('Y-m-d H:i:s');
             //$start_time = '2024-07-31 09:00:00';
-            $start_time = Carbon::now('Asia/Kolkata')->subMinutes(59)->setTimezone('Asia/Riyadh')->format('Y-m-d H:i:s');
+            $start_time = Carbon::now('Asia/Kolkata')->subMinutes(2)->setTimezone('Asia/Riyadh')->format('Y-m-d H:i:s');
         }
 
         if ($end_time != null) {
