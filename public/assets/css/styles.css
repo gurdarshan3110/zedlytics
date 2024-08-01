@@ -11740,12 +11740,14 @@ button.btn-none {
   width: fit-content;
   background-color: #28a745!important;
   border-radius: 0px 4px 0px 4px;
+  padding: 0px 2px 0px 2px;
 }
 
 .text-amount-danger{
   width: fit-content;
   background-color: rgb(220 53 69) !important;
   border-radius: 0px 4px 0px 4px;
+  padding: 0px 2px 0px 2px;
 }
 
 .card-height{
