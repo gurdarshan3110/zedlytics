@@ -46,7 +46,17 @@
     $(document).ready(function() {
         var table = $('#top-table-winners').DataTable({
             dom: 'Bfrtip',
-            pageLength: 15,
+            "columnDefs": [
+                { "width": "10%", "targets": 0 },
+                { "width": "20%", "targets": 1 },
+                { "width": "30%", "targets": 2 },
+                { "width": "30%", "targets": 3 },
+                { "width": "10%", "targets": 4 },
+            ],
+            pageLength:10,
+            responsive: true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "scrollX": true,
             buttons: [
                 {
                     extend: 'copyHtml5',
@@ -77,6 +87,13 @@
         });
 
     });
-
+    function autoAdjustColumns(table) {
+        var container = table.table().container();
+        var resizeObserver = new ResizeObserver(function () {
+            table.columns.adjust();
+        });
+        resizeObserver.observe(container);
+    }
+    autoAdjustColumns(table);
 </script>
 @endpush
