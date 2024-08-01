@@ -11736,6 +11736,22 @@ button.btn-none {
     white-space: nowrap;
 }
 
+.text-amount-success{
+  width: fit-content;
+  background-color: #28a745!important;
+  border-radius: 0px 4px 0px 4px;
+}
+
+.text-amount-danger{
+  width: fit-content;
+  background-color: rgb(220 53 69) !important;
+  border-radius: 0px 4px 0px 4px;
+}
+
+.card-height{
+  height: 65px !important;
+}
+
 /*.name-cell:hover {
     white-space: normal;
     overflow: visible;

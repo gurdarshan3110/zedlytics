@@ -47,19 +47,19 @@
                 buttons: [
                     {
                         extend: 'copyHtml5',
-                        title: 'open-position'
+                        title: 'financial-report'
                     },
                     {
                         extend: 'excelHtml5',
-                        title: 'open-position'
+                        title: 'financial-report'
                     },
                     {
                         extend: 'csvHtml5',
-                        title: 'open-position'
+                        title: 'financial-report'
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'open-position'
+                        title: 'financial-report'
                     }
                 ],
                 drawCallback: function () {

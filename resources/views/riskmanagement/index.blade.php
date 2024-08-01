@@ -1,6 +1,7 @@
 @extends('includes.app')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function autoReload() {
         setTimeout(function() {
@@ -25,6 +26,55 @@
             <!--end::Create app-->
         </div>
         <div class="row">
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center text-primary">
+                        <i class="fas fa-users card-icon text-center"></i>
+                        
+                        <div class="fs-3 text-center">
+                            {{$activeUsers}}
+                        </div>
+                        <p class="fs-6 text-center mt-1 mb-0">Active Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center text-success">
+                        <i class="fas fa-angle-double-up card-icon text-center"></i>
+                        
+                        <div class="fs-3 text-center">
+                            {{$profitCount}}
+                        </div>
+                        <p class="fs-6 text-center mt-1 mb-0">Winners</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center text-danger">
+                        <i class="fas fa-angle-double-down card-icon text-center"></i>
+                        
+                        <div class="fs-3 text-center">
+                            {{$lossCount}}
+                        </div>
+                        <p class="fs-6 text-center mt-1 mb-0">Losers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center">
+                        <div class="card-height d-flex justify-content-center text-primary">
+                            <canvas id="profitLossChart"></canvas>
+                        </div>
+                        <p class=" text-primary fs-6 text-center mt-1 mb-0">Ratio</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row mt-1">
             <div class="col-sm-3">
                 <div class="card bg-fff p-2">
                     @include($directory.'.top-ten-winners')
@@ -48,6 +98,7 @@
         </div>
     </div>
 </main>
+@push('jsscript')
 <script>
 $(document).ready(function() {
     $('#date').on('change', function() {
@@ -106,6 +157,40 @@ $(document).ready(function() {
         $('#view-more-losers').attr('href', '{{ route("moreWL", ["status" => "losers"]) }}' + '&date=' + date);
     }
 });
+    const profitCount = {{ $profitCount }};
+    const lossCount = {{ $lossCount }};
+    
+    const ctx = document.getElementById('profitLossChart').getContext('2d');
+    const profitLossChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Profits', 'Losses'],
+            datasets: [{
+                label: 'Profit and Loss',
+                data: [profitCount, lossCount],
+                backgroundColor: ['#28a745', '#dc3545'], 
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false, // Hide the legend
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            },
+            cutout: '60%'
+        }
+    });
 </script>
+@endpush
 @endsection  
+
 

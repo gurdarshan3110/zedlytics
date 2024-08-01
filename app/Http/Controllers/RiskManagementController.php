@@ -24,7 +24,7 @@ class RiskManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    const TITLE = 'Risk Management';
+    const TITLE = 'Risk Management Dashboard';
     const URL = 'risk-management';
     const DIRECTORY = 'riskmanagement';
     const FNAME = 'risk management';
@@ -57,6 +57,26 @@ class RiskManagementController extends Controller
             ->limit(10)
             ->get();
 
+        $activeUsers = TrxLog::whereBetween('createdDate', [$startDate, $endDate])->distinct('userId')
+                           ->count('userId');
+        $profitCount = TrxLog::select('userId', 'accountId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->whereNotNull('closeProfit')
+            ->groupBy('userId', 'accountId')
+            ->havingRaw('SUM(closeProfit) > 0') 
+            ->distinct('userId')
+            ->count('userId');
+
+        $lossCount = TrxLog::select('userId', 'accountId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->whereNotNull('closeProfit')
+            ->groupBy('userId', 'accountId')
+            ->havingRaw('SUM(closeProfit) > 0') 
+            ->distinct('userId')
+            ->count('userId');
+
         $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
             $query->whereBetween('createdDate', [$startDate, $endDate])
                   ->whereNotNull('closeProfit');
@@ -81,7 +101,7 @@ class RiskManagementController extends Controller
 
         
         if(in_array('view '.$fname,permissions())){
-            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers','topWinnerParents','topLoserParents'));
+            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers','topWinnerParents','topLoserParents','activeUsers','profitCount','lossCount'));
         }else{
             return redirect()->route('dashboard.index');
         }
