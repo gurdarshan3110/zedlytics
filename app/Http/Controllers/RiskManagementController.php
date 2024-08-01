@@ -92,7 +92,7 @@ class RiskManagementController extends Controller
             return [
                 'accountId' => $client->client_code,
                 'name' => $client->name,
-                'totalCloseProfit' => $parentProfits[$client->user_id],
+                'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
             ];
         });
         
