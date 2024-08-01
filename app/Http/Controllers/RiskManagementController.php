@@ -73,7 +73,7 @@ class RiskManagementController extends Controller
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
             ->groupBy('userId', 'accountId')
-            ->havingRaw('SUM(closeProfit) > 0') 
+            ->havingRaw('SUM(closeProfit) < 0') 
             ->distinct('userId')
             ->count('userId');
 
