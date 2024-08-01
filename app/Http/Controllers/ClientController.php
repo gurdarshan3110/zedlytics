@@ -227,19 +227,18 @@ class ClientController extends Controller
     {
         $length = $request->input('length');
         $start = $request->input('start');
-        $search = $request->input('search.value'); // Getting search input
-        $order = $request->input('order')[0]; // Getting ordering input
-        $columns = $request->input('columns'); // Getting column data
+        $search = $request->input('search.value'); 
+        $order = $request->input('order')[0]; 
+        $columns = $request->input('columns'); 
         $status = $request->input('status');
 
-        // Map DataTable column names to database column names
         $columnMap = [
             'client_code' => 'client_code',
             'username' => 'username',
             'name' => 'name',
             'email' => 'email',
             'phone_no' => 'phone_no',
-            'rm' => 'rm', // Assuming rm is a field in clients table, otherwise, remove or handle it differently
+            'rm' => 'rm', 
         ];
 
         $orderColumnIndex = $order['column'];
@@ -247,11 +246,9 @@ class ClientController extends Controller
         $orderColumnName = $columns[$orderColumnIndex]['data'];
         $orderByColumn = $columnMap[$orderColumnName] ?? 'client_code'; 
 
-        // Fetch the query with filtering and ordering
         $query = Model::with(['brand', 'rmanager'])
             ->where('status', $status)
             ->when($search, function ($query, $search) {
-                // Add your searchable columns here
                 return $query->where(function ($q) use ($search) {
                     $q->where('client_code', 'like', "%{$search}%")
                       ->orWhere('name', 'like', "%{$search}%")
@@ -261,20 +258,8 @@ class ClientController extends Controller
             })
             ->orderBy($orderByColumn, $orderDirection);
 
-        // Print the SQL query for debugging
-        
-
-        // Get the total number of records after filtering
         $filteredRecords = $query->count();
-
-        // Paginate the results
-        $data = $query->skip($start)->take($length);//->get();
-        // $sql = $data->toSql();
-        // $bindings = $query->getBindings();
-        // dd(vsprintf(str_replace('?', '%s', $sql), array_map(function ($binding) {
-        //     return is_numeric($binding) ? $binding : "'{$binding}'";
-        // }, $bindings)));
-        // Prepare DataTables response
+        $data = $query->skip($start)->take($length);
         return DataTables::of($data)
             ->addColumn('brand', function ($row) {
                 return (($row->brand_id != null) ? $row->brand->name : '');

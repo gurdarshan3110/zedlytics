@@ -7,7 +7,6 @@
                     <?php 
                         $modules = softModules(0);
                         $permissions = permissions();
-
                     ?>
 
                     @foreach ($modules as $module)
@@ -37,7 +36,7 @@
                                         @php
                                             $childModuleUrl = str_replace('-', ' ', $childModule->url);
                                             $childPermissionKey = 'view ' . $childModuleUrl;
-                                            if($childModuleUrl=='margin limit menu'){
+                                            if($childModuleUrl == 'margin limit menu'){
                                                $childPermissionKey = 'view margin limit';
                                             }
                                         @endphp
@@ -63,3 +62,5 @@
     <div id="layoutSidenav_content">
         @yield('content')
         @yield('footer')
+    </div>
+</div>

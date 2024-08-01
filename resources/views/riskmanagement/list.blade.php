@@ -11,84 +11,77 @@
             </tr>
             </thead>
             <tbody>
-                @if(count($data)>0)
-                    @foreach($data as $winner)
-                        <tr>
-                            <td class="text-start">{{$winner->accountId}}</td>
-                            <td>{{$winner->client->username}}</td>
-                            <td>{{$winner->client->parent->name}}</td>
-                            <td>{{$winner->client->name}}</td>
-                            <td class="text-end">{{$winner->totalCloseProfit}}</td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="4" class="text-center">no records found</td>
-                    </tr>
-                @endif
+                
             </tbody>
         </table>
     </div>
 </div>
 @push('jsscript')
-   <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#top-table-winners').DataTable({
-                dom: 'Bfrtip',
-                columnDefs: [
-                    { width: "10%", targets: 0 },
-                    { width: "20%", targets: 1 },
-                    { width: "30%", targets: 2 },
-                    { width: "30%", targets: 3 },
-                    { width: "10%", targets: 4 }
-                ],
-                pageLength: 10,
-                responsive: true,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                scrollX: true,
-                buttons: [
-                    {
-                        extend: 'copyHtml5',
-                        title: 'wl-report'
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        title: 'wl-report'
-                    },
-                    {
-                        extend: 'csvHtml5',
-                        title: 'wl-report'
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        title: 'wl-report'
-                    }
-                ],
-                drawCallback: function () {
-                    $('.dataTables_filter input').addClass('form-control form-control-solid w-250px');
-                    $('.dt-buttons button').addClass('fs-7 active-menu-item text-light border-0');
-                    $('.dt-buttons').addClass('mb-2');
-                    $('.dt-button').addClass('btn-primary');
-                    $('.paginate_button').addClass('fs-7');
-                    $('.paginate_button.current').addClass('fs-7 active-menu-item');
-                    $('.paginate_button.active-menu-item').removeClass('current');
+        const date = "{{ $date }}";
+        var table = $('#top-table-winners').DataTable({
+            "columnDefs": [
+                { "width": "10%", "targets": 0 },
+                { "width": "20%", "targets": 1 },
+                { "width": "30%", "targets": 2 },
+                { "width": "30%", "targets": 3 },
+                { "width": "10%", "targets": 4 },
+            ],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/{{$url}}/list",
+                type: 'GET',
+                data: function (d) {
+                    d.date = date; // Add the status filter
                 }
-            });
-
-            function autoAdjustColumns(table) {
-                var container = table.table().container();
-                var resizeObserver = new ResizeObserver(function () {
-                    table.columns.adjust();
-                });
-                resizeObserver.observe(container);
+            },
+            columns: [
+                { data: 'accountId', name: 'accountId' },
+                { data: 'username', name: 'username' },
+                { data: 'parent', name: 'parent' },
+                { data: 'name', name: 'name' },
+                { data: 'totalCloseProfit', name: 'totalCloseProfit' },
+            ],
+            pageLength: 10,
+            dom: 'Blfrtip',
+            responsive: true,
+            scrollX: true,  // enables horizontal scrolling
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5',
+            ],
+            language: {
+                search: '',
+                searchPlaceholder: "Search {{$title}}",
+                paginate: {
+                    previous: '<i class="fa fa-angle-left"></i>',
+                    next: '<i class="fa fa-angle-right"></i>'
+                }
+            },
+            drawCallback: function () {
+                $('.dataTables_filter input').addClass('form-control form-control-solid w-250px');
+                $('.dt-buttons button').addClass('fs-7 active-menu-item text-light border-0');
+                $('.dt-buttons').addClass('mb-2');
+                $('.dt-button').addClass('btn-primary');
+                $('.paginate_button').addClass('fs-7');
+                $('.paginate_button.current').addClass('fs-7 active-menu-item');
+                $('.paginate_button.active-menu-item').removeClass('current');
             }
-            autoAdjustColumns(table);
+        });
+
+        $('#filter').click(function(){
+            var min = $('#min').val();
+            var max = $('#max').val();
+            table.ajax.url('/{{$url}}/list?min=' + min + '&max=' + max).load();
         });
     </script>
 @endpush
