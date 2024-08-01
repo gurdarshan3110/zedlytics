@@ -29,7 +29,7 @@
                         @endphp
                         <tr>
                             <td class="text-start">{{$winner['accountId']}}</td>
-                            <td>{{$winner['name']}}</td>
+                            <td class="name-cell" title="{{ $winner['name'] }}">{{$winner['name']}}</td>
                             <td class="text-end">                            	<span class="{{$growthClass}}">
                                     {{$winner['totalCloseProfit']}}
                                 </span>
