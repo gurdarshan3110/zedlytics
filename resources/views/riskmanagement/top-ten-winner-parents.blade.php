@@ -10,12 +10,31 @@
             </tr>
             </thead>
             <tbody>
+                @php
+                    $previousProfit = 0; 
+                @endphp
                 @if(count($topWinnerParents)>0)
                     @foreach($topWinnerParents as $winner)
+                        @php
+                            // Calculate growth direction
+                            $growthClass = '';
+                            if ($previousProfit !== null) {
+                                if ($winner['totalCloseProfit'] > 0) {
+                                    $growthClass = 'text-amount-success text-white'; // Increasing
+                                } elseif ($winner['totalCloseProfit'] < 0) {
+                                    $growthClass = 'text-amount-danger text-white'; // Decreasing
+                                }
+                            }
+                            $previousProfit = $winner['totalCloseProfit']
+                        @endphp
                         <tr>
                             <td class="text-start">{{$winner['accountId']}}</td>
                             <td>{{$winner['name']}}</td>
-                            <td class="text-end">{{$winner['totalCloseProfit']}}</td>
+                            <td class="text-end">   
+                                <span class="{{$growthClass}}">
+                                    {{$winner['totalCloseProfit']}}
+                                </span>
+                            </td>
                         </tr>
                     @endforeach
                 @else
