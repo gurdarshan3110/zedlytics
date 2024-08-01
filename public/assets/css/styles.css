@@ -11752,6 +11752,10 @@ button.btn-none {
   height: 65px !important;
 }
 
+.card-height-single{
+  height: 125px !important;
+}
+
 /*.name-cell:hover {
     white-space: normal;
     overflow: visible;

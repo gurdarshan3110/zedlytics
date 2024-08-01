@@ -72,6 +72,20 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center card-height-single d-flex justify-content-center text-primary align-items-end">
+                        <canvas id="pllineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mt-1">
+                <div class="card bg-fff text-light">
+                    <div class="card-body text-center card-height-single d-flex justify-content-center text-primary align-items-end">
+                        <canvas id="plbarChart"></canvas>
+                    </div>
+                </div>
+            </div>
             
         </div>
         <div class="row mt-1">
@@ -187,6 +201,72 @@ $(document).ready(function() {
                 }
             },
             cutout: '60%'
+        }
+    });
+    const ctxLine = document.getElementById('pllineChart').getContext('2d');
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: ['Profits', 'Losses'],
+            datasets: [{
+                label: 'Profit and Loss',
+                data: [profitCount, lossCount],
+                backgroundColor: 'rgba(28, 200, 138, 0.2)', // Light green for profits
+                borderColor: '#28a745', // Green for profits
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Bar Chart
+    const ctxBar = document.getElementById('plbarChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['Profits', 'Losses'],
+            datasets: [{
+                label: 'Profit and Loss',
+                data: [profitCount, lossCount],
+                backgroundColor: ['#28a745', '#dc3545'], // Green for profits, red for losses
+                borderColor: ['#1c7430', '#b52d2a'], // Darker green and red for borders
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 </script>
