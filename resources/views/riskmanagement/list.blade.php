@@ -3,10 +3,11 @@
         <table class="w-100 align-middle fs-6 table table-bordered" border="0" cellpadding="0" cellspacing="0" id="top-table-winners">
             <thead>
             <tr>
-                <th width="15%">Id</th>
-                <th width="25%">Username</th>
-                <th width="45%">Name</th>
-                <th width="15%">PNL</th>
+                <th width="10%">Id</th>
+                <th width="20%">Username</th>
+                <th width="30%">Parent</th>
+                <th width="30%">Name</th>
+                <th width="10%">PNL</th>
             </tr>
             </thead>
             <tbody>
@@ -15,6 +16,7 @@
                         <tr>
                             <td class="text-start">{{$winner->accountId}}</td>
                             <td>{{$winner->client->username}}</td>
+                            <td>{{$winner->client->parent->name}}</td>
                             <td>{{$winner->client->name}}</td>
                             <td class="text-end">{{$winner->totalCloseProfit}}</td>
                         </tr>

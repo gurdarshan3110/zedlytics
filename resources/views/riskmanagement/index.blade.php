@@ -67,14 +67,13 @@ $(document).ready(function() {
                 $('#top-table-winners tbody').append(
                     '<tr>' +
                         '<td>' + winner.accountId + '</td>' +
-                        '<td>' + (winner.client ? winner.client.username : '') + '</td>' +
                         '<td>' + (winner.client ? winner.client.name : '') + '</td>' +
                         '<td>' + winner.totalCloseProfit + '</td>' +
                     '</tr>'
                 );
             });
         } else {
-            $('#top-table-winners tbody').append('<tr><td colspan="4">No winners found for this date.</td></tr>');
+            $('#top-table-winners tbody').append('<tr><td colspan="2">No winners found for this date.</td></tr>');
         }
 
         // Update losers table
@@ -83,14 +82,13 @@ $(document).ready(function() {
                 $('#top-table-losers tbody').append(
                     '<tr>' +
                         '<td>' + loser.accountId + '</td>' +
-                        '<td>' + (loser.client ? loser.client.username : '') + '</td>' +
                         '<td>' + (loser.client ? loser.client.name : '') + '</td>' +
                         '<td>' + loser.totalCloseProfit + '</td>' +
                     '</tr>'
                 );
             });
         } else {
-            $('#top-table-losers tbody').append('<tr><td colspan="4">No losers found for this date.</td></tr>');
+            $('#top-table-losers tbody').append('<tr><td colspan="3">No losers found for this date.</td></tr>');
         }
     }
     function updateViewMoreLinks(date) {

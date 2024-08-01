@@ -4,10 +4,9 @@
         <table class="w-100 align-middle fs-7" border="0" cellpadding="0" cellspacing="0" id="top-table-winners">
             <thead>
             <tr>
-                <th width="15%">Id</th>
-                <th width="25%">Username</th>
-                <th width="45%">Name</th>
-                <th width="15%">PNL</th>
+                <th width="20%">Id</th>
+                <th width="60%">Name</th>
+                <th width="20%">PNL</th>
             </tr>
             </thead>
             <tbody>
@@ -15,14 +14,13 @@
                     @foreach($topTenLossers as $winner)
                         <tr>
                             <td class="text-start">{{$winner->accountId}}</td>
-                            <td>{{$winner->client->username}}</td>
                             <td>{{$winner->client->name}}</td>
                             <td class="text-end">{{$winner->totalCloseProfit}}</td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="4" class="text-center">no records found</td>
+                        <td colspan="3" class="text-center">no records found</td>
                     </tr>
                 @endif
             </tbody>
