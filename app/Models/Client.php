@@ -127,4 +127,19 @@ class Client extends Model
         return $this->genericPolicy()->pluck('policyName')->implode(', ');
     }
 
+    public function children()
+    {
+        return $this->hasMany(Client::class, 'parentId', 'user_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(TrxLog::class, 'userId', 'user_id');
+    }
+
+    public function trxLogs()
+    {
+        return $this->hasMany(TrxLog::class, 'userId', 'user_id');
+    }
+
 }

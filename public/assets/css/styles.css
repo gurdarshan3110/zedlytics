@@ -11728,6 +11728,25 @@ button.btn-none {
   width: 15% !important;
 }
 
+.name-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    max-width: 50px;
+    white-space: nowrap;
+}
+
+/*.name-cell:hover {
+    white-space: normal;
+    overflow: visible;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    position: absolute;
+    z-index: 1;
+    padding: 1px;
+}*/
+
+
 @media (max-width: 576px) {
   .dataTables_length{
     margin-bottom: 5px;

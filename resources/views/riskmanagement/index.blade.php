@@ -35,6 +35,16 @@
                     @include($directory.'.top-ten-lossers')
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="card bg-fff p-2">
+                    @include($directory.'.top-ten-winner-parents')
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card bg-fff p-2">
+                    @include($directory.'.top-ten-loser-parents')
+                </div>
+            </div>
         </div>
     </div>
 </main>

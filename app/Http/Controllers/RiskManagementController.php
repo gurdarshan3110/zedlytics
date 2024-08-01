@@ -56,8 +56,32 @@ class RiskManagementController extends Controller
             ->orderBy('totalCloseProfit', 'asc')
             ->limit(10)
             ->get();
+
+        $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('createdDate', [$startDate, $endDate])
+                  ->whereNotNull('closeProfit');
+        }])->get();
+
+        $parentProfits = $clients->groupBy('parentId')->map(function ($group) {
+            return $group->sum(function ($client) {
+                return $client->trxLogs->sum('closeProfit');
+            });
+        });
+
+        $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
+            return [
+                'accountId' => $client->client_code,
+                'name' => $client->name,
+                'totalCloseProfit' => $parentProfits[$client->user_id],
+            ];
+        });
+        
+        $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
+        $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
+
+        
         if(in_array('view '.$fname,permissions())){
-            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers'));
+            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers','topWinnerParents','topLoserParents'));
         }else{
             return redirect()->route('dashboard.index');
         }
