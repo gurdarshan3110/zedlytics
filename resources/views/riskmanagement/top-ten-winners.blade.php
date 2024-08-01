@@ -4,9 +4,9 @@
         <table class="w-100 align-middle fs-7" border="0" cellpadding="0" cellspacing="0" id="top-table-winners">
             <thead>
             <tr>
-                <th width="20%">Id</th>
-                <th width="60%">Name</th>
-                <th width="20%">PNL</th>
+                <th width="25%">Id</th>
+                <th width="50%">Name</th>
+                <th width="25%">PNL</th>
             </tr>
             </thead>
             <tbody>
