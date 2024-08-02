@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\OpenPosition;
-use App\Models\BaseCurrency;
 use App\Models\CronJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,6 +28,7 @@ class FetchOpenPositionsJob implements ShouldQueue
 
     public function handle()
     {
+        set_time_limit(-1);
         $username = config('services.bestbull.username');
         $password = config('services.bestbull.password');
 
@@ -53,7 +53,6 @@ class FetchOpenPositionsJob implements ShouldQueue
         }
 
         OpenPosition::truncate();
-        //BaseCurrency::query()->delete();
         CronJob::create(['cron_job_name' => 'Open Position']);
         
         //$this->fetchBaseCurrencyData();
@@ -61,7 +60,7 @@ class FetchOpenPositionsJob implements ShouldQueue
         $fromDate = '2020-01-01 00:00:00';
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
-        $response = Http::withToken($this->token)->get($this->baseUrl.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0', [
+        $response = Http::timeout(180)->withToken($this->token)->get($this->baseUrl.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0', [
             'currencyIds' => '',
             'withDemo' => false,
             'fromDate' => $fromDate,
