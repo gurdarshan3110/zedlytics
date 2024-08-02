@@ -288,8 +288,8 @@ class RiskManagementController extends Controller
         $date = $request->query('date');
         $timezone = 'Asia/Kolkata';
 
-        //$startDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->startOfDay()->subHours(2)->subMinutes(30);
-        $startDate = '2024-07-30 00:00:00';
+        $startDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        //$startDate = '2024-07-30 00:00:00';
         $endDate = Carbon::createFromFormat('Y-m-d', $date, $timezone)->endOfDay()->subHours(2)->subMinutes(30);
 
         $length = $request->input('length', 10); // Default to 10 if not provided
