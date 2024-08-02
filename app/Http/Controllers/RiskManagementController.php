@@ -83,26 +83,25 @@ class RiskManagementController extends Controller
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
 
-        $baseCurrency = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1);
+        //$baseCurrency = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1);
 
-        // $baseCur = BaseCurrency::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
-        //     $query->whereBetween('createdDate', [$startDate, $endDate])
-        //           ->whereNotNull('closeProfit');
-        // }])->get();
-        // $currencyProfits = $baseCur->groupBy('parent_id')->map(function ($group) {
-        //     return $group->sum(function ($baseCur) {
-        //         return $baseCur->trxLogs->sum('closeProfit');
-        //     });
-        // });
-        // $marketCurrencies = BaseCurrency::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
-        //     return [
-        //         'accountId' => $client->client_code,
-        //         'name' => $client->name,
-        //         'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
-        //     ];
-        // });
+        $baseCur = BaseCurrency::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('createdDate', [$startDate, $endDate])
+                  ->whereNotNull('closeProfit');
+        }])->where('parent_id', 1)->where('base_id','!=',1)->get();
+        $currencyProfits = $baseCur->groupBy('currencyId')->map(function ($group) {
+            return $group->sum(function ($baseCur) {
+                return $baseCur->trxLogs->sum('closeProfit');
+            });
+        });
+
+        $markets = BaseCurrency::whereIn('base_id', $parentProfits->keys())->get()->map(function ($baseCur) use ($currencyProfits) {
+            return [
+                'name' => $baseCur->name,
+                'totalCloseProfit' => number_format($currencyProfits[$baseCur->base_id], 2, '.', ''),
+            ];
+        })->sortByDesc('totalCloseProfit')->take(10);
     
-        $markets = $baseCurrency->limit(10)->get();
         $scripts = TrxLog::with('currency')->select('currencyId')
             ->selectRaw('SUM(closeProfit) as totalCloseProfit')
             ->whereNotNull('closeProfit')

@@ -55,4 +55,9 @@ class BaseCurrency extends Model
         return $this->hasManyThrough(TrxLog::class, BaseCurrency::class, 'parent_id', 'currencyId', 'base_id', 'base_id');
     }
 
+    public function trxLogs()
+    {
+        return $this->hasMany(TrxLog::class, 'currencyId', 'base_id');
+    }
+
 }
