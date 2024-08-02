@@ -51,4 +51,9 @@ class TrxLog extends Model
         return $this->belongsTo(Client::class, 'userId','user_id');
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(BaseCurrency::class, 'currencyId','base_id');
+    }
+
 }

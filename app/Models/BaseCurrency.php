@@ -24,7 +24,7 @@ class BaseCurrency extends Model
     ];
 
     protected $appends = [
-        'parent'
+        'parent','child_ids'
     ];
 
     public function positions()
@@ -39,4 +39,20 @@ class BaseCurrency extends Model
         }
         return BaseCurrency::select('name')->where('base_id', $this->parent_id)->first()->name;
     }
+
+    public function getChildIdsAttribute()
+    {
+        return $this->hasMany(BaseCurrency::class, 'parent_id', 'base_id')->pluck('base_id');
+    }
+
+    public function childCurrencies()
+    {
+        return $this->hasMany(BaseCurrency::class, 'parent_id', 'base_id');
+    }
+
+    public function childTransactions()
+    {
+        return $this->hasManyThrough(TrxLog::class, BaseCurrency::class, 'parent_id', 'currencyId', 'base_id', 'base_id');
+    }
+
 }
