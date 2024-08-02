@@ -42,8 +42,8 @@ class TransferUserJob implements ShouldQueue
             $cronjob = CronJob::create([
                 'cron_job_name' => 'Transfer Users API'
             ]);
-            $client = Client::select('user_id','transfered_to','id')->where('transfered',1)->first();
-            //foreach ($clients as $key => $client) {
+            $clients = Client::select('user_id','transfered_to','id')->where('transfered',1)->get();
+            foreach ($clients as $key => $client) {
                 $data = [
                     'toParentNodeUserId' => $client->transfered_to,
                     'userId' => $client->user_id,
@@ -54,17 +54,17 @@ class TransferUserJob implements ShouldQueue
                     ->put($this->baseUrl . "admin/public/api/v1/user", $data);
 
                 if ($response->successful()) {
-                    //$clientUser = Client::find($client->id);
-                    $client->transfered = 0;
-                    $client->parentId = $client->transfered_to;
-                    $client->save();
+                    $clientUser = Client::find($client->id);
+                    $clientUser->transfered = 0;
+                    $clientUser->parentId = $clientUser->transfered_to;
+                    $clientUser->save();
                 } else {
                     Log::error('API request failed', [
                         'client' => $client,
                         'response' => $response->body(),
                     ]);
                 }
-            //}
+            }
             $cronjob->status = 1;
             $cronjob->save();
             
