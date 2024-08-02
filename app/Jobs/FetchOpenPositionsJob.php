@@ -57,7 +57,8 @@ class FetchOpenPositionsJob implements ShouldQueue
         
         //$this->fetchBaseCurrencyData();
 
-        $fromDate = '2020-01-01 00:00:00';
+        //$fromDate = '2020-01-01 00:00:00';
+        $fromDate = Carbon::now()->subDays(60)->endOfDay()->format('Y-m-d H:i:s');
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         $response = Http::timeout(180)->withToken($this->token)->get($this->baseUrl.'trading/public/api/v1/report/open/positions/' . $this->clientTreeUserIdNode . '/0', [
