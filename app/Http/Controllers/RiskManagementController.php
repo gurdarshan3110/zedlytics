@@ -58,7 +58,7 @@ class RiskManagementController extends Controller
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit');
             
-        $profitCount = (clone $transCount)->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) < 0')->distinct('userId')->count('userId');
+        $profitCount = (clone $transCount)->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) > 0')->distinct('userId')->count('userId');
         $lossCount = (clone $transCount)->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) < 0')->distinct('userId')->count('userId');
 
         $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
@@ -85,25 +85,31 @@ class RiskManagementController extends Controller
 
         //$baseCurrency = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1);
 
-        // $baseCur = BaseCurrency::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
-        //     $query->whereBetween('createdDate', [$startDate, $endDate])
-        //           ->whereNotNull('closeProfit');
-        // }]);
-        // //dd($baseCur);
-        // $currencyProfits = $baseCur->groupBy('parent_id')->map(function ($group) {
-        //     return $group->sum(function ($currency) {
-        //         return $currency->trxLogs->sum('closeProfit');
-        //     });
-        // });
-        // dd($currencyProfits);
-        // $markets = BaseCurrency::whereIn('base_id', $parentProfits->keys())->get()->map(function ($baseCur) use ($currencyProfits) {
-        //     return [
-        //         'name' => $baseCur->name,
-        //         'totalCloseProfit' => number_format($currencyProfits[$baseCur->base_id], 2, '.', ''),
-        //     ];
-        // })->sortByDesc('totalCloseProfit')->take(10);
-        //dd($markets);
-        $markets='';
+        $baseCurrencies = BaseCurrency::with(['childTransactions' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('createdDate', [$startDate, $endDate])
+                  ->whereNotNull('closeProfit');
+        }])
+        ->where('parent_id', 1)
+        ->where('base_id', '!=', 1)
+        ->get();
+
+        // Calculate total close profit for each parent currency
+        $currencyProfits = $baseCurrencies->mapWithKeys(function ($currency) {
+            $totalCloseProfit = $currency->childTransactions->sum('closeProfit');
+            return [$currency->base_id => $totalCloseProfit];
+        });
+
+        // Sort and take the top 10 and bottom 10 currencies by total close profit
+        $sortedProfits = $currencyProfits->sortDesc();
+
+        $markets = $sortedProfits->take(10)->map(function ($totalCloseProfit, $baseId) {
+            $currency = BaseCurrency::find($baseId);
+            return $currency ? [
+                'name' => $currency->name,
+                'totalCloseProfit' => number_format($totalCloseProfit, 2, '.', ''),
+            ] : null;
+        })->filter();
+        //$markets='';
         $scripts = TrxLog::with('currency')->select('currencyId')
             ->selectRaw('SUM(closeProfit) as totalCloseProfit')
             ->whereNotNull('closeProfit')
