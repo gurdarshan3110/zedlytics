@@ -22,6 +22,7 @@ use App\Jobs\AccountMirroringPolicyJob;
 use App\Jobs\WithdrawRequestJob;
 use App\Jobs\CreateDealerJob;
 use App\Jobs\TransferUserJob;
+use App\Jobs\UpdateBaseCurrenciesJob;
 use Carbon\Carbon;
 
 class WithdrawRequestController extends Controller
@@ -51,6 +52,12 @@ class WithdrawRequestController extends Controller
     {
         WithdrawRequestJob::dispatch();
         return response()->json(['message' => 'Withdraw request job dispatched successfully.']);
+    }
+
+    public function fetchBaseCurrencies()
+    {
+        UpdateBaseCurrenciesJob::dispatch();
+        return response()->json(['message' => 'Base Currencies job dispatched successfully.']);
     }
 
     public function fetchTransferUser()

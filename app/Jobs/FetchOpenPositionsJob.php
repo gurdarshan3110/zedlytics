@@ -53,10 +53,10 @@ class FetchOpenPositionsJob implements ShouldQueue
         }
 
         OpenPosition::truncate();
-        BaseCurrency::query()->delete();
+        //BaseCurrency::query()->delete();
         CronJob::create(['cron_job_name' => 'Open Position']);
         
-        $this->fetchBaseCurrencyData();
+        //$this->fetchBaseCurrencyData();
 
         $fromDate = '2020-01-01 00:00:00';
         $toDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
@@ -110,65 +110,6 @@ class FetchOpenPositionsJob implements ShouldQueue
                         'referenceCurrencyId' => $item['referenceCurrencyId'],
                         'posComment' => $item['posComment'] ?? null,
                         'status' => 1,
-                    ]
-                );
-            }
-        }
-    }
-
-    protected function fetchBaseCurrencyData()
-    {
-        $response = Http::withToken($this->token)->get($this->baseUrl.'admin/public/api/v1/currency');
-
-        if ($response->failed()) {
-            // Handle fetch failure (e.g., log the error or notify someone)
-            return;
-        }
-
-        $data = $response->json();
-
-        foreach ($data['data'] as $item) {
-            if ($item['used'] != 0) {
-                BaseCurrency::updateOrCreate(
-                    ['base_id' => $item['id']],
-                    [
-                        'name' => $item['name'],
-                        'used' => $item['used'],
-                        'open_day' => $item['openDay'],
-                        'close_day' => $item['closeDay'],
-                        'open_time' => $item['openTime'],
-                        'close_time' => $item['closeTime'],
-                        'daily_close_time_from1' => $item['dailyCloseTimeFrom1'],
-                        'daily_close_time_to1' => $item['dailyCloseTimeTo1'],
-                        'daily_close_time_from2' => $item['dailyCloseTimeFrom2'],
-                        'daily_close_time_to2' => $item['dailyCloseTimeTo2'],
-                        'daily_close_time_from3' => $item['dailyCloseTimeFrom3'],
-                        'daily_close_time_to3' => $item['dailyCloseTimeTo3'],
-                        'tick_digits' => $item['tickDigits'],
-                        'closed' => $item['closed'],
-                        'reference_currency_id' => $item['referenceCurrencyId'],
-                        'decimal_digits' => $item['decimalDigits'],
-                        'sell_only' => $item['sellOnly'],
-                        'buy_only' => $item['buyOnly'],
-                        'description' => $item['description'],
-                        'currency_type_id' => $item['currencyTypeId'],
-                        'parent_id' => $item['parentId'],
-                        'amount_unit_id' => $item['amountUnitId'],
-                        'row_color' => $item['rowColor'],
-                        'auto_stop_trade' => $item['autoStopTrade'],
-                        'auto_stop_trade_seconds' => $item['autoStopTradeSeconds'],
-                        'requotable' => $item['requotable'],
-                        'move_if_closed' => $item['moveIfClosed'],
-                        'spread_from_bid' => $item['spreadFromBid'],
-                        'feeder_name' => $item['feederName'],
-                        'expiry_date' => $item['expiryDate'],
-                        'contract_size' => $item['contractSize'],
-                        'direct_calculation' => $item['directCalculation'],
-                        'ref_direct_calculation' => $item['refDirectCalculation'],
-                        'close_cancel_all_on_expiry' => $item['closeCancelAllOnExpiry'],
-                        'auto_cancel_sltp_orders' => $item['autoCancelSltpOrders'],
-                        'auto_cancel_entry_orders' => $item['autoCancelEntryOrders'],
-                        'auto_switch_feed_seconds' => $item['autoSwitchFeedSeconds'],
                     ]
                 );
             }
