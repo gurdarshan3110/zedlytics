@@ -19,7 +19,7 @@ Schedule::job(new WithdrawRequestJob, 'default')->everyTwoMinutes();
 Schedule::job(new CreateNewClientsJob, 'default')->everyTwoMinutes();
 //Schedule::job(new CreateClientAndAccountJob, 'default')->everyFiveMinutes();
 Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
-Schedule::job(new TransactionsReLogJob, 'default')->everyMinutes();
+Schedule::job(new TransactionsReLogJob, 'default')->everyMinute();
 Schedule::job(new TransferUserJob, 'default')->everyFifteenMinutes();
 //Schedule::job(new TransferUserJob, 'default')->weeklyOn(7, '13:00');
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
