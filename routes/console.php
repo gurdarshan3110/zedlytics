@@ -9,6 +9,7 @@ use App\Jobs\CreateNewClientsJob;
 use App\Jobs\WithdrawRequestJob;
 use App\Jobs\TransactionsReLogJob;
 use App\Jobs\TransferUserJob;
+use App\Jobs\UpdateBaseCurrenciesJob;
 
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());
@@ -21,5 +22,5 @@ Schedule::job(new CreateNewClientsJob, 'default')->everyThirtyMinutes();
 Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
 Schedule::job(new TransactionsReLogJob, 'default')->everyMinute();
 //Schedule::job(new TransferUserJob, 'default')->everyFifteenMinutes();
-//Schedule::job(new TransferUserJob, 'default')->weeklyOn(7, '13:00');
+Schedule::job(new UpdateBaseCurrenciesJob, 'default')->weeklyOn('10:00', '17:30');
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
