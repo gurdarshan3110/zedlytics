@@ -28,31 +28,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript">
-        var minDate, maxDate;
-        
-        var table=$('#record-table{{$brand->id}}').DataTable({
+        $(document).ready(function() {
+            var brandName = '{{ $brand->name }}';
+            
+            var table = $('#record-table{{ $brand->id }}').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/{{$url}}/list?brand={{$brand->id}}",
+                ajax: "/{{ $url }}/list?brand={{ $brand->id }}",
                 columns: [
-
-                    {data: 'id', name: 'id'},
-                    {data: 'market', name: 'market'},
-                    {data: 'script', name: 'script'},
-                    {data: 'minimum_deal', name: 'minimum_deal'},
-                    {data: 'maximum_deal_in_single_order', name: 'maximum_deal_in_single_order'},
-                    {data: 'maximum_quantity_in_script', name: 'maximum_quantity_in_script'},
-                    {data: 'intraday_margin', name: 'intraday_margin'},
-                    {data: 'holding_maintainence_margin', name: 'holding_maintainence_margin'},
-                    {data: 'inventory_day_margin', name: 'inventory_day_margin'},
-                    {data: 'total_group_limit', name: 'total_group_limit'},
-                    {data: 'margin_calculation_time', name: 'margin_calculation_time'}
-                    
+                    { data: 'id', name: 'id' },
+                    { data: 'market', name: 'market' },
+                    { data: 'script', name: 'script' },
+                    { data: 'minimum_deal', name: 'minimum_deal' },
+                    { data: 'maximum_deal_in_single_order', name: 'maximum_deal_in_single_order' },
+                    { data: 'maximum_quantity_in_script', name: 'maximum_quantity_in_script' },
+                    { data: 'intraday_margin', name: 'intraday_margin' },
+                    { data: 'holding_maintainence_margin', name: 'holding_maintainence_margin' },
+                    { data: 'inventory_day_margin', name: 'inventory_day_margin' },
+                    { data: 'total_group_limit', name: 'total_group_limit' },
+                    { data: 'margin_calculation_time', name: 'margin_calculation_time' }
                 ],
-                pageLength:1000,
+                pageLength: 1000,
                 dom: 'Blfrtip',
                 responsive: true,
-                //"lengthMenu": [[1000, 2500], [1000, 2500]],
                 "scrollX": true,  // enables horizontal scrolling
                 buttons: [
                     'copyHtml5',
@@ -60,23 +58,54 @@
                     'csvHtml5',
                     {
                         extend: 'pdfHtml5',
-                        title: '{{$brand->name}} Margin Limits', 
-                        filename: '{{$brand->name}}-margin-limits',
-                        pageSize: 'A3', 
+                        title: brandName + ' Margin Limits',
+                        filename: brandName + '-margin-limits',
+                        pageSize: 'A3',
                         exportOptions: {
-                            columns: ':visible' 
+                            columns: ':visible'
                         },
+                        customize: function (doc) {
+                            console.log("Customizing PDF for brand: " + brandName); // Debugging
+
+                            if (brandName === 'SKY') {
+                                console.log("Applying SKY styles to PDF"); // Debugging
+
+                                // Styling the title
+                                doc.styles.title = {
+                                    color: '#0b4c68', // Set the title color
+                                    fontSize: 20,
+                                    alignment: 'center' // Center align the title
+                                };
+
+                                // Styling the header row
+                                var objHeader = {
+                                    fillColor: '#F1AC40', // Set the header background color
+                                    color: '#000', // Set the header text color
+                                    bold: true,
+                                    fontSize: 14
+                                };
+
+                                doc.content[1].table.body[0].forEach(function (h) {
+                                    h.fillColor = objHeader['fillColor'];
+                                    h.color = objHeader['color'];
+                                    h.bold = objHeader['bold'];
+                                    h.fontSize = objHeader['fontSize'];
+                                });
+                            } else {
+                                console.log("No styles applied to PDF for brand: " + brandName); // Debugging
+                            }
+                        }
                     }
                 ],
                 "language": {
-                        "search": '',
-                        "searchPlaceholder": "Search {{$title}}",
-                        "paginate": {
+                    "search": '',
+                    "searchPlaceholder": "Search {{ $title }}",
+                    "paginate": {
                         "previous": '<i class="fa fa-angle-left"></i>',
-                            "next": '<i class="fa fa-angle-right"></i>'
+                        "next": '<i class="fa fa-angle-right"></i>'
                     }
                 },
-                "drawCallback": function () {
+                "drawCallback": function() {
                     $('.dataTables_filter input').addClass('form-control form-control-solid w-250px');
                     $('.dt-buttons button').addClass('fs-7 active-menu-item text-light border-0');
                     $('.dt-buttons').addClass('mb-2');
@@ -84,21 +113,25 @@
                     $('.paginate_button').addClass('fs-7');
                     $('.paginate_button.current').addClass('fs-7 active-menu-item');
                     $('.paginate_button.active-menu-item').removeClass('current');
-                    
                 }
             });
-            $('#filter').click(function(){
-                var min=$('#min').val();
-                var max=$('#max').val();
-                table.ajax.url( '/agencies/list?min='+min+'&max='+max ).load();
+
+            $('#filter').click(function() {
+                var min = $('#min').val();
+                var max = $('#max').val();
+                table.ajax.url('/agencies/list?min=' + min + '&max=' + max).load();
             });
-        function autoAdjustColumns(table) {
-            var container = table.table().container();
-            var resizeObserver = new ResizeObserver(function () {
-                table.columns.adjust();
-            });
-            resizeObserver.observe(container);
-        }
-        autoAdjustColumns(table)
+
+            function autoAdjustColumns(table) {
+                var container = table.table().container();
+                var resizeObserver = new ResizeObserver(function() {
+                    table.columns.adjust();
+                });
+                resizeObserver.observe(container);
+            }
+
+            autoAdjustColumns(table);
+        });
+
     </script>
 @endpush

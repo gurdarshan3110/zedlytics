@@ -39,7 +39,7 @@
                 url: "/{{$url}}/list",
                 type: 'GET',
                 data: function (d) {
-                    d.date = date; // Add the status filter
+                    d.date = date; // Add the date filter
                 }
             },
             columns: [
@@ -51,8 +51,7 @@
             ],
             pageLength: 10,
             dom: 'Blfrtip',
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                "scrollX": true,
+            "lengthMenu": [[10, 25, 50, 100, 1000, 2000], [10, 25, 50, 100, 1000, 2000]],
             scrollX: true,  // enables horizontal scrolling
             buttons: [
                 'copyHtml5',
@@ -62,7 +61,7 @@
             ],
             language: {
                 search: '',
-                searchPlaceholder: "Search {{$title}}",
+                searchPlaceholder: "Search {{ $title }}",
                 paginate: {
                     previous: '<i class="fa fa-angle-left"></i>',
                     next: '<i class="fa fa-angle-right"></i>'
@@ -79,10 +78,5 @@
             }
         });
 
-        $('#filter').click(function(){
-            var min = $('#min').val();
-            var max = $('#max').val();
-            table.ajax.url('/{{$url}}/list?min=' + min + '&max=' + max).load();
-        });
     </script>
 @endpush
