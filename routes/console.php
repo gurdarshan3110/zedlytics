@@ -22,5 +22,5 @@ Schedule::job(new CreateNewClientsJob, 'default')->everyThirtyMinutes();
 Schedule::job(new TransactionLogsJob, 'default')->everyMinute();
 Schedule::job(new TransactionsReLogJob, 'default')->everyMinute();
 //Schedule::job(new TransferUserJob, 'default')->everyFifteenMinutes();
-Schedule::job(new UpdateBaseCurrenciesJob, 'default')->weeklyOn(10,17,30);
+//Schedule::job(new UpdateBaseCurrenciesJob, 'default')->weeklyOn(10,17,30);
 //Schedule::job(new FetchOpenPositionsJob, 'openpositions', 'sqs')->everyFiveMinutes();
