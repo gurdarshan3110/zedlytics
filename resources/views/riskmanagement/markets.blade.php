@@ -9,29 +9,7 @@
             </tr>
             </thead>
             <tbody>
-            	@php
-                    $previousProfit = 0; 
-                @endphp
-                @if(count($markets)>0)
-                    @foreach($markets as $winner)
-                    	@php
-                            // Calculate growth direction
-                            $growthClass = '';
-                            
-                        @endphp
-                        <tr>
-                            <td class="name-cell" title="{{$winner->name}}">{{$winner->name}}</td>
-                            <td class="text-end">                            	<span class="{{$growthClass}}">
-                                  
-                                </span>
-                            </td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="3" class="text-center">no records found</td>
-                    </tr>
-                @endif
+            	
             </tbody>
         </table>
     </div>
