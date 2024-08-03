@@ -11783,4 +11783,7 @@ button.btn-none {
   .sb-topnav .navbar-brand {
     width: 135px !important;
   }
+  .current-card{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
 }

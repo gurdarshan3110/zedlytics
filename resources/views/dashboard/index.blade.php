@@ -289,7 +289,7 @@
 
                         @endphp
                         <div class="col-md-4">
-                            <div class="card bg-fff">
+                            <div class="card bg-fff current-card">
                                 <div class="card-body financial">
                                     <h5 class="card-title mb-0 pb-0 text-dark w-100 d-flex">{{$brand->name}} Financials</h5>
                                     <p class="text-dark">{{date('d M Y l',strtotime($startDate))}}</p>
@@ -355,7 +355,7 @@
         <div class="row mt-2">
             <h5 class="card-title mt-2 mb-2 p-2 text-dark">Complete Overview</h5>
             <div class="col-md-4">
-                <div class="card">
+                <div class="card current-card">
                     <div class="card-body bg-fff">
                         <p class="text-dark">{{date('d M Y',strtotime($startDate))}}</p>
                         @php
