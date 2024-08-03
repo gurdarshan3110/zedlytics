@@ -11777,4 +11777,10 @@ button.btn-none {
     float: left;
     width: max-content;
   }
+  .logo{
+    width: 120px;
+  }
+  .sb-topnav .navbar-brand {
+    width: 135px !important;
+  }
 }

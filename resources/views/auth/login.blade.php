@@ -35,7 +35,7 @@
 <body>
     <div class="container-fluid login-container">
         <div class="row">
-            <div class="col-md-6 bg-primary col-h-100 login-image overflow-hidden p-0">
+            <div class="col-md-6 d-none d-md-block bg-primary col-h-100 login-image overflow-hidden p-0">
                 <img src="{{asset('/assets/images/ai.gif')}}" alt="ai" class="col-h-100">
             </div>
             <div class="col-md-6 d-flex align-items-center">
