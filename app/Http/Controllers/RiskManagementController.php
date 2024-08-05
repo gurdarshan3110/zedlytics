@@ -124,9 +124,9 @@ class RiskManagementController extends Controller
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->groupBy('currencyId');
 
-        $top10scripts = (clone $scripts)->orderBy('totalCloseProfit','desc')->limit(15)->get();
+        $top10scripts = (clone $scripts)->orderBy('totalCloseProfit','desc')->limit(16)->get();
 
-        $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(15)->get();
+        $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(16)->get();
 
         
         if(in_array('view '.$fname,permissions())){
