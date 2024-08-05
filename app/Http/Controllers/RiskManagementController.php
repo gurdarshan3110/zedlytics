@@ -82,8 +82,8 @@ class RiskManagementController extends Controller
         
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
-
-        $parentCurrencies = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1)->get();
+        $ids = [34, 66, 196, 68, 649, 732, 1073, 1419, 2497, 3181, 3182, 3231, 3232, 496, 505, 516, 517];
+        $parentCurrencies = BaseCurrency::whereIn('base_id', $ids)->get();
 
         $parentProfits = [];
         foreach ($parentCurrencies as $parent) {
