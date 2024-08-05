@@ -93,14 +93,14 @@ class RiskManagementController extends Controller
 
             $parentProfits[] = [
                 'parent_id' => $parent->base_id,
-                'parent_name' => $parent->name,
-                'total_close_profit' => $totalCloseProfit,
+                'name' => $parent->name,
+                'totalCloseProfit' => $totalCloseProfit,
             ];
         }
 
         // Order results by total closeProfit descending
         usort($parentProfits, function ($a, $b) {
-            return $b['total_close_profit'] <=> $a['total_close_profit'];
+            return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
         });
         $markets = $parentProfits;
         
