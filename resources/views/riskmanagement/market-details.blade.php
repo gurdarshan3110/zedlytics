@@ -53,7 +53,11 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td class="name-cell" title="{{$market['name']}}"><a href="/client-details/{{$market['id']}}" target="_blank" class="text-dark text-decoration-none">{{$market['name']}}</a></td>
+                                        @if($market['id']==562){
+                                            <td class="name-cell" title="{{$market['name']}}"><a href="/market-details/{{$market['id']}}" target="_blank" class="text-dark text-decoration-none">{{$market['name']}}</a></td>
+                                        }else{
+                                            <td class="name-cell" title="{{$market['name']}}"><a href="/client-details/{{$market['id']}}" target="_blank" class="text-dark text-decoration-none">{{$market['name']}}</a></td>
+                                        }
                                         <td class="text-end">                               
                                             <span class="{{$growthClass}}">
                                                 {{$market['totalCloseProfit']}}
