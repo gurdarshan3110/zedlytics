@@ -92,10 +92,13 @@ class RiskManagementController extends Controller
             $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))
                  ->whereBetween('createdDate', [$startDate, $endDate])->get();
             $totalCloseProfit = $trxLogs->sum('closeProfit');
+            $totalCloseProfit1 = 0;
             if($parent->base_id==517){
-                $trxLogs1 = TrxLog::where('currencyId', 562)
+                $paren = BaseCurrency::whereIn('base_id', 562)->get();
+                $childCurrencies1 = $paren->childCurrencies;
+                $trxLogs1 = TrxLog::whereIn('currencyId', $childCurrencies1->pluck('base_id'))
                  ->whereBetween('createdDate', [$startDate, $endDate])->get();
-            $totalCloseProfit1 = $trxLogs1->sum('closeProfit');
+                $totalCloseProfit1 = $trxLogs1->sum('closeProfit');
             }
             
             $parentProfit = TrxLog::where('currencyId', $parent->base_id)
