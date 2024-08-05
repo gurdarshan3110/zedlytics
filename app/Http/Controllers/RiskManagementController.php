@@ -89,7 +89,7 @@ class RiskManagementController extends Controller
         foreach ($parentCurrencies as $parent) {
             
             $childCurrencies = $parent->childCurrencies;
-            $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))->where('used',1)
+            $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))
                  ->whereBetween('createdDate', [$startDate, $endDate])->get();
             $totalCloseProfit = $trxLogs->sum('closeProfit');
 
