@@ -1,5 +1,5 @@
 <div class="container">
-    <h5>Top 10 Winner Scripts</h5>
+    <h5>Top Winner Scripts</h5>
     <div class="table-responsive">
         <table class="w-100 align-middle fs-7" border="0" cellpadding="0" cellspacing="0" id="top-table-winners">
             <thead>

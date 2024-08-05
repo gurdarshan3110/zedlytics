@@ -82,7 +82,7 @@ class RiskManagementController extends Controller
         
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
-        $ids = [34, 66, 196, 68, 649, 732, 1073, 1419, 2497, 3181, 3182, 3231, 3232, 496, 505, 516, 517];
+        $ids = [34, 66, 196, 649, 732, 1073, 1419, 2497, 3181, 3182, 3231, 3232, 496, 505, 516, 517];
         $parentCurrencies = BaseCurrency::whereIn('base_id', $ids)->get();
 
         $parentProfits = [];
@@ -124,9 +124,9 @@ class RiskManagementController extends Controller
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->groupBy('currencyId');
 
-        $top10scripts = (clone $scripts)->orderBy('totalCloseProfit','desc')->limit(10)->get();
+        $top10scripts = (clone $scripts)->orderBy('totalCloseProfit','desc')->limit(17)->get();
 
-        $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(10)->get();
+        $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(17)->get();
 
         
         if(in_array('view '.$fname,permissions())){
