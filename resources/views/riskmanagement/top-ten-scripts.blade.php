@@ -27,8 +27,13 @@
                             $previousProfit = $winner->totalCloseProfit
                         @endphp
                         <tr>
-                            <td class="name-cell" title="{{$winner->currency->name}}">{{$winner->currency->name}}</td>
-                            <td class="text-end">                            	<span class="{{$growthClass}}">
+                            @if($winner->currencyId==562)
+                                <td class="name-cell" title="{{$winner->currency->name}}"><a href="/market-details/{{$winner->currencyId}}" target="_blank" class="text-dark text-decoration-none">{{$winner->currency->name}}</a></td>
+                            @else
+                                <td class="name-cell" title="{{$winner->currency->name}}"><a href="/client-details/{{$winner->currencyId}}" target="_blank" class="text-dark text-decoration-none">{{$winner->currency->name}}</a></td>
+                            @endif
+                            <td class="text-end">                            	
+                                <span class="{{$growthClass}}">
                                     {{$winner->totalCloseProfit}}
                                 </span>
                             </td>

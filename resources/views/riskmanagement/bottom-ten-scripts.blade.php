@@ -27,7 +27,11 @@
                             $previousProfit = $loser->totalCloseProfit
                         @endphp
                         <tr>
-                            <td class="name-cell" title="{{$loser->currency->name}}">{{$loser->currency->name}}</td>
+                            @if($loser->currencyId==562)
+                                <td class="name-cell" title="{{$loser->currency->name}}"><a href="/market-details/{{$loser->currencyId}}" target="_blank" class="text-dark text-decoration-none">{{$loser->currency->name}}</a></td>
+                            @else
+                                <td class="name-cell" title="{{$loser->currency->name}}"><a href="/client-details/{{$loser->currencyId}}" target="_blank" class="text-dark text-decoration-none">{{$loser->currency->name}}</a></td>
+                            @endif
                             <td class="text-end">                               <span class="{{$growthClass}}">
                                     {{$loser->totalCloseProfit}}
                                 </span>
