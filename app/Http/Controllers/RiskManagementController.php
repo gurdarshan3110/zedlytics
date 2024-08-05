@@ -73,13 +73,11 @@ class RiskManagementController extends Controller
         });
 
         $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
-            if($parentProfits[$client->user_id]!=0){
-                return [
-                    'accountId' => $client->client_code,
-                    'name' => $client->name,
-                    'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
-                ];
-            }
+            return [
+                'accountId' => $client->client_code,
+                'name' => $client->name,
+                'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
+            ];
         });
         
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
@@ -186,8 +184,6 @@ class RiskManagementController extends Controller
 
         return view($directory.'.market-details', compact( 'title','markets','url','directory','date'));
     }
-
-    
 
     public function scripts(Request $request){
         $title = "All Scripts";
