@@ -83,12 +83,14 @@ class RiskManagementController extends Controller
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
 
-        $parentCurrencies = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1);
+        $parentCurrencies = BaseCurrency::where('parent_id', 1)->where('base_id','!=',1)->get();
 
         $parentProfits = [];
         foreach ($parentCurrencies as $parent) {
+            
             $childCurrencies = $parent->childCurrencies;
-            $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))->get();
+            $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))
+                 ->whereBetween('createdDate', [$startDate, $endDate])->get();
             $totalCloseProfit = $trxLogs->sum('closeProfit');
 
             $parentProfits[] = [
@@ -97,13 +99,13 @@ class RiskManagementController extends Controller
                 'totalCloseProfit' => $totalCloseProfit,
             ];
         }
-
+        //dd($parentCurrencies);
         // Order results by total closeProfit descending
         usort($parentProfits, function ($a, $b) {
             return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
         });
         $markets = $parentProfits;
-        
+        //dd($markets);
         $scripts = TrxLog::with('currency')->select('currencyId')
             ->selectRaw('SUM(closeProfit) as totalCloseProfit')
             ->whereNotNull('closeProfit')
