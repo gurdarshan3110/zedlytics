@@ -137,7 +137,7 @@ class RiskManagementController extends Controller
     }
 
     public function marketDetails(Request $request,$id){
-        $title = "Market Details for ".getCurrencyName($id);
+        $title = "Market Details for `".getCurrencyName($id)."`";
         $url = self::URL;
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
@@ -187,7 +187,7 @@ class RiskManagementController extends Controller
 
     public function clientDetails(Request $request,$id){
         
-        $title = "Client Details for ".getCurrencyName($id);
+        $title = "Client Details for `".getCurrencyName($id)."`";
         $url = self::URL;
         $directory = self::DIRECTORY;
         $fname = self::FNAME;
