@@ -32,9 +32,10 @@
                             <table class="w-100 align-middle fs-6 table table-bordered" border="0" cellpadding="0" cellspacing="0" id="top-table-winners">
                                 <thead>
                                 <tr>
-                                    <th width="35%">Name</th>
-                                    <th width="35%">Username</th>
-                                    <th width="30%">PNL</th>
+                                    <th width="20%">Account Id</th>
+                                    <th width="30%">Name</th>
+                                    <th width="30%">Username</th>
+                                    <th width="20%">PNL</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -54,6 +55,7 @@
                                         }
                                     @endphp
                                     <tr>
+                                        <td title="{{ucwords($client->client->client_code)}}">{{ucwords($client->client->client_code)}}</td>
                                         <td title="{{ucwords($client->client->name)}}">{{ucwords($client->client->name)}}</td>
                                         <td title="{{ucwords($client->client->username)}}">{{ucwords($client->client->username)}}</td>
                                         <td class="text-end">                               
