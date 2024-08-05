@@ -14,7 +14,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex">
             <h3 class="mt-4 w-75">
-                {{$title}} @if(Auth::user()->user_type==\App\Models\User::USER_SUPER_ADMIN)(Total PL : {{array_sum(array_column($markets, 'totalCloseProfit'))}})@endif
+                {{$title}} @if(Auth::user()->role=='Super Admin')(Total PL : {{array_sum(array_column($markets, 'totalCloseProfit'))}})@endif
             </h3>
             <h3 class="mt-4 d-flex justify-content-end w-25">
                 <input type="date" id="date" value="{{$date}}" class="form-control"/> 
