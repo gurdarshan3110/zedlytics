@@ -9,7 +9,6 @@
             </tr>
             </thead>
             <tbody>
-                {{$markets}}
             	@php
                     $previousProfit = 0; 
                 @endphp
