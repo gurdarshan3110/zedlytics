@@ -187,6 +187,8 @@ class RiskManagementController extends Controller
         return view($directory.'.market-details', compact( 'title','markets','url','directory','date'));
     }
 
+    
+
     public function scripts(Request $request){
         $title = "All Scripts";
         $url = self::URL;
