@@ -45,7 +45,7 @@
             </tbody>
         </table>
     </div>
-    <div class="d-flex justify-content-end mt-3">
-        
+    <div class="d-flex justify-content-end">
+        <a href="{{ route('more-parents', ['date' => $date]) }}" id="view-more-scripts" target="_blank" class="fs-7">View More</a>
     </div>
 </div>

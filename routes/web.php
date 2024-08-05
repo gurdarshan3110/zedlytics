@@ -144,6 +144,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::get('/risk-management/list', [RiskManagementController::class, 'list'])->name('risk-management.list');
     Route::get('/more-wl', [RiskManagementController::class, 'moreWL'])->name('moreWL');
     Route::get('/scripts', [RiskManagementController::class, 'scripts'])->name('scripts');
+    Route::get('/more-parents', [RiskManagementController::class, 'moreParents'])->name('more-parents');
     Route::get('/market-details/{id}', [RiskManagementController::class, 'marketDetails'])->name('market-details');
     Route::get('/client-details/{id}', [RiskManagementController::class, 'clientDetails'])->name('client-details');
     Route::resource('risk-management', RiskManagementController::class);

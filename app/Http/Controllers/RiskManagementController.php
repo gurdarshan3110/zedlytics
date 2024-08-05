@@ -70,6 +70,8 @@ class RiskManagementController extends Controller
             return $group->sum(function ($client) {
                 return $client->trxLogs->sum('closeProfit');
             });
+        })->filter(function ($sum) {
+            return $sum != 0;
         });
 
         $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
@@ -202,6 +204,42 @@ class RiskManagementController extends Controller
             ->groupBy('currencyId')->orderBy('totalCloseProfit','desc')->get();
         
         return view($directory.'.scripts', compact( 'title','scripts','url','directory','date'));
+    }
+
+    public function moreParents(Request $request){
+
+        $title = "All Parents";
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $timezone = 'Asia/Kolkata';
+        $date = Carbon::today()->toDateString();
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
+        $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('createdDate', [$startDate, $endDate])
+                  ->whereNotNull('closeProfit');
+        }])->get();
+
+        $parentProfits = $clients->groupBy('parentId')->map(function ($group) {
+            return $group->sum(function ($client) {
+                return $client->trxLogs->sum('closeProfit');
+            });
+        })->filter(function ($sum) {
+            return $sum != 0;
+        });
+
+        $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
+            return [
+                'accountId' => $client->client_code,
+                'name' => $client->name,
+                'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
+            ];
+        });
+        
+        $scripts = $parents->sortByDesc('totalCloseProfit');
+        return view($directory.'.more-parents', compact( 'title','scripts','url','directory','date'));
     }
 
     public function clientDetails(Request $request,$id){
