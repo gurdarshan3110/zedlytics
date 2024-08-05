@@ -26,7 +26,7 @@
                             }
                         @endphp
                         <tr>
-                            <td class="name-cell" title="{{$winner['name']}}">{{$winner['name']}}</td>
+                            <td class="name-cell" title="{{$winner['name']}}"><a href="/market-details/{{$winner['id']}}" target="_blank" class="text-dark text-decoration-none">{{$winner['name']}}</a></td>
                             <td class="text-end">                            	<span class="{{$growthClass}}">
                                     {{$winner['totalCloseProfit']}}
                                 </span>

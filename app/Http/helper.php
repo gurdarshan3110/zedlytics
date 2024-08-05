@@ -4,11 +4,16 @@ use App\Models\Bank;
 use App\Models\CashbookLedger;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\BaseCurrency;
 use Carbon\Carbon;
 
 function softModules($parent)
 {
     return ModuleMaster::where('status',1)->where('parent',$parent)->orderBy('sno')->get();
+}
+
+function getCurrencyName($id){
+    return BaseCurrency::select('name')->where('base_id',$id)->first()->name;
 }
 
 function renderModule($module, $permissions) {

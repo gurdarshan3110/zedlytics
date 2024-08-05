@@ -105,7 +105,7 @@ class RiskManagementController extends Controller
                  ->whereBetween('createdDate', [$startDate, $endDate])->sum('closeProfit');
             $totalCloseProfit = $totalCloseProfit+ $parentProfit+$totalCloseProfit1;    
             $parentProfits[] = [
-                'parent_id' => $parent->base_id,
+                'id' => $parent->base_id,
                 'name' => $parent->name,
                 'totalCloseProfit' => $totalCloseProfit,
             ];
@@ -134,6 +134,78 @@ class RiskManagementController extends Controller
         }else{
             return redirect()->route('dashboard.index');
         }
+    }
+
+    public function marketDetails(Request $request,$id){
+        $title = "Market Details for ".getCurrencyName($id);
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $timezone = 'Asia/Kolkata';
+        $date = Carbon::today()->toDateString();
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
+        $details = BaseCurrency::where('parent_id', $id)->get();
+        $parentProfits = [];
+        foreach ($details as $parent) {
+            
+            $childCurrencies = $parent->childCurrencies;
+            $trxLogs = TrxLog::whereIn('currencyId', $childCurrencies->pluck('base_id'))
+                 ->whereBetween('createdDate', [$startDate, $endDate])->get();
+            $totalCloseProfit = $trxLogs->sum('closeProfit');
+            $totalCloseProfit1 = 0;
+            if($parent->base_id==517){
+                $paren = BaseCurrency::where('base_id', 562)->first();
+                $childCurrencies1 = $paren->childCurrencies;
+                $trxLogs1 = TrxLog::whereIn('currencyId', $childCurrencies1->pluck('base_id'))
+                 ->whereBetween('createdDate', [$startDate, $endDate])->get();
+                $totalCloseProfit1 = $trxLogs1->sum('closeProfit');
+            }
+            
+            $parentProfit = TrxLog::where('currencyId', $parent->base_id)
+                 ->whereBetween('createdDate', [$startDate, $endDate])->sum('closeProfit');
+            $totalCloseProfit = $totalCloseProfit+ $parentProfit+$totalCloseProfit1; 
+            if($totalCloseProfit!=0) {  
+                $parentProfits[] = [
+                    'id' => $parent->base_id,
+                    'name' => $parent->name,
+                    'totalCloseProfit' => $totalCloseProfit,
+                ];
+            }
+            
+        }
+        //dd($childProfits);
+        // Order results by total closeProfit descending
+        usort($parentProfits, function ($a, $b) {
+            return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
+        });
+        $markets = $parentProfits;
+
+        return view($directory.'.market-details', compact( 'title','markets','url','directory','date'));
+    }
+
+    public function clientDetails(Request $request,$id){
+        
+        $title = "Client Details for ".getCurrencyName($id);
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $timezone = 'Asia/Kolkata';
+        $date = Carbon::today()->toDateString();
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
+        $transactions = TrxLog::with('client')->select('userId','accountId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->whereNotNull('closeProfit')
+            ->where('currencyId',$id)
+            ->groupBy('userId','accountId');
+        $clients = (clone $transactions)->orderBy('totalCloseProfit', 'desc')
+            ->get();
+
+        return view($directory.'.client-details', compact( 'title','clients','url','directory','date'));
     }
 
     public function getTrxLogs(Request $request)
