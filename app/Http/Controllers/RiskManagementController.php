@@ -112,7 +112,7 @@ class RiskManagementController extends Controller
             ];
             
         }
-        dd($childProfits);
+        //dd($childProfits);
         // Order results by total closeProfit descending
         usort($parentProfits, function ($a, $b) {
             return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
