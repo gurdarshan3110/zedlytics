@@ -185,6 +185,25 @@ class RiskManagementController extends Controller
         return view($directory.'.market-details', compact( 'title','markets','url','directory','date'));
     }
 
+    public function scripts(Request $request){
+        $title = "All Scripts";
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $timezone = 'Asia/Kolkata';
+        $date = Carbon::today()->toDateString();
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
+        $scripts = TrxLog::with('currency')->select('currencyId')
+            ->selectRaw('SUM(closeProfit) as totalCloseProfit')
+            ->whereNotNull('closeProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->groupBy('currencyId')->orderBy('totalCloseProfit','desc')->get();
+        
+        return view($directory.'.scripts', compact( 'title','scripts','url','directory','date'));
+    }
+
     public function clientDetails(Request $request,$id){
         
         $title = "Client Details for `".getCurrencyName($id)."`";
