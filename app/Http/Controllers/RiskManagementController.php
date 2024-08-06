@@ -109,7 +109,7 @@ class RiskManagementController extends Controller
             $parentProfits[] = [
                 'id' => $parent->base_id,
                 'name' => $parent->name,
-                'totalCloseProfit' => $totalCloseProfit,
+                'totalCloseProfit' => number_format($totalCloseProfit,'2','.',''),
             ];
             
         }
@@ -172,7 +172,7 @@ class RiskManagementController extends Controller
                 $parentProfits[] = [
                     'id' => $parent->base_id,
                     'name' => $parent->name,
-                    'totalCloseProfit' => $totalCloseProfit,
+                    'totalCloseProfit' => number_format($totalCloseProfit,'2','.',''),
                 ];
             }
             
