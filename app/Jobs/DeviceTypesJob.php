@@ -105,14 +105,16 @@ class DeviceTypesJob implements ShouldQueue
     public function getMac($device,$ip,$user_id){
         $type = explode('@', $device);
         $repeat = UserDevice::where('ip_address',$ip)->where('mac_id',$type[1])->count();
-        $clientData['repeat'] =$repeat;
-        UserDevice::updateOrCreate(
-            [
-                'ip_address' => $ip,
-                'mac_id' => $type[1],
-            ],
-            $clientData
-        );
+        if(isset($repeat)){
+            $clientData['repeat'] =$repeat;
+            UserDevice::updateOrCreate(
+                [
+                    'ip_address' => $ip,
+                    'mac_id' => $type[1],
+                ],
+                $clientData
+            );
+        }
         return [
                     'device_type'  => $type[0],
                     'mac_id'  => $type[1],
