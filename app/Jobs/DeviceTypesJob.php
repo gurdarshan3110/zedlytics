@@ -107,6 +107,9 @@ class DeviceTypesJob implements ShouldQueue
         $repeat = UserDevice::where('ip_address',$ip)->where('mac_id',$type[1])->count();
         if(isset($repeat)){
             $clientData['repeat'] =$repeat;
+            
+        }
+        if(isset($repeat) && $repeat>0){
             UserDevice::updateOrCreate(
                 [
                     'ip_address' => $ip,
