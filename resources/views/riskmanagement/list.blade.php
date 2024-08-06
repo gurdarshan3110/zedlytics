@@ -27,7 +27,7 @@
         const date = "{{ $date }}";
 
         var table = $('#top-table-winners').DataTable({
-            "order": [[ $('#market-winners thead th').length - 1, 'desc' ]],
+            "order": [[ $('#top-table-winners thead th').length - 1, 'desc' ]],
             "columnDefs": [
                 { "width": "10%", "targets": 0 },
                 { "width": "20%", "targets": 1 },
