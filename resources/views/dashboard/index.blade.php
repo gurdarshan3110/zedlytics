@@ -182,7 +182,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex">
             <p class="mt-2 mb-0 w-95">
-                {{$title}} @if(Auth::user()->role=='Super Admin'): Balance {{$totalBalance}}
+                {{$title}} @if(Auth::user()->user_type=='super_admin' || Auth::user()->role=='Super Admin'): Balance {{$totalBalance}}
 
                 (Withdrawal Requests : {{$withdrawRequests}})
                 @endif
