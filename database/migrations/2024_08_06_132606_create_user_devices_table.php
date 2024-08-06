@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('is_mac')->default(false);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('clients')->onDelete('cascade');
+            //$table->foreign('user_id')->references('id')->on('clients')->onDelete('cascade');
         });
     }
 
