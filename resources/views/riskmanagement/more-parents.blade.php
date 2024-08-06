@@ -84,7 +84,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
     <script type="text/javascript">
-        var table = $('#market-winners').DataTable({});
+        var table = $('#market-winners').DataTable({
+            "order": [[ $('#market-winners thead th').length - 1, 'desc' ]]
+        });
     </script>
 @endpush
 @endsection 
