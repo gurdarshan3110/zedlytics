@@ -52,6 +52,7 @@ class DeviceTypesJob implements ShouldQueue
                     $clientData['mac_id'] = $getMac['mac_id'];
                     $clientData['device_type'] = $getMac['device_type'];
                     $clientData['repeat'] = $getMac['repeat'];
+                    $clientData['user_id'] = $clientData['userId'];
                     
                     $trxLog = UserDevice::updateOrCreate(
                         [

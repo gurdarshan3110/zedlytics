@@ -60,6 +60,8 @@ Route::get('/dispatch-account-mirroring-policies', [WithdrawRequestController::c
 Route::get('/dispatch-agent-commission-policies', [WithdrawRequestController::class, 'fetchAgentCommissionPolicies']);
 Route::get('/dispatch-transfer-user', [WithdrawRequestController::class, 'fetchTransferUser']);
 
+Route::get('/user-devices-job', [WithdrawRequestController::class, 'fetchDeviceTypes']);
+
 
 
 
