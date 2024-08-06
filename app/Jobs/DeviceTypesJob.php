@@ -38,23 +38,12 @@ class DeviceTypesJob implements ShouldQueue
             
             $this->token = $data['data']['token'];
             $this->clientTreeUserIdNode = $data['data']['clientTreeUserIdNode'][0];    
-            $fDate=null;        
-            $tDate=null;        
             $cronJob = CronJob::where('cron_job_name','Device IP/MAC')->latest()->first();
-            if($cronJob){
-                $fDate=$cronJob['start_time'];        
-                $tDate=$cronJob['end_time'];
-            }
-            $getTime = $this->getCronTime($fDate,$tDate);
-            $fromDate = $getTime['start_time'];
-            $toDate = $getTime['end_time'];
-            
+
             $cronjob = CronJob::create([
                 'cron_job_name' => 'Device IP/MAC',
-                'start_time' => $fromDate,
-                'end_time' => $toDate,
             ]);
-            //Log::info($this->baseUrl."admin/public/api/v1/user/".$this->clientTreeUserIdNode."/transactionLogs?fromDate=".$fromDate."&toDate=".$toDate."&ticketOrderId=&trxLogActionTypeId=&trxLogTransTypeId=&trxSubTypeId=&ipAddress=&createdById=");
+           
             $response = Http::timeout(360)->withToken($this->token)->get($this->baseUrl."admin/public/api/v1/user/get/live/users");
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
