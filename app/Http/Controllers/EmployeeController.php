@@ -135,8 +135,10 @@ class EmployeeController extends Controller
                     ->with('error',$errors)
                     ->withInput();
         }
-
+        //dd($input['ip_auth']);
         $user = User::where('employee_code',$employee->employee_code)->first();
+        $user->ip_auth = ((isset($input['ip_auth']) && $input['ip_auth']==1)?0:1);
+        $user->save();
         $macAddress = explode(',',$input['mac_address']);
         $deleteMac = MacAddress::where('user_id',$user->id)->delete();
         foreach ($macAddress as $key => $value) {
@@ -202,13 +204,14 @@ class EmployeeController extends Controller
         $directory = self::DIRECTORY;
         $roles = Role::pluck('name', 'name')->prepend('Select Role', '');
         $user = User::where('employee_code',$employee->employee_code)->first();
+        $ip_auth = $user->ip_auth;
         $macAddress = MacAddress::where('user_id',$user->id)->get();
         $mac_address = '';
         foreach ($macAddress as $key => $value) {
             $mac_address = (($key==0)?$value->mac_address:$mac_address.','.$value->mac_address);
         }
         
-        return view(self::DIRECTORY.'.mac', compact(self::DIRECTORY, 'title','directory','url','roles','mac_address'));
+        return view(self::DIRECTORY.'.mac', compact(self::DIRECTORY, 'title','directory','url','roles','mac_address','ip_auth'));
     }
 
     /**

@@ -31,12 +31,12 @@
                                             </div>
                                         @endif
 
-                                        <form method="POST" action="{{ route('2fa.verify') }}">
+                                        <form method="POST" id="2faform" action="{{ route('2fa.verify') }}">
                                             @csrf
 
                                             <div class="form-group">
                                                 <label for="2fa_code">{{ __('Enter 2FA Code') }}</label>
-                                                <input id="2fa_code" type="text" class="form-control @error('2fa_code') is-invalid @enderror" name="2fa_code" required autofocus>
+                                                <input id="2fa_code" type="text" onkeyup="checkCode(this.value);" class="form-control @error('2fa_code') is-invalid @enderror" name="2fa_code" required autofocus>
                                                 @error('2fa_code')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -72,5 +72,12 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="{{asset('/assets/js/scripts.js')}}"></script>
+        <script type="text/javascript">
+            function checkCode(otp){
+                if(otp.length==6){
+                    document.getElementById('2faform').submit();
+                }
+            }
+        </script>
     </body>
 </html>

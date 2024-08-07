@@ -32,7 +32,8 @@ class User extends Authenticatable
         'password',
         'phone_no',
         'user_type',
-        'role'
+        'role',
+        'ip_auth'
     ];
 
     /**

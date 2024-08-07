@@ -36,7 +36,7 @@ class CheckMacAddress
             '/'
             // Add other routes or URIs you want to bypass
         ];
-        if ($user && ( $user->user_type == User::USER_SUPER_ADMIN || $user->role == 'Partner')) {
+        if ($user && ( $user->user_type == User::USER_SUPER_ADMIN || $user->is_auth == 0 || $user->role == 'Partner')) {
             return $next($request);
         }
         // Check if the request path should bypass the MAC address check
