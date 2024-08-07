@@ -11,12 +11,10 @@ class UserDevice extends Model
 
     protected $fillable = [
         'user_id',
-        'ip_address',
+        'client_address',
+        'address_type',
         'device_type',
-        'mac_id',
-        'repeat',
-        'is_ip',
-        'is_mac',
+        'is_available',
     ];
 
     /**

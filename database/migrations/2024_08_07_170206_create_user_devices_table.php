@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('user_devices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('ip_address', 45); 
+            $table->string('client_address')->nullable(); 
             $table->string('device_type')->nullable();
-            $table->string('mac_id')->nullable();
-            $table->integer('repeat')->nullable();
-            $table->boolean('is_ip')->default(false);
-            $table->boolean('is_mac')->default(false);
+            $table->boolean('address_type')->default(0);
+            $table->boolean('is_available')->default(false);
             $table->timestamps();
 
             //$table->foreign('user_id')->references('id')->on('clients')->onDelete('cascade');

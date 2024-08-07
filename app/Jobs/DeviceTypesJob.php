@@ -48,17 +48,26 @@ class DeviceTypesJob implements ShouldQueue
             if ($response->successful()) {
                 $clientDatas = $response->json()['data'];
                 foreach ($clientDatas as $key => $clientData) {
-                    $getMac = $this->getMac($clientData['deviceType'],$clientData['ipAddress'],$clientData['userId']);
-                    $clientData['mac_id'] = $getMac['mac_id'];
+                    $getMac = $this->getMac($clientData['deviceType']);
+                    
                     $clientData['device_type'] = $getMac['device_type'];
-                    $clientData['repeat'] = $getMac['repeat'];
                     $clientData['user_id'] = $clientData['userId'];
+                    $clientData['address_type'] = 0;
                     
                     $trxLog = UserDevice::updateOrCreate(
                         [
                             'user_id' => $clientData['userId'],
-                            'ip_address' => $clientData['ipAddress'],
-                            'mac_id' => $clientData['mac_id'],
+                            'client_address' => $clientData['ipAddress'],
+                            'device_type' => $clientData['device_type'],
+                        ],
+                        $clientData
+                    );
+                    $clientData['client_address'] = $getMac['mac_id'];
+                    $clientData['address_type'] = 1;
+                    $trxLog = UserDevice::updateOrCreate(
+                        [
+                            'user_id' => $clientData['userId'],
+                            'client_address' => $clientData['client_address'],
                             'device_type' => $clientData['device_type'],
                         ],
                         $clientData
@@ -102,26 +111,11 @@ class DeviceTypesJob implements ShouldQueue
         );
     }
 
-    public function getMac($device,$ip,$user_id){
+    public function getMac($device){
         $type = explode('@', $device);
-        $repeat = UserDevice::where('ip_address',$ip)->where('mac_id',$type[1])->count();
-        if(isset($repeat)){
-            $clientData['repeat'] =$repeat;
-            
-        }
-        if(isset($repeat) && $repeat>0){
-            UserDevice::updateOrCreate(
-                [
-                    'ip_address' => $ip,
-                    'mac_id' => $type[1],
-                ],
-                $clientData
-            );
-        }
         return [
                     'device_type'  => $type[0],
-                    'mac_id'  => $type[1],
-                    'repeat' => $repeat
+                    'mac_id'  => $type[1]
                 ];
     }
 

@@ -149,7 +149,7 @@ class RiskManagementController extends Controller
             ];
         });
 
-        $topCommissions = $commissions->sortByDesc('commissions')->take(10);
+        $topCommissions = $commissions->sortByDesc('commissions')->take(16);
 
         
         if(in_array('view '.$fname,permissions())){
