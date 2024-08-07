@@ -74,4 +74,17 @@
         </div>
     </div>
 </main>
+@push('jsscript')
+    <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript">
+        var table = $('#top-table-winners').DataTable({
+            "order": [[ $('#top-table-winners thead th').length - 1, 'desc' ]]
+        });
+    </script>
+@endpush
 @endsection 
