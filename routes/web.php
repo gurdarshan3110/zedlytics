@@ -27,6 +27,7 @@ use App\Http\Controllers\LedgerLogController;
 use App\Http\Controllers\ChartsController;
 use App\Http\Controllers\RiskManagementController;
 use App\Http\Controllers\ComingSoonController;
+use App\Http\Controllers\UserDeviceController;
 
 Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon.index');
 
@@ -157,7 +158,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     
     Route::resource('two-factor',TwoFactorController::class);
-     
 
+    Route::get('/user-devices/list', [UserDeviceController::class, 'list'])->name('user-devices.list');
+    Route::resource('user-devices',UserDeviceController::class);
+    
 
 });

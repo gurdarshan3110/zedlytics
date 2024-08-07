@@ -22,6 +22,6 @@ class UserDevice extends Model
      */
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'user_id', 'user_id');
     }
 }
