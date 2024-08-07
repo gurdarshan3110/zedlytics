@@ -131,9 +131,29 @@ class RiskManagementController extends Controller
 
         $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(16)->get();
 
+
+        $commissionProfits = $clients->groupBy('user_id')->map(function ($group) {
+            return $group->sum(function ($client) {
+                return $client->trxLogs->sum('openCommission') + $client->trxLogs->sum('closeCommission');
+            });
+        })->filter(function ($sum) {
+            return $sum != 0;
+        });
+
+        $commissions = Client::whereIn('user_id', $commissionProfits->keys())->get()->map(function ($client) use ($commissionProfits) {
+            return [
+                'id' => $client->user_id,
+                'accountId' => $client->client_code,
+                'name' => $client->name,
+                'commissions' => number_format($commissionProfits[$client->user_id], 2, '.', ''),
+            ];
+        });
+
+        $topCommissions = $commissions->sortByDesc('commissions')->take(10);
+
         
         if(in_array('view '.$fname,permissions())){
-            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers','topWinnerParents','topLoserParents','activeUsers','profitCount','lossCount','markets','top10scripts','bottom10scripts'));
+            return view($directory.'.index', compact('title','url','directory','date','topTenWinners','topTenLossers','topWinnerParents','topLoserParents','activeUsers','profitCount','lossCount','markets','top10scripts','bottom10scripts','topCommissions'));
         }else{
             return redirect()->route('dashboard.index');
         }

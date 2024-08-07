@@ -11760,6 +11760,10 @@ button.btn-none {
   height: 125px !important;
 }
 
+.zed-info-cards{
+  min-height: 251px !important;
+}
+
 /*.name-cell:hover {
     white-space: normal;
     overflow: visible;

@@ -90,45 +90,45 @@
         </div>
         <div class="row mt-1">
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.top-ten-winners')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.top-ten-lossers')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.top-ten-winner-parents')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.top-ten-loser-parents')
                 </div>
             </div>
         </div>
         <div class="row mt-1">
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.markets')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.top-ten-scripts')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
+                <div class="card bg-fff zed-info-cards p-2">
                     @include($directory.'.bottom-ten-scripts')
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card bg-fff p-2">
-                    @include($directory.'.top-ten-loser-parents')
+                <div class="card bg-fff zed-info-cards p-2">
+                    @include($directory.'.top-commissions')
                 </div>
             </div>
         </div>
