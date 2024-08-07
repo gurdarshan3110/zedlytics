@@ -28,8 +28,12 @@
                             $previousProfit = $winner['totalCloseProfit']
                         @endphp
                         <tr>
-                            <td class="text-start">{{$winner['accountId']}}</td>
-                            <td class="name-cell" title="{{ $winner['name'] }}">{{$winner['name']}}</td>
+                            <td class="text-start">
+                                <a href="/child-details/{{$winner['id']}}" target="_blank" class="text-dark text-decoration-none">{{$winner['accountId']}}</a>
+                            </td>
+                            <td class="name-cell" title="{{ $winner['name'] }}">
+                                <a href="/child-details/{{$winner['id']}}" target="_blank" class="text-dark text-decoration-none">{{$winner['name']}}</a>
+                            </td>
                             <td class="text-end">   
                                 <span class="{{$growthClass}}">
                                     {{$winner['totalCloseProfit']}}

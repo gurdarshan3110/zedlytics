@@ -76,6 +76,7 @@ class RiskManagementController extends Controller
 
         $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
             return [
+                'id' => $client->user_id,
                 'accountId' => $client->client_code,
                 'name' => $client->name,
                 'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
@@ -263,6 +264,44 @@ class RiskManagementController extends Controller
             ->get();
 
         return view($directory.'.client-details', compact( 'title','clients','url','directory','date'));
+    }
+
+    public function childDetails(Request $request,$id){
+        
+        $title = "Child Details for `".getUserName($id)."`";
+        $url = self::URL;
+        $directory = self::DIRECTORY;
+        $fname = self::FNAME;
+        $timezone = 'Asia/Kolkata';
+        $date = Carbon::today()->toDateString();
+        $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
+        $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
+
+        $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('createdDate', [$startDate, $endDate])
+                  ->whereNotNull('closeProfit');
+        }])->where('parentId',$id)->get();
+
+        $parentProfits = $clients->groupBy('user_id')->map(function ($group) {
+            return $group->sum(function ($client) {
+                return $client->trxLogs->sum('closeProfit');
+            });
+        })->filter(function ($sum) {
+            return $sum != 0;
+        });
+
+        $childs = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
+            return [
+                'username' => $client->username,
+                'accountId' => $client->client_code,
+                'name' => $client->name,
+                'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
+            ];
+        });
+        
+        //$topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
+
+        return view($directory.'.child-details', compact( 'title','childs','url','directory','date'));
     }
 
     public function getTrxLogs(Request $request)

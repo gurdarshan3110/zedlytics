@@ -2,6 +2,7 @@
 use App\Models\ModuleMaster;
 use App\Models\Bank;
 use App\Models\CashbookLedger;
+use App\Models\Client;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Models\BaseCurrency;
@@ -14,6 +15,10 @@ function softModules($parent)
 
 function getCurrencyName($id){
     return BaseCurrency::select('name')->where('base_id',$id)->first()->name;
+}
+
+function getUserName($id){
+    return Client::select('name')->where('user_id',$id)->first()->name;
 }
 
 function renderModule($module, $permissions) {
