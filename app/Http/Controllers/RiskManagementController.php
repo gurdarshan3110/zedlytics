@@ -76,23 +76,27 @@ class RiskManagementController extends Controller
                   ->whereNotNull('closeProfit');
         }])->get();
 
-        $parentProfits = $clients->groupBy('parentId')->map(function ($group) {
-            return $group->sum(function ($client) {
-                return $client->trxLogs->sum('closeProfit');
-            });
-        })->filter(function ($sum) {
-            return $sum != 0;
-        });
+        $parentProfits = Client::join('trx_logs', 'clients.user_id', '=', 'trx_logs.userId')
+            ->whereBetween('trx_logs.createdDate', [$startDate, $endDate])
+            ->whereNotNull('trx_logs.closeProfit')
+            ->groupBy('clients.parentId')
+            ->selectRaw('clients.parentId, SUM(trx_logs.closeProfit) as totalCloseProfit')
+            ->having('totalCloseProfit', '!=', 0)
+            ->get();
 
-        $parents = Client::whereIn('user_id', $parentProfits->keys())->get()->map(function ($client) use ($parentProfits) {
-            return [
-                'id' => $client->user_id,
-                'accountId' => $client->client_code,
-                'name' => $client->name,
-                'totalCloseProfit' => number_format($parentProfits[$client->user_id], 2, '.', ''),
-            ];
-        });
-        
+        // Get the parent clients with aggregated profits
+        $parents = Client::whereIn('user_id', $parentProfits->pluck('parentId'))
+            ->get()
+            ->map(function ($client) use ($parentProfits) {
+                return [
+                    'id' => $client->user_id,
+                    'accountId' => $client->client_code,
+                    'name' => $client->name,
+                    'totalCloseProfit' => number_format($parentProfits->firstWhere('parentId', $client->user_id)->totalCloseProfit, 2, '.', ''),
+                ];
+            });
+
+        // Sort and take top 10 winners and losers
         $topWinnerParents = $parents->sortByDesc('totalCloseProfit')->take(10);
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
         $ids = [34, 66, 196, 649, 732, 1073, 1419, 2497, 3181, 3182, 3231, 3232, 496, 505, 516, 517];
