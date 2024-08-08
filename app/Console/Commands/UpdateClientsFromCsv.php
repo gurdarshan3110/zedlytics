@@ -72,16 +72,12 @@ class UpdateClientsFromCsv extends Command
                 if ($client) {
                     $updateData = [];
                     if (!empty($row['email'])) {
-                        $updateData['email'] = $row['email'];
+                        $client->email =$row['email'];
                     }
                     if (!empty($row['phone_no'])) {
-                        $updateData['phone_no'] = $row['phone_no'];
+                        $client->phone_no =$row['phone_no'];
                     }
-
-                    if (!empty($updateData)) {
-                        $client->update($updateData);
-                        $this->info("Updated client_code: {$row['client_code']}");
-                    }
+                    $client->save();
                 } else {
                     Log::warning("Client not found for client_code: {$row['client_code']}");
                 }
