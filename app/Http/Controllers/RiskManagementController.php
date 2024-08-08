@@ -41,25 +41,35 @@ class RiskManagementController extends Controller
         $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
         $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
         
-        $transactions = TrxLog::with('client')->select('userId','accountId')
+        $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
-            ->groupBy('userId','accountId');
-        $topTenWinners = (clone $transactions)->orderBy('totalCloseProfit', 'desc')
+            ->groupBy('userId','accountId')
+            ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
-        $topTenLossers = (clone $transactions)->orderBy('totalCloseProfit', 'asc')
-            ->limit(10)->get();
-
-        $activeUsers = TrxLog::whereBetween('createdDate', [$startDate, $endDate])->whereNotNull('closeProfit')->distinct('userId')->count('userId');
-        $transCount = TrxLog::select('userId', 'accountId')
+        $topTenLossers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereBetween('createdDate', [$startDate, $endDate])
-            ->whereNotNull('closeProfit');
+            ->whereNotNull('closeProfit')
+            ->groupBy('userId','accountId')
+            ->orderBy('totalCloseProfit', 'asc')
+            ->limit(10)
+            ->get();;
+
+        $activeUsers = TrxLog::whereBetween('createdDate', [$startDate, $endDate])->whereNotNull('closeProfit')->distinct('userId')->count('userId');
             
-        $profitCount = (clone $transCount)->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) > 0')->distinct('userId')->count('userId');
-        $lossCount = (clone $transCount)->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) < 0')->distinct('userId')->count('userId');
+        $profitCount = TrxLog::select('userId', 'accountId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->whereNotNull('closeProfit')
+            ->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) > 0')->distinct('userId')->count('userId');
+        $lossCount = TrxLog::select('userId', 'accountId')
+            ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->whereNotNull('closeProfit')
+            ->groupBy('userId', 'accountId')->havingRaw('SUM(closeProfit) < 0')->distinct('userId')->count('userId');
 
         $clients = Client::with(['trxLogs' => function ($query) use ($startDate, $endDate) {
             $query->whereBetween('createdDate', [$startDate, $endDate])
