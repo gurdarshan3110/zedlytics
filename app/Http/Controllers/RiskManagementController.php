@@ -101,72 +101,74 @@ class RiskManagementController extends Controller
         $topLoserParents = $parents->sortBy('totalCloseProfit')->take(10);
         
         $ids = [34, 66, 196, 649, 732, 1073, 1419, 2497, 3181, 3182, 3231, 3232, 496, 505, 516, 517];
-$specialBaseId = 517;
-$specialChildBaseId = 562;
+        $specialBaseId = 517;
+        $specialChildBaseId = 562;
 
-// Retrieve parent currencies and their child currencies in a single query
-$parentCurrencies = BaseCurrency::with(['childCurrencies' => function ($query) {
-    $query->select('base_id', 'parent_id');
-}])->whereIn('base_id', $ids)->get();
+        // Retrieve parent currencies and their child currencies in a single query
+        $parentCurrencies = BaseCurrency::with(['childCurrencies' => function ($query) {
+            $query->select('base_id', 'parent_id');
+        }])->whereIn('base_id', $ids)->get();
 
-$allCurrencyIds = $parentCurrencies->flatMap(function ($parent) use ($specialBaseId, $specialChildBaseId) {
-    $currencyIds = $parent->childCurrencies->pluck('base_id')->toArray();
+        $allCurrencyIds = $parentCurrencies->flatMap(function ($parent) use ($specialBaseId, $specialChildBaseId) {
+            $currencyIds = $parent->childCurrencies->pluck('base_id')->toArray();
 
-    // Check for the special case where base_id is 517
-    if ($parent->base_id == $specialBaseId) {
-        $specialParent = BaseCurrency::with('childCurrencies')->find($specialChildBaseId);
-        if ($specialParent) {
-            $currencyIds = array_merge($currencyIds, $specialParent->childCurrencies->pluck('base_id')->toArray());
-        }
-    }
+            // Check for the special case where base_id is 517
+            if ($parent->base_id == $specialBaseId) {
+                $specialParent = BaseCurrency::with('childCurrencies')->find($specialChildBaseId);
+                if ($specialParent) {
+                    $currencyIds = array_merge($currencyIds, $specialParent->childCurrencies->pluck('base_id')->toArray());
+                }
+            }
 
-    $currencyIds[] = $parent->base_id; // Include the parent currency itself
-    return $currencyIds;
-})->unique();
+            $currencyIds[] = $parent->base_id; // Include the parent currency itself
+            return $currencyIds;
+        })->unique();
 
-// Aggregate profits for all currency IDs in one query
-$profits = TrxLog::select('currencyId')
-    ->selectRaw('SUM(closeProfit) as totalCloseProfit')
-    ->whereIn('currencyId', $allCurrencyIds)
-    ->whereBetween('createdDate', [$startDate, $endDate])
-    ->groupBy('currencyId')
-    ->get()
-    ->keyBy('currencyId');  // Use keyBy to create a map
+        // Aggregate profits for all currency IDs in one query
+        $profits = TrxLog::select('currencyId')
+            ->selectRaw('SUM(closeProfit) as totalCloseProfit')
+            ->whereIn('currencyId', $allCurrencyIds)
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->groupBy('currencyId')
+            ->get()
+            ->keyBy('currencyId');  // Use keyBy to create a map
 
-// Calculate total close profit for each parent currency
-$parentProfits = $parentCurrencies->map(function ($parent) use ($profits) {
-    $totalCloseProfit = $parent->childCurrencies->pluck('base_id')
-        ->merge([$parent->base_id])
-        ->sum(function ($currencyId) use ($profits) {
-            // Return the totalCloseProfit or 0 if it doesn't exist
-            return optional($profits->get($currencyId))->totalCloseProfit ?? 0;
+        // Calculate total close profit for each parent currency
+        $parentProfits = $parentCurrencies->map(function ($parent) use ($profits) {
+            $totalCloseProfit = $parent->childCurrencies->pluck('base_id')
+                ->merge([$parent->base_id])
+                ->sum(function ($currencyId) use ($profits) {
+                    // Return the totalCloseProfit or 0 if it doesn't exist
+                    return optional($profits->get($currencyId))->totalCloseProfit ?? 0;
+                });
+
+            return [
+                'id' => $parent->base_id,
+                'name' => $parent->name,
+                'totalCloseProfit' => number_format($totalCloseProfit, 2, '.', ''),
+            ];
+        })->toArray();
+
+        // Sort the results by total close profit (descending)
+        usort($parentProfits, function ($a, $b) {
+            return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
         });
 
-    return [
-        'id' => $parent->base_id,
-        'name' => $parent->name,
-        'totalCloseProfit' => number_format($totalCloseProfit, 2, '.', ''),
-    ];
-})->toArray();
+        $markets = $parentProfits;
 
-// Sort the results by total close profit (descending)
-usort($parentProfits, function ($a, $b) {
-    return $b['totalCloseProfit'] <=> $a['totalCloseProfit'];
-});
-
-$markets = $parentProfits;
-
-
-        //dd($markets);
-        $scripts = TrxLog::with('currency')->select('currencyId')
+        $top10scripts = TrxLog::with('currency')->select('currencyId')
             ->selectRaw('SUM(closeProfit) as totalCloseProfit')
             ->whereNotNull('closeProfit')
             ->whereBetween('createdDate', [$startDate, $endDate])
-            ->groupBy('currencyId');
+            ->groupBy('currencyId')
+            ->orderBy('totalCloseProfit','desc')->limit(16)->get();
 
-        $top10scripts = (clone $scripts)->orderBy('totalCloseProfit','desc')->limit(16)->get();
-
-        $bottom10scripts = (clone $scripts)->orderBy('totalCloseProfit', 'asc')->limit(16)->get();
+        $bottom10scripts = TrxLog::with('currency')->select('currencyId')
+            ->selectRaw('SUM(closeProfit) as totalCloseProfit')
+            ->whereNotNull('closeProfit')
+            ->whereBetween('createdDate', [$startDate, $endDate])
+            ->groupBy('currencyId')
+            ->orderBy('totalCloseProfit', 'asc')->limit(16)->get();
 
 
         $commissionProfits = $clients->groupBy('user_id')->map(function ($group) {
