@@ -24,6 +24,7 @@ class UpdateClientsFromCsv extends Command
 
         if (filter_var($filePath, FILTER_VALIDATE_URL)) {
             $this->info("Downloading file from URL: $filePath");
+
             $response = Http::get($filePath);
 
             if ($response->failed()) {
@@ -62,9 +63,11 @@ class UpdateClientsFromCsv extends Command
         }
 
         foreach ($data as $row) {
+
             $row['client_code']=$row['ACCOUNT ID'];
             $row['email']=$row['EMAIL'];
             $row['phone_no']=$row['MOBILE'];
+            $row['city']=$row['CITY'];
             //dd($row);
             if (isset($row['client_code']) && !empty($row['client_code'])) {
                 $client = Client::where('client_code', $row['client_code'])->first();
@@ -74,10 +77,18 @@ class UpdateClientsFromCsv extends Command
                     if (!empty($row['email'])) {
                         $client->email =$row['email'];
                     }
+                    if (!empty($row['city'])) {
+                        $client->city =$row['city'];
+                    }
                     if (!empty($row['phone_no'])) {
-                        $client->phone_no =$row['phone_no'];
+                        if($client->phone_no==''){
+                            $client->phone_no =$row['phone_no'];
+                        }else{
+                            $client->mobile =$row['phone_no'];
+                        }
                     }
                     $client->save();
+                    echo $client->client_code . "\n";
                 } else {
                     Log::warning("Client not found for client_code: {$row['client_code']}");
                 }
