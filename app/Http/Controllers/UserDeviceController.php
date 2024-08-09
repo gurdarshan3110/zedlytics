@@ -46,26 +46,27 @@ class UserDeviceController extends Controller
             'username' => 'username',
             'client_address' => 'client_address',
             'address_type' => 'address_type',
+            'count' => 'count',
         ];
 
         $orderColumnIndex = $order['column'];
         $orderDirection = $order['dir'];
         $orderColumnName = $columns[$orderColumnIndex]['data'];
-        $orderByColumn = $columnMap[$orderColumnName] ?? 'client_code'; 
+        $orderByColumn = $columnMap[$orderColumnName] ?? 'count'; 
 
         $query = Model::with('client')
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
-                    $q->where('client_address', 'like', "%{$search}%")
-                      ->orWhereHas('client', function ($q) use ($search) {
-                          $q->where('client_code', 'like', "%{$search}%")
-                            ->orWhere('name', 'like', "%{$search}%")
-                            ->orWhere('username', 'like', "%{$search}%");
-                      });
+                    $q->where('client_address', 'like', "%{$search}%");
+                      // ->orWhereHas('client', function ($q) use ($search) {
+                      //     $q->where('client_code', 'like', "%{$search}%")
+                      //       ->orWhere('name', 'like', "%{$search}%")
+                      //       ->orWhere('username', 'like', "%{$search}%");
+                      // });
                 });
             })
             ->when($orderByColumn, function ($query) use ($orderByColumn, $orderDirection) {
-                if (in_array($orderByColumn, ['client_code', 'name', 'username'])) {
+                if (in_array($orderByColumn, ['client_code', 'username'])) {
                     return $query->whereHas('client', function ($q) use ($orderByColumn, $orderDirection) {
                         $q->orderBy($orderByColumn, $orderDirection);
                     });
