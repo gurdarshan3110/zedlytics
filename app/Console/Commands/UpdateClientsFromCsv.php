@@ -81,11 +81,11 @@ class UpdateClientsFromCsv extends Command
                         $client->city =$row['city'];
                     }
                     if (!empty($row['phone_no'])) {
-                        if($client->phone_no==''){
+                        //if($client->phone_no==''){
                             $client->phone_no =$row['phone_no'];
-                        }else{
-                            $client->mobile =$row['phone_no'];
-                        }
+                        // }else{
+                        //     $client->mobile =$row['phone_no'];
+                        // }
                     }
                     $client->save();
                     echo $client->client_code . "\n";
