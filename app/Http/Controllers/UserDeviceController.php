@@ -51,7 +51,7 @@ class UserDeviceController extends Controller
         $orderColumnIndex = $order['column'];
         $orderDirection = $order['dir'];
         $orderColumnName = $columns[$orderColumnIndex]['data'];
-        $orderByColumn = $columnMap[$orderColumnName] ?? 'id'; 
+        $orderByColumn = $columnMap[$orderColumnName] ?? 'client_code'; 
 
         $query = Model::with('client')
             ->when($search, function ($query, $search) {
