@@ -64,7 +64,7 @@ class Client extends Model
         'status',
     ];
 
-    protected $append = ['currency_policies_names','generic_policies_names','robo_policies_name','account_mirroring_policies_name','highlight'];
+    protected $append = ['currency_policies_names','generic_policies_names','robo_policies_name','account_mirroring_policies_name','highlight_alert'];
 
     // public function users()
     // {
@@ -142,7 +142,7 @@ class Client extends Model
         return $this->hasMany(TrxLog::class, 'userId', 'user_id');
     }
 
-    public function getHighlightAttribute()
+    public function getHighlightAlertAttribute()
     {
         $highlight = $this->userDevices()->where('is_available', 1)->first();
         if(isset($highlight) && $highlight->highlight==1){

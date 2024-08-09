@@ -91,7 +91,7 @@
             <div class="card card-fixed-height w-100 p-2">
                 <div class="form-group">
                     <label>Currencies Policies ID:</label>
-                    <div class="card-value">{{ $client->currency_policies_names }}</div>
+                    <div class="card-value">{{ $client->currency_policies_names }} {{ $client->highlight_alert }}</div>
                 </div>
                 <div class="form-group">
                     <label>Generic Policies ID:</label>
