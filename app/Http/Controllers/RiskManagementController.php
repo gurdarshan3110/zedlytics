@@ -41,7 +41,7 @@ class RiskManagementController extends Controller
         $startDate = Carbon::now($timezone)->startOfDay()->subHours(2)->subMinutes(30);
         $endDate = Carbon::now($timezone)->endOfDay()->subHours(2)->subMinutes(30);
         
-        $topTenWinners = TrxLog::with('client')->select('userId','accountId','highlight')
+        $topTenWinners = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
@@ -49,7 +49,7 @@ class RiskManagementController extends Controller
             ->orderBy('totalCloseProfit', 'desc')
             ->limit(10)
             ->get();
-        $topTenLossers = TrxLog::with('client')->select('userId','accountId','highlight')
+        $topTenLossers = TrxLog::with('client')->select('userId','accountId')
             ->selectSub('SUM(closeProfit)', 'totalCloseProfit')
             ->whereBetween('createdDate', [$startDate, $endDate])
             ->whereNotNull('closeProfit')
