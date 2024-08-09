@@ -127,6 +127,20 @@ class Client extends Model
         return $this->genericPolicy()->pluck('policyName')->implode(', ');
     }
 
+    public function getHighlightAlertAttribute()
+    {
+        $highlight = $this->userDevices()->where('is_available', 1);
+        if(isset($highlight)){
+            return true;
+        }
+        return false;
+    }
+
+    public function userDevices()
+    {
+        return $this->hasMany(UserDevice::class, 'user_id', 'user_id');
+    }
+
     public function children()
     {
         return $this->hasMany(Client::class, 'parentId', 'user_id');
@@ -142,13 +156,5 @@ class Client extends Model
         return $this->hasMany(TrxLog::class, 'userId', 'user_id');
     }
 
-    public function getHighlightAlertAttribute()
-    {
-        $highlight = $this->userDevices()->where('is_available', 1)->first();
-        if(isset($highlight) && $highlight->highlight==1){
-            return true;
-        }
-        return false;
-    }
 
 }
