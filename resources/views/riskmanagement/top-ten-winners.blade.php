@@ -27,12 +27,12 @@
                             }
                             $previousProfit = $winner->totalCloseProfit; // Update previous profit
                             $txtClass='';
-                            if($winner->client->highlight==1){
+                            if($winner->highlight==1){
                                 $txtClass='text-danger';
                             }
                         @endphp
                         <tr>
-                            <td class="text-start {{$txtClass}}">{{$winner->accountId}}</td>
+                            <td class="text-start {{$txtClass}}">{{$winner->client}}</td>
                             <td class="name-cell" title="{{ $winner->client->name }}">{{$winner->client->name}}</td>
                             <td class="text-end">
                                 <span class="{{$growthClass}}">
