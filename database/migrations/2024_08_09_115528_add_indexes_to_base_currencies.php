@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('base_currencies', function (Blueprint $table) {
             $table->unique('base_id');
-            $table->index('base_id');
             $table->index('used');
             $table->index('parent_id');
         });
@@ -26,7 +25,6 @@ return new class extends Migration
     {
         Schema::table('base_currencies', function (Blueprint $table) {
             $table->dropUnique(['base_id']);
-            $table->dropIndex(['base_id']);
             $table->dropIndex(['used']);
             $table->dropIndex(['parent_id']);
 
