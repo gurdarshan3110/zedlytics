@@ -67,7 +67,7 @@ class CreateLeadsUsingCsv extends Command
         foreach ($data as $row) {
             //dd($row);
             $data = $row['name'];
-            $pattern = '/^([a-zA-Z0-9\/]+) ?: ?(\S+) ([\w\s\]\/\.]+)(?: \((\w+)\))?\.?$/';
+            $pattern = '/^([a-zA-Z0-9]+): (\d{10}) ([\w\s]+)(?: \((\w)\))?(?=\s+[a-zA-Z0-9]+:|\s*$)/m';
 
             $id='';
             $phone='';
@@ -94,6 +94,7 @@ class CreateLeadsUsingCsv extends Command
                                 'name' => $name
                             ],
                             [
+                                'account_id' => $id,
                                 'phone_no' => $phone,
                                 'name' => $name,
                                 'status' => (($status=='')?1:0)

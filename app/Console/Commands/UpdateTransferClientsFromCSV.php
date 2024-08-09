@@ -65,7 +65,7 @@ class UpdateTransferClientsFromCSV extends Command
         $header = array_shift($data);
         
         foreach ($data as $row) {
-            $accountId = $row['account id'];
+            $accountId = $row['Account No.'];
             $newParentId = $row['Transfer to'];
 
             $client = Client::where('client_code', $accountId)->first();
