@@ -27,7 +27,7 @@
                             }
                             $previousProfit = $winner->totalCloseProfit; // Update previous profit
                             $txtClass='';
-                            if($winner->highlight==1){
+                            if($winner->client->highlight==true){
                                 $txtClass='text-danger';
                             }
                         @endphp

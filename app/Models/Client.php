@@ -144,7 +144,11 @@ class Client extends Model
 
     public function getHighlightAttribute()
     {
-        return $this->userDevices()->where('is_available', 1)->exists();
+        $highlight = $this->userDevices()->where('is_available', 1)->first();
+        if(isset($highlight) && $highlight->highlight==1){
+            return true;
+        }
+        return false;
     }
 
 }
