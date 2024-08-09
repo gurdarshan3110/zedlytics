@@ -147,7 +147,7 @@ class UserDeviceController extends Controller
         $filteredRecords = $query->count();
 
         $data = [];
-        $query->skip($start)->take($length)->chunk(100, function ($rows) use (&$data) {
+        $query->skip($start)->take($length)->chunk(50, function ($rows) use (&$data) {
             foreach ($rows as $row) {
                 $rowData = [
                     'account_id' => $row->client->client_code,
@@ -177,6 +177,10 @@ class UserDeviceController extends Controller
                 'recordsFiltered' => $filteredRecords,
             ])
             ->make(true);
+    }
+
+    public function deviceDetail(Request $request,$id){
+
     }
 
 

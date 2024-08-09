@@ -160,6 +160,7 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
     Route::resource('two-factor',TwoFactorController::class);
 
     Route::get('/user-devices/list', [UserDeviceController::class, 'list'])->name('user-devices.list');
+    Route::get('/device-details/{id}', [UserDeviceController::class, 'deviceDetail'])->name('device.details');
     Route::resource('user-devices',UserDeviceController::class);
     
 
