@@ -11,7 +11,7 @@
             <th>Username</th>
             <th>Address</th>
             <th>Type</th>
-            <th  style="width:15%;">Action</th>
+            <th  style="width:5%;">Count</th>
         </tr>
         </thead>
         <tbody>
@@ -47,7 +47,7 @@
                     {data: 'username', name: 'username'},
                     {data: 'address', name: 'address'},
                     {data: 'type', name: 'type'},
-                    {data: 'action', name: 'action',className:'action'},
+                    {data: 'count', name: 'count'},
                     
                 ],
                 pageLength:10,
