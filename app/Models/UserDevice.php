@@ -17,6 +17,11 @@ class UserDevice extends Model
         'is_available',
     ];
 
+    public function getCountAttribute()
+    {
+        return static::where('client_address', $this->client_address)->count();
+    }
+
     /**
      * Get the user that owns the device.
      */

@@ -86,6 +86,7 @@ class UserDeviceController extends Controller
                     'username' => $row->client->username,
                     'address' => $row->client_address,
                     'type' => $row->address_type == 0 ? 'IP' : 'MAC',
+                    'count' => $row->count,
                     'action' => '<form action="'.route(self::URL.'.destroy', [$row]).'" method="post">'.
                                 csrf_field().
                                 method_field('DELETE').
