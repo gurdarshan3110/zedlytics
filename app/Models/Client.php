@@ -129,7 +129,7 @@ class Client extends Model
 
     public function getHighlightAlertAttribute()
     {
-        $highlight = $this->userDevices()->where('is_available', 1);
+        $highlight = UserDevice::where('user_id',$this->user_id)->where('is_available', 1)->first();
         if(isset($highlight)){
             return true;
         }
