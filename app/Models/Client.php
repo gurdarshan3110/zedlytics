@@ -142,4 +142,9 @@ class Client extends Model
         return $this->hasMany(TrxLog::class, 'userId', 'user_id');
     }
 
+    public function getHighlightAttribute()
+    {
+        return $this->userDevices()->where('is_available', 1)->exists();
+    }
+
 }

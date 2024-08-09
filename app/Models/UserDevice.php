@@ -15,6 +15,8 @@ class UserDevice extends Model
         'address_type',
         'device_type',
         'is_available',
+        'reason',
+        'updated_by',
     ];
 
     public function getCountAttribute()

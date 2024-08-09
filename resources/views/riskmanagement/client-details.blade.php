@@ -55,9 +55,9 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td title="{{ucwords($client->client->client_code)}}">{{ucwords($client->client->client_code)}}</td>
-                                        <td title="{{ucwords($client->client->name)}}">{{ucwords($client->client->name)}}</td>
-                                        <td title="{{ucwords($client->client->username)}}">{{ucwords($client->client->username)}}</td>
+                                        <td class="@if($client->client->highlight==1)text-danger@endif" title="{{ucwords($client->client->client_code)}}">{{ucwords($client->client->client_code)}}</td>
+                                        <td class="@if($client->client->highlight==1)text-danger@endif" title="{{ucwords($client->client->name)}}">{{ucwords($client->client->name)}}</td>
+                                        <td class="@if($client->client->highlight==1)text-danger@endif" title="{{ucwords($client->client->username)}}">{{ucwords($client->client->username)}}</td>
                                         <td class="text-end">                               
                                             <span class="{{$growthClass}}">
                                                 {{$client['totalCloseProfit']}}

@@ -161,7 +161,9 @@ Route::group(['middleware' => ['auth:web',CheckMacAddress::class]], function ($r
 
     Route::get('/user-devices/list', [UserDeviceController::class, 'list'])->name('user-devices.list');
     Route::get('/device-details/{id}', [UserDeviceController::class, 'deviceDetail'])->name('device.details');
+    Route::post('/update-blacklist', [UserDeviceController::class, 'update'])->name('update.blacklist');
     Route::resource('user-devices',UserDeviceController::class);
+    
     
 
 });
