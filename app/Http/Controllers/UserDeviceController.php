@@ -57,12 +57,11 @@ class UserDeviceController extends Controller
         $query = Model::with('client')
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
-                    $q->where('client_address', 'like', "%{$search}%");
-                      // ->orWhereHas('client', function ($q) use ($search) {
-                      //     $q->where('client_code', 'like', "%{$search}%")
-                      //       ->orWhere('name', 'like', "%{$search}%")
-                      //       ->orWhere('username', 'like', "%{$search}%");
-                      // });
+                    $q->where('client_address', 'like', "%{$search}%")
+                      ->orWhereHas('client', function ($q) use ($search) {
+                          $q->where('client_code', 'like', "%{$search}%")
+                            ->orWhere('username', 'like', "%{$search}%");
+                      });
                 });
             })
             ->when($orderByColumn, function ($query) use ($orderByColumn, $orderDirection) {
