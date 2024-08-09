@@ -64,7 +64,7 @@ class Client extends Model
         'status',
     ];
 
-    protected $append = ['currency_policies_names','generic_policies_names','robo_policies_name','account_mirroring_policies_name'];
+    protected $append = ['currency_policies_names','generic_policies_names','robo_policies_name','account_mirroring_policies_name','highlight'];
 
     // public function users()
     // {
