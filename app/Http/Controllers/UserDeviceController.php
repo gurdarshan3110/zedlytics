@@ -46,7 +46,6 @@ class UserDeviceController extends Controller
             'username' => 'username',
             'client_address' => 'client_address',
             'address_type' => 'address_type',
-            'count' => 'count',
         ];
 
         $orderColumnIndex = $order['column'];
