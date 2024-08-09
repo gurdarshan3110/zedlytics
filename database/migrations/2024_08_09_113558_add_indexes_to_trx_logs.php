@@ -15,7 +15,6 @@ return new class extends Migration
             $table->index('createdDate');
             $table->index('userId');
             $table->index('accountId');
-            $table->index('parentId');
             $table->index('currencyId');
 
             $table->index('closeProfit');
@@ -33,7 +32,6 @@ return new class extends Migration
             $table->dropIndex(['createdDate']);
             $table->dropIndex(['userId']);
             $table->dropIndex(['accountId']);
-            $table->dropIndex(['parentId']);
             $table->dropIndex(['currencyId']);
 
             $table->dropIndex(['closeProfit']);
